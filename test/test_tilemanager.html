@@ -15,6 +15,13 @@
 					ok(typeof(TileManager) !== 'undefined', 'TileManager ctor exists');
 					var tm = new TileManager();
 					ok(tm, 'should get object back');
+					ok(tm.tilemap, 'should have a tilemap');
+					// prove that it starts out empty somehow
+					var x = 0;
+					for (prop in tm.tilemap) {
+						x++;
+					}
+					ok(x === 0, 'the tilemap should be empty');
 				});
 				
 				module('usage', {
@@ -32,6 +39,8 @@
 				test('get and set', function() {
 					ok(typeof(this.tm.get) == 'function', 'get is a function');
 					ok(typeof(this.tm.set) == 'function', 'set is a function');
+					ok(this.tm.get(0, 0) === Tile.AirTile, '0,0 has an AirTile');
+					ok(this.tm.get(3, -2) === Tile.AirTile, 'gee, looks like it is all AirTiles');
 				});
 			});
 		</script>

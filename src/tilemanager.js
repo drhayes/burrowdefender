@@ -8,12 +8,14 @@
 (function(global, $) {
   
   var TileManager = function() {
+    this.tilemap = {};
+
     this.makekey = function(x, y) {
       return x + ':' + y;
     };
     
     this.get = function() {
-      
+      return Tile.AirTile;
     };
     
     this.set = function() {
