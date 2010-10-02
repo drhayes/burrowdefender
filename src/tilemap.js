@@ -7,7 +7,7 @@
 
 (function(global, $) {
   
-  var TileManager = function() {
+  var TileMap = function() {
     this.tilemap = {};
 
     this.makekey = function(x, y) {
@@ -24,6 +24,6 @@
     
   };
   
-  global.TileManager = TileManager;
+  global.TileMap = TileMap;
   
 })(window, jQuery)
