@@ -14,12 +14,16 @@
       return x + ':' + y;
     };
     
-    this.get = function() {
+    this.get = function(x, y) {
+      var key = this.makekey(x, y);
+      if (key in this.tilemap) {
+        return this.tilemap[key];
+      }
       return Tile.AirTile;
     };
     
-    this.set = function() {
-      
+    this.set = function(x, y, tile) {
+      this.tilemap[this.makekey(x, y)] = tile;
     };
     
   };

@@ -8,19 +8,49 @@
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
 			$(document).ready(function() {
+				
+				var checkexists = function(thing, message) {
+					ok(typeof(thing) != 'undefined', message);
+				};
+				
 				module('basics');
 				
 				test('ctor', function() {
-					ok(typeof(window.Tile) != 'undefined', 'Tile ctor exists');
+					checkexists(Tile, 'Tile ctor exists');
 					var tile = new Tile()
 					ok(tile, 'should have got something back');
 				});
 				
 				module('statics');
 				
-				test('Air', function() {
-					ok(typeof(window.Tile.Air), 'Air exists');
+				test('tilesize', function() {
+					checkexists(Tile.tilesize, 'Tile.tilesize exists');
 				});
+				
+				test('totilepos', function() {
+					checkexists(Tile.totilepos, 'Tile.convertpos exists');
+					var pos = Tile.totilepos(0, 0);
+					equals(pos.x, 0, 'converted (0,0) x position correctly');
+					equals(pos.y, 0, 'converted (0,0) y position correctly');
+					pos = Tile.totilepos(32, 0);
+					equals(pos.x, 1, 'converted (32,0) x position correctly');
+					equals(pos.y, 0, 'converted (32,0) y position correctly');
+					pos = Tile.totilepos(32, 1);
+					equals(pos.x, 1, 'converted (32,1) x position correctly');
+					equals(pos.y, 0, 'converted (32,1) y position correctly');
+					pos = Tile.totilepos(-1, -1);
+					equals(pos.x, -1, 'converted (-1, -1) x position correctly');
+					equals(pos.y, -1, 'converted (-1, -1) y position correctly');
+				});
+				
+				test('Air', function() {
+					checkexists(Tile.Air, 'Air exists');
+				});
+
+				test('Dirt', function() {
+					checkexists(Tile.Dirt, 'Dirt exists');
+				});
+
 			});
 		</script>
 	</head>

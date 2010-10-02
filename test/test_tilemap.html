@@ -41,6 +41,10 @@
 					ok(typeof(this.tm.set) == 'function', 'set is a function');
 					ok(this.tm.get(0, 0) === Tile.AirTile, '0,0 has an AirTile');
 					ok(this.tm.get(3, -2) === Tile.AirTile, 'gee, looks like it is all AirTiles');
+					this.tm.set(0, 0, Tile.Dirt);
+					var key = this.tm.makekey(0, 0);
+					ok(this.tm.tilemap[key] === Tile.Dirt, 'the dirt tile is in the tilemap');
+					ok(this.tm.get(0, 0) === Tile.Dirt, 'the dirt tile we set is gettable');
 				});
 			});
 		</script>
