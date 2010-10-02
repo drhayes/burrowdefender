@@ -8,11 +8,12 @@
 		<link rel="stylesheet" href="qunit.css" media="screen" title="no title">
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
-				module('ctor');
+				module('basics');
 
-				test('global name available', function() {
+				test('ctor', function() {
 					ok(typeof(TileManager) !== 'undefined', 'TileManager ctor exists');
-					
+					var tm = new TileManager();
+					ok(tm, 'should get object back');
 				});
 			});
 		</script>

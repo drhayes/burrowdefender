@@ -6,7 +6,6 @@
 (function(global, $) {
   
   var TileManager = function() {
-    
   };
   
   global.TileManager = TileManager;
