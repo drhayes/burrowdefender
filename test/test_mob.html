@@ -12,6 +12,13 @@
 				
 				test('ctor', function() {
 					ok(typeof(Mob) !== 'undefined', 'mob ctor exists');
+					var mob = new Mob();
+					equals(mob.x, 0, 'initial x pos');
+					equals(mob.y, 0, 'initial y pos');
+					equals(mob.size.x, 16, 'initial x size');
+					equals(mob.size.y, 16, 'initial y size');
+					equals(mob.vel.x, 0, 'initial x velocity');
+					equals(mob.vel.y, 0, 'initial y velocity');
 				});
 			});
 		</script>

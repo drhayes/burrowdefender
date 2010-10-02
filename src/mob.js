@@ -7,7 +7,16 @@
 (function(global, $) {
 
   var Mob = function() {
-    
+    this.x = 0;
+    this.y = 0;
+    this.size = {
+      x: 16,
+      y: 16
+    };
+    this.vel = {
+      x: 0,
+      y: 0
+    };
   };
   
   global.Mob = Mob;
