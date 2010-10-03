@@ -32,8 +32,15 @@
       y: options.vel.y
     };
     
+    // Given the velocity of the mob, this function returns a rectangle of the
+    // mob's new position given as {x1,y1,x2,y2}.
     this.newposition = function() {
-      
+      return {
+        x1: this.x + this.vel.x,
+        y1: this.y + this.vel.y,
+        x2: this.x + this.size.x + this.vel.x,
+        y2: this.y + this.size.y + this.vel.y
+      };
     };
   };
   

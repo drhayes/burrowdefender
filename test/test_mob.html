@@ -37,6 +37,12 @@
 				module('usage', {
 					setup: function() {
 						this.m = new Mob({
+							x: 5,
+							y: 5,
+							size: {
+								x: 16,
+								y: 16
+							},
 							vel: {
 								x: 5,
 								y: 3
@@ -47,6 +53,11 @@
 
 				test('newposition', function() {
 					ok(typeof(this.m.newposition) !== 'undefined', 'newposition defined');
+					var r1 = this.m.newposition();
+					ok(r1.x1 === 10, 'r1.x1');
+					ok(r1.y1 === 8, 'r1.y1');
+					ok(r1.x2 === 26, 'r1.x2');
+					ok(r1.y2 === 24, 'r1.y2');
 				});
 			});
 		</script>
