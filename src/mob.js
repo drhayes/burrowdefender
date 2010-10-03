@@ -42,6 +42,11 @@
         y2: this.y + this.size.y + this.vel.y
       };
     };
+    
+    this.move = function() {
+      this.x += this.vel.x;
+      this.y += this.vel.y;
+    };
   };
   
   global.Mob = Mob;

@@ -59,6 +59,13 @@
 					ok(r1.x2 === 26, 'r1.x2');
 					ok(r1.y2 === 24, 'r1.y2');
 				});
+				
+				test('move', function() {
+					ok(typeof(this.m.move) !== 'undefined', 'move defined');
+					this.m.move();
+					equals(this.m.x, 10, 'x works');
+					equals(this.m.y, 8, 'y works');
+				});
 			});
 		</script>
 	</head>
