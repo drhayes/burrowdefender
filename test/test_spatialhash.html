@@ -4,11 +4,40 @@
 		<title>Spatial Hash</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
-		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<script type="text/javascript" src="../src/tile.js"></script>
 		<script type="text/javascript" src="../src/spatialhash.js"></script>
+		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
 			$(document).ready(function() {
-				//tests go here
+				module('basics');
+				
+				test('ctor', function() {
+					ok(typeof(SpatialHash) !== 'undefined', 'SpatialHash ctor exists');
+					var sh = new SpatialHash();
+					ok(sh.spacemap, 'The spacemap exists');
+					ok(sh.get, 'get method');
+					ok(sh.set, 'set method');
+					ok(sh.makekey, 'makekey method');
+				});
+				
+				module('usage', {
+					setup: function() {
+						this.sh = new SpatialHash();
+					}
+				});
+				
+				test('makekey', function() {
+					
+				});
+				
+				test('get and set', function() {
+					ok(this.sh.get(0, 0).length == 0, 'get from empty returns empty list');
+					var o = {};
+					this.sh.set(0, 0, o);
+					var x = this.sh.get(0, 0);
+					ok(x.length == 1, 'get with one object returns it in list');
+					equals(x[0], o, 'it is the o object');
+				});
 			});
 		</script>
 	</head>
