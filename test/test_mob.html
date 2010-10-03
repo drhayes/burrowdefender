@@ -20,6 +20,34 @@
 					equals(mob.vel.x, 0, 'initial x velocity');
 					equals(mob.vel.y, 0, 'initial y velocity');
 				});
+				
+				test('ctor with options', function() {
+					var mob = new Mob({
+						x: 30,
+						vel: {
+							x: -3,
+							y: 5
+						}
+					});
+					equals(mob.x, 30, 'mob.x === 30');
+					equals(mob.vel.x, -3, 'mob.vel.x === -3');
+					equals(mob.vel.y, 5, 'mob.vel.y === 5');
+				});
+				
+				module('usage', {
+					setup: function() {
+						this.m = new Mob({
+							vel: {
+								x: 5,
+								y: 3
+							}
+						});
+					}
+				})
+
+				test('newposition', function() {
+					ok(typeof(this.m.newposition) !== 'undefined', 'newposition defined');
+				});
 			});
 		</script>
 	</head>
