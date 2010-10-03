@@ -15,9 +15,6 @@
 					ok(typeof(SpatialHash) !== 'undefined', 'SpatialHash ctor exists');
 					var sh = new SpatialHash();
 					ok(sh.spacemap, 'The spacemap exists');
-					ok(sh.get, 'get method');
-					ok(sh.set, 'set method');
-					ok(sh.makekey, 'makekey method');
 				});
 				
 				module('usage', {
@@ -27,10 +24,15 @@
 				});
 				
 				test('makekey', function() {
-					
+					ok(this.sh.makekey, 'makekey method');
+					ok(this.sh.makekey(1, 1) == "0:0", '(1,1) becomes the key 0:0');
+					ok(this.sh.makekey(65, 65) == "1:1", '(65, 65) becomes the key 1:1');
+					ok(this.sh.makekey(-32, -65) == "-1:-2", '(-32, -65) becomes the key -1:-2');
 				});
 				
 				test('get and set', function() {
+					ok(this.sh.get, 'get method');
+					ok(this.sh.set, 'set method');
 					ok(this.sh.get(0, 0).length == 0, 'get from empty returns empty list');
 					var o = {};
 					this.sh.set(0, 0, o);

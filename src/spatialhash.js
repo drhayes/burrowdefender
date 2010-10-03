@@ -3,7 +3,7 @@
 // Keeps track of what we should check collisions against by partitioning
 // worldspace into a grid. Every object that intersects any cell is added to
 // a list corresponding to that cell.
-// Takes world coordinates converts it to an internal representation.
+// Takes world coordinates and converts it to an internal representation.
 //
 // Depends: tile.js
 
@@ -14,8 +14,10 @@
   var SpatialHash = function() {
     this.spacemap = {};
     
-    this.makekey = function() {
-      
+    this.makekey = function(x, y) {
+      var kx = Math.floor(x / cellsize);
+      var ky = Math.floor(y / cellsize);
+      return kx + ':' + ky;
     };
     
     // Given in world coordinates.
@@ -23,7 +25,7 @@
       return [];
     };
     
-    this.set = function() {
+    this.set = function(x, y, o) {
       
     };
   };

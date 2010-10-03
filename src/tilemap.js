@@ -1,7 +1,7 @@
 // tilemanager.js
 //
 // Manages a group of tiles retrievable by tile x,y.
-// This is not the same as entity x,y -- less granular.
+// This is not the same as worldspace x,y -- less granular.
 //
 // Depends: tile.js
 
