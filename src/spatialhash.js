@@ -13,13 +13,13 @@
 
   var SpatialHash = function() {
     this.spacemap = {};
-    
+
     this.makekey = function(x, y) {
       var kx = Math.floor(x / cellsize);
       var ky = Math.floor(y / cellsize);
       return kx + ':' + ky;
     };
-    
+
     // Given in world coordinates.
     this.get = function(x, y) {
       var key = this.makekey(x, y);
@@ -28,7 +28,7 @@
       }
       return [];
     };
-    
+
     this.set = function(x, y, o) {
       var key = this.makekey(x, y);
       if (key in this.spacemap) {
@@ -36,6 +36,22 @@
       }
       else {
         this.spacemap[key] = [o];
+      }
+    };
+
+    this.remove = function(x, y, o) {
+      var l = this.get(x, y);
+      // find the element we're trying to remove
+      var index = -1;
+      for (var i = 0; i < l.length; i++) {
+        if (l[i] === o) {
+          index = i;
+          break;
+        }
+      }
+      if (index !== -1) {
+        var key = this.makekey(x, y);
+        this.spacemap[key].splice(index, 1);
       }
     };
   };

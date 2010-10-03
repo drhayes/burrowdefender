@@ -25,9 +25,9 @@
 				
 				test('makekey', function() {
 					ok(this.sh.makekey, 'makekey method');
-					ok(this.sh.makekey(1, 1) == "0:0", '(1,1) becomes the key 0:0');
-					ok(this.sh.makekey(65, 65) == "1:1", '(65, 65) becomes the key 1:1');
-					ok(this.sh.makekey(-32, -65) == "-1:-2", '(-32, -65) becomes the key -1:-2');
+					ok(this.sh.makekey(1, 1) === "0:0", '(1,1) becomes the key 0:0');
+					ok(this.sh.makekey(65, 65) === "1:1", '(65, 65) becomes the key 1:1');
+					ok(this.sh.makekey(-32, -65) === "-1:-2", '(-32, -65) becomes the key -1:-2');
 				});
 				
 				test('get and set', function() {
@@ -37,8 +37,21 @@
 					var o = {};
 					this.sh.set(0, 0, o);
 					var x = this.sh.get(0, 0);
-					ok(x.length == 1, 'get with one object returns it in list');
+					ok(x.length === 1, 'get with one object returns it in list');
 					equals(x[0], o, 'it is the o object');
+				});
+				
+				test('set and remove', function() {
+					var o1 = {x: 1};
+					var o2 = {x: 2};
+					this.sh.set(0, 0, o1);
+					this.sh.set(15, 15, o2);
+					var x = this.sh.get(32, 32);
+					ok(x.length === 2, 'get with two objects returns them in a list');
+					this.sh.remove(0, 0, o1);
+					x = this.sh.get(32, 32);
+					ok(x.length === 1, 'remove pulled the o1 object');
+					equals(x[0], o2, 'o2 is the object that is left');
 				});
 			});
 		</script>
