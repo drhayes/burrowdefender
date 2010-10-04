@@ -111,6 +111,30 @@
 					equals(this.m.x, 10, 'collided in the x');
 					equals(this.m.y, 5, 'did not collide in the y');
 				});
+				
+				test('move with collisions up with two', function() {
+					// set the mob velocity up
+					this.m.vel.y = -10;
+					// collide in the y twice
+					var r1 = {x1: -30, y1: -30, x2: 15, y2: 2};
+					var r2 = {x1: 16, y1: -30, x2: 40, y2: 4};
+					this.m.move([r1, r2]);
+					equals(this.m.x, 5, 'did not collide in the x');
+					equals(this.m.y, 4, 'collided in the y');
+				});
+				
+				test('move with collisions up and to the left', function() {
+					// set the mob velocity left and up
+					this.m.vel.x = -10;
+					this.m.vel.y = -10;
+					// collide in the y from the bottom
+					var r1 = {x1: -30, y1: -30, x2: 50, y2: 0};
+					// collide in the x from the right
+					var r2 = {x1: -40, y1: 0, x2: 0, y2: 50};
+					this.m.move([r1, r2]);
+					equals(this.m.x, 0, 'collided in the x');
+					equals(this.m.y, 0, 'collided in the y');
+				});
 			});
 		</script>
 	</head>

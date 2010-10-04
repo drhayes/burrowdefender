@@ -70,6 +70,7 @@
         else if (mob.vel.y > 0) {
           mob.vel.y -= newpos.y2 - r.y1;
         }
+        newpos = mob.newposition();
         if (mob.vel.x < 0) {
           mob.vel.x += r.x2 - newpos.x1;
         }
