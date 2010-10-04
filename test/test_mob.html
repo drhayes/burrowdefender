@@ -72,7 +72,7 @@
 					equals(this.m.y, 8, 'y works');
 				});
 				
-				test('move with collisions up', function() {
+				test('move with collisions up with one', function() {
 					// set the mob velocity up
 					this.m.vel.y = -10;
 					// collide in the y from the bottom
@@ -82,7 +82,7 @@
 					equals(this.m.y, 0, 'collided in the y');
 				});
 
-				test('move with collisions down', function() {
+				test('move with collisions down with one', function() {
 					// set the mob velocity down
 					this.m.vel.y = 10;
 					// collide in the y from the top
@@ -92,13 +92,23 @@
 					equals(this.m.y, 10, 'collided in the y');
 				});
 				
-				test('move with collisions left', function() {
+				test('move with collisions left with one', function() {
 					// set the mob velocity left
 					this.m.vel.x = -10;
 					// collide in the x from the right
 					var r1 = {x1: -35, y1: 0, x2: 0, y2: 30};
 					this.m.move([r1]);
 					equals(this.m.x, 0, 'collided in the x');
+					equals(this.m.y, 5, 'did not collide in the y');
+				});
+				
+				test('move with collisions right with one', function() {
+					// set the mob velocity right
+					this.m.vel.x = 10;
+					// collide in the x from the left
+					var r1 = {x1: 40, y1: 0, x2: 70, y2: 30};
+					this.m.move([r1]);
+					equals(this.m.x, 10, 'collided in the x');
 					equals(this.m.y, 5, 'did not collide in the y');
 				});
 			});
