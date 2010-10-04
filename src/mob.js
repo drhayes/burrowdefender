@@ -37,7 +37,6 @@
     // Given a list of rects, don't let the mob move into any of them.
     this.move = function(collides) {
       collides = collides || [];
-      // var newpos = this.newposition();
       var mob = this;
       $.each(collides, function(i, r) {
         // collide at all?
@@ -59,22 +58,19 @@
         }
         // okay, we're doing this
         if (mob.vel.y < 0) {
-          // mob.vel.y += r.y2 - newpos.y1;
           mob.vel.y += r.y2 - npy1;
+          return;
         }
         else if (mob.vel.y > 0) {
-          // mob.vel.y -= newpos.y2 - r.y1;
           mob.vel.y -= npy2 - r.y1;
+          return;
         }
         if (mob.vel.x < 0) {
-          // mob.vel.x += r.x2 - newpos.x1;
           mob.vel.x += r.x2 - npx1;
         }
         else if (mob.vel.x > 0) {
-          // mob.vel.x -= newpos.x2 - r.x1;
           mob.vel.x -= npx2 - r.x1;
         }
-        // newpos = mob.newposition();
       });
       this.x += this.vel.x;
       this.y += this.vel.y;
