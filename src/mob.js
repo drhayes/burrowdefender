@@ -59,11 +59,9 @@
         // okay, we're doing this
         if (mob.vel.y < 0) {
           mob.vel.y += r.y2 - npy1;
-          return;
         }
         else if (mob.vel.y > 0) {
           mob.vel.y -= npy2 - r.y1;
-          return;
         }
         if (mob.vel.x < 0) {
           mob.vel.x += r.x2 - npx1;
