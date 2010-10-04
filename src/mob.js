@@ -67,6 +67,9 @@
         if (mob.vel.y < 0) {
           mob.vel.y += r.y2 - newpos.y1;
         }
+        else if (mob.vel.y > 0) {
+          mob.vel.y -= newpos.y2 - r.y1;
+        }
         if (mob.vel.x < 0) {
         }
         newpos = mob.newposition();

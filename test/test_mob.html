@@ -73,30 +73,24 @@
 				});
 				
 				test('move with collisions up', function() {
-					console.log('move with collisions up and left');
-					// set the mob velocity up and to the left
+					// set the mob velocity up
 					this.m.vel.y = -10;
-					// collide in the x to the left
+					// collide in the y from the bottom
 					var r1 = {x1: -25, y1: -30, x2: 50, y2: 0};
-					// collide in the y to the up
 					this.m.move([r1]);
-					equals(this.m.x, 5, 'collided in the x');
+					equals(this.m.x, 5, 'did not collide in the x');
 					equals(this.m.y, 0, 'collided in the y');
 				});
 
 				test('move with collisions down', function() {
-					
+					// set the mob velocity down
+					this.m.vel.y = 10;
+					// collide in the y from the top
+					var r1 = {x1: -25, y1: 40, x2: 50, y2: 75};
+					this.m.move([r1]);
+					equals(this.m.x, 5, 'did not collide in the x');
+					equals(this.m.y, 10, 'collided in the y');
 				});
-				
-				// test('move with collisions down and right', function() {
-				// 	// collide in the x to the right
-				// 	var r1 = {x1: 24, y1: 5, x2: 32, y2: 13};
-				// 	// collide in the y on the bottom
-				// 	var r2 = {x1: 20, y1: 23, x2: 23, y2: 30};
-				// 	this.m.move([r1, r2]);
-				// 	equals(this.m.x, 7, 'collided in the x');
-				// 	equals(this.m.y, 6, 'collided in the y');
-				// });
 			});
 		</script>
 	</head>
