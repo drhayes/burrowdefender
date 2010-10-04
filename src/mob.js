@@ -71,6 +71,7 @@
           mob.vel.y -= newpos.y2 - r.y1;
         }
         if (mob.vel.x < 0) {
+          mob.vel.x += r.x2 - newpos.x1;
         }
         newpos = mob.newposition();
       });

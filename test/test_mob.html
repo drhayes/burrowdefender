@@ -91,6 +91,16 @@
 					equals(this.m.x, 5, 'did not collide in the x');
 					equals(this.m.y, 10, 'collided in the y');
 				});
+				
+				test('move with collisions left', function() {
+					// set the mob velocity left
+					this.m.vel.x = -10;
+					// collide in the x from the right
+					var r1 = {x1: -35, y1: 0, x2: 0, y2: 30};
+					this.m.move([r1]);
+					equals(this.m.x, 0, 'collided in the x');
+					equals(this.m.y, 5, 'did not collide in the y');
+				});
 			});
 		</script>
 	</head>
