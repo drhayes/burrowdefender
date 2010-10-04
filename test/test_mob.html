@@ -52,17 +52,6 @@
 					}
 				})
 
-				test('newposition', function() {
-					ok(typeof(this.m.newposition) !== 'undefined', 'newposition defined');
-					this.m.vel.x = 5;
-					this.m.vel.y = 3;
-					var r1 = this.m.newposition();
-					ok(r1.x1 === 10, 'r1.x1');
-					ok(r1.y1 === 8, 'r1.y1');
-					ok(r1.x2 === 40, 'r1.x2');
-					ok(r1.y2 === 38, 'r1.y2');
-				});
-				
 				test('move', function() {
 					ok(typeof(this.m.move) !== 'undefined', 'move defined');
 					this.m.vel.x = 5;

@@ -34,50 +34,47 @@
       y: options.vel.y
     };
     
-    // Given the velocity of the mob, this function returns a rectangle of the
-    // mob's new position given as {x1,y1,x2,y2}.
-    this.newposition = function() {
-      return {
-        x1: this.x + this.vel.x,
-        y1: this.y + this.vel.y,
-        x2: this.x + this.size.x + this.vel.x,
-        y2: this.y + this.size.y + this.vel.y
-      };
-    };
-    
     // Given a list of rects, don't let the mob move into any of them.
     this.move = function(collides) {
       collides = collides || [];
-      var newpos = this.newposition();
+      // var newpos = this.newposition();
       var mob = this;
       $.each(collides, function(i, r) {
         // collide at all?
-        if (newpos.y2 < r.y1) {
+        var npx1 = mob.x + mob.vel.x;
+        var npy1 = mob.y + mob.vel.y;
+        var npx2 = mob.x + mob.size.x + mob.vel.x;
+        var npy2 = mob.y + mob.size.y + mob.vel.y;
+        if (npy2 < r.y1) {
           return;
         }
-        if (newpos.y1 > r.y2) {
+        if (npy1 > r.y2) {
           return;
         }
-        if (newpos.x2 < r.x1) {
+        if (npx2 < r.x1) {
           return;
         }
-        if (newpos.x1 > r.x2) {
+        if (npx1 > r.x2) {
           return;
         }
+        // okay, we're doing this
         if (mob.vel.y < 0) {
-          mob.vel.y += r.y2 - newpos.y1;
+          // mob.vel.y += r.y2 - newpos.y1;
+          mob.vel.y += r.y2 - npy1;
         }
         else if (mob.vel.y > 0) {
-          mob.vel.y -= newpos.y2 - r.y1;
+          // mob.vel.y -= newpos.y2 - r.y1;
+          mob.vel.y -= npy2 - r.y1;
         }
-        newpos = mob.newposition();
         if (mob.vel.x < 0) {
-          mob.vel.x += r.x2 - newpos.x1;
+          // mob.vel.x += r.x2 - newpos.x1;
+          mob.vel.x += r.x2 - npx1;
         }
         else if (mob.vel.x > 0) {
-          mob.vel.x -= newpos.x2 - r.x1;
+          // mob.vel.x -= newpos.x2 - r.x1;
+          mob.vel.x -= npx2 - r.x1;
         }
-        newpos = mob.newposition();
+        // newpos = mob.newposition();
       });
       this.x += this.vel.x;
       this.y += this.vel.y;
