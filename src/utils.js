@@ -19,6 +19,15 @@
         return false;
       }
       return true;
+    },
+    intersect: function(a1, a2, b1, b2) {
+      if (a2 < b1) {
+        return false;
+      }
+      if (a1 > b2) {
+        return false;
+      }
+      return true;
     }
   }
   

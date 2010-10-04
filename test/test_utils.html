@@ -21,6 +21,16 @@
 					ok(collide(rect1, rect2), 'rect1 and rect2 collide');
 					ok(!collide(rect1, rect3), 'rect2 and rect3 do not collide');
 				});
+				
+				test('intersect', function() {
+					ok(typeof(utils.intersect) != 'undefined', 'utils.intersect exists');
+					var intersect = utils.intersect;
+					ok(!intersect(-1, 0, 1, 4), 'no intersect');
+					ok(intersect(0, 2, 1, 4), 'intersect');
+					ok(intersect(2, 3, 1, 4), 'intersect');
+					ok(intersect(3, 6, 1, 4), 'intersect');
+					ok(!intersect(5, 8, 1, 4), 'no intersect');
+				});
 			});
 		</script>
 	</head>
