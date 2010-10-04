@@ -4,6 +4,7 @@
 		<title>Mob</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/utils.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
@@ -40,12 +41,12 @@
 							x: 5,
 							y: 5,
 							size: {
-								x: 16,
-								y: 16
+								x: 30,
+								y: 30
 							},
 							vel: {
-								x: 5,
-								y: 3
+								x: 0,
+								y: 0
 							}
 						});
 					}
@@ -53,19 +54,49 @@
 
 				test('newposition', function() {
 					ok(typeof(this.m.newposition) !== 'undefined', 'newposition defined');
+					this.m.vel.x = 5;
+					this.m.vel.y = 3;
 					var r1 = this.m.newposition();
 					ok(r1.x1 === 10, 'r1.x1');
 					ok(r1.y1 === 8, 'r1.y1');
-					ok(r1.x2 === 26, 'r1.x2');
-					ok(r1.y2 === 24, 'r1.y2');
+					ok(r1.x2 === 40, 'r1.x2');
+					ok(r1.y2 === 38, 'r1.y2');
 				});
 				
 				test('move', function() {
 					ok(typeof(this.m.move) !== 'undefined', 'move defined');
+					this.m.vel.x = 5;
+					this.m.vel.y = 3;
 					this.m.move();
 					equals(this.m.x, 10, 'x works');
 					equals(this.m.y, 8, 'y works');
 				});
+				
+				test('move with collisions up', function() {
+					console.log('move with collisions up and left');
+					// set the mob velocity up and to the left
+					this.m.vel.y = -10;
+					// collide in the x to the left
+					var r1 = {x1: -25, y1: -30, x2: 50, y2: 0};
+					// collide in the y to the up
+					this.m.move([r1]);
+					equals(this.m.x, 5, 'collided in the x');
+					equals(this.m.y, 0, 'collided in the y');
+				});
+
+				test('move with collisions down', function() {
+					
+				});
+				
+				// test('move with collisions down and right', function() {
+				// 	// collide in the x to the right
+				// 	var r1 = {x1: 24, y1: 5, x2: 32, y2: 13};
+				// 	// collide in the y on the bottom
+				// 	var r2 = {x1: 20, y1: 23, x2: 23, y2: 30};
+				// 	this.m.move([r1, r2]);
+				// 	equals(this.m.x, 7, 'collided in the x');
+				// 	equals(this.m.y, 6, 'collided in the y');
+				// });
 			});
 		</script>
 	</head>
