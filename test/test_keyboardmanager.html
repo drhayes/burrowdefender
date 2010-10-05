@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>KeyboardManager</title>
+		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/eventer.js"></script>
+		<script type="text/javascript" src="../src/keyboardmanager.js"></script>
+		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+				
+				module('keyboard manager');
+				
+				test('ctor', function() {
+					var keyman = new KeyboardManager();
+					ok(typeof(keyman.eventer) === 'object', 'eventer field');
+					keyman.unlatch();
+				});
+				
+				test('subscribe to body for keypress', function() {
+					var keyMan = new KeyboardManager();
+					// replace dispatch function to prove event is firing
+					var dispatchCalled = false;
+					keyMan.dispatch = function() {
+						dispatchCalled = true;
+					}
+					// no event propogation... best we can do!
+					$('body').keydown();
+					ok(dispatchCalled, 'dispatch was called');
+					keyMan.unlatch();
+				});
+				
+				test('latch and unlatch', function() {
+					var keyMan = new KeyboardManager();
+					// replace dispatch function to prove event is not firing when unlatched
+					var dispatchCalled = false;
+					keyMan.dispatch = function() {
+						dispatchCalled = true;
+					}
+					keyMan.unlatch();
+					// no event propogation... best we can do!
+					$('body').keydown();
+					ok(!dispatchCalled, 'dispatch was not called when we were unlatched');
+					keyMan.latch();
+					$('body').keydown();
+					ok(dispatchCalled, 'dispatch was called after latching');
+					keyMan.unlatch();
+				});
+
+				test('bind', function() {
+					var keyMan = new KeyboardManager();
+					ok(typeof(keyMan.keyMap) !== 'undefined', 'keyMap exists on keyboard manager');
+					ok(typeof(keyMan.bind) === 'function', 'bind exists on key man');
+					
+					var called = false;
+					keyMan.bind('w', function() {
+						called = true;
+					});
+					keyMan.dispatch({
+						type: 'keypress',
+						charCode: 119 // w
+					});
+					ok(called, 'bound');
+					keyMan.unlatch();
+				});
+				
+				test('case', function() {
+					var keyMan = new KeyboardManager();
+					var called = false;
+					called = false;
+					keyMan.bind('1', function() {
+						called = true;
+					})
+					keyMan.dispatch({
+						type: 'keypress',
+						'charCode': 49 // '1'
+					});
+					ok(called, 'should have been called for 1');
+					called = false;
+					keyMan.dispatch({
+						type: 'keypress',
+						'charCode': 33 // '!'
+					});
+					ok(!called, 'should not have been called for !');
+					called = false;
+					keyMan.bind('shift_x', function() {
+						called = true;
+					})
+					keyMan.dispatch({
+						type: 'keypress',
+						'charCode': 88 // 'X'
+					});
+					ok(called, 'called for X');
+					called = false;
+					keyMan.dispatch({
+						type: 'keypress',
+						'charCode': 120 // 'x'
+					});
+					ok(!called, 'not called for x');
+					keyMan.unlatch();
+				});
+				
+				test('spacebar', function() {
+					expect(1);
+					var keyman = new KeyboardManager();
+					keyman.bind(' ', function() {
+						ok(true, 'spacebar called');
+					})
+					keyman.dispatch({
+						type: 'keypress',
+						'charCode': 32 // spacebar
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1 id="qunit-header">KeyboardManager Test</h1>
+		<h2 id="qunit-banner"></h2>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">test markup, will be hidden</div>
+	</body>
+</html>
