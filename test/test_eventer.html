@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Eventer</title>
+		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/eventer.js"></script>
+		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<script>
+			$(document).ready(function() {
+				module('eventer');
+				
+				test('namespaces', function() {
+					ok(typeof(window.Eventer) !== 'undefined', 'eventer');
+				});
+				
+				test('ctor', function() {
+					var eventer1 = new Eventer();
+					ok(typeof(eventer1.subscribe) === 'function', 'subscribe is a function');
+					ok(typeof(eventer1.fire) === 'function', 'fire is a function');
+				});
+				
+				test('subscribe validation', function() {
+					var eventer1 = new Eventer();
+					try {
+						eventer1.subscribe(null, function() {});
+						ok(false, 'null event name');
+					}
+					catch (error) {
+						ok(true, 'null event name');
+					}
+					try {
+						eventer1.subscribe('blah', null);
+						ok(false, 'null callback');
+					}
+					catch (error) {
+						ok(true, 'null callback');
+					}
+				});
+				
+				test('fire validation', function() {
+					var eventer1 = new Eventer();
+					try {
+						eventer1.fire(null);
+						ok(false, 'null event name');
+					}
+					catch (error) {
+						ok(true, 'null event name');
+					}
+				});
+				
+				test('subscribe and fire one', function() {
+					var eventer1 = new Eventer();
+					var func1Called = false;
+					var func1 = function() {
+						func1Called = true;
+					}
+					var func2Called = false;
+					var func2 = function() {
+						func2Called = true;
+					}
+					eventer1.subscribe('one', func1);
+					eventer1.subscribe('two', func1);
+					eventer1.subscribe('two', func2);
+					
+					ok(!func1Called, 'func1 not called');
+					ok(!func2Called, 'func2 not called');
+					eventer1.fire('one');
+					ok(func1Called, 'func1 called');
+					ok(!func2Called, 'func2 not called');
+					
+					func1Called = false;
+					ok(!func1Called, 'func1 not called');
+					ok(!func2Called, 'func2 not called');
+					eventer1.fire('two');
+					ok(func1Called, 'func1 called');
+					ok(func2Called, 'func2 called');
+					
+					eventer1.fire('blah');
+				});
+				
+				test('fire with args', function() {
+					var e = new Eventer();
+					e.subscribe('one', function(args) {
+						ok(args.a === 'a', 'first arg');
+						ok(args.b === 'b', 'second arg');
+						ok(args.c === 'c', 'third arg');
+					})
+					e.fire('one', {
+						a: 'a',
+						b: 'b',
+						c: 'c'
+					})
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1 id="qunit-header">Eventer Test</h1>
+		<h2 id="qunit-banner"></h2>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">test markup, will be hidden</div>
+	</body>
+</html>
