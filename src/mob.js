@@ -38,12 +38,14 @@
     this.move = function(collides) {
       collides = collides || [];
       var mob = this;
+      var velx = this.vel.x;
+      var vely = this.vel.y;
       $.each(collides, function(i, r) {
         // collide at all?
-        var npx1 = mob.x + mob.vel.x;
-        var npy1 = mob.y + mob.vel.y;
-        var npx2 = mob.x + mob.size.x + mob.vel.x;
-        var npy2 = mob.y + mob.size.y + mob.vel.y;
+        var npx1 = mob.x + velx;
+        var npy1 = mob.y + vely;
+        var npx2 = mob.x + mob.size.x + velx;
+        var npy2 = mob.y + mob.size.y + vely;
         if (npy2 < r.y1) {
           return;
         }
@@ -61,24 +63,24 @@
         var oyx = utils.intersect(mob.x, mob.x + mob.size.x, r.x1, r.x2)
         var oyi = utils.intersect(mob.y, mob.y + mob.size.y, r.y1, r.y2);
         if (!oyi) {
-          if (mob.vel.y < 0) {
-            mob.vel.y += r.y2 - npy1 + 1;
+          if (vely < 0) {
+            vely += r.y2 - npy1 + 1;
           }
-          else if (mob.vel.y > 0) {
-            mob.vel.y -= npy2 - r.y1 + 1;
+          else if (vely > 0) {
+            vely -= npy2 - r.y1 + 1;
           }          
         }
         if (!oyx) {
-          if (mob.vel.x < 0) {
-            mob.vel.x += r.x2 - npx1 + 1;
+          if (velx < 0) {
+            velx += r.x2 - npx1 + 1;
           }
-          else if (mob.vel.x > 0) {
-            mob.vel.x -= npx2 - r.x1 + 1;
+          else if (velx > 0) {
+            velx -= npx2 - r.x1 + 1;
           }          
         }
       });
-      this.x += this.vel.x;
-      this.y += this.vel.y;
+      this.x += velx;
+      this.y += vely;
     };
   };
   

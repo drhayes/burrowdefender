@@ -69,6 +69,7 @@
 					this.m.move([r1]);
 					equals(this.m.x, 5, 'did not collide in the x');
 					equals(this.m.y, 1, 'collided in the y');
+					equals(this.m.vel.y, -10, 'velocity did not change');
 				});
 
 				test('move with collisions down with one', function() {
@@ -79,6 +80,7 @@
 					this.m.move([r1]);
 					equals(this.m.x, 5, 'did not collide in the x');
 					equals(this.m.y, 9, 'collided in the y');
+					equals(this.m.vel.y, 10, 'velocity did not change');
 				});
 				
 				test('move with collisions left with one', function() {
@@ -89,6 +91,7 @@
 					this.m.move([r1]);
 					equals(this.m.x, 1, 'collided in the x');
 					equals(this.m.y, 5, 'did not collide in the y');
+					equals(this.m.vel.x, -10, 'velocity did not change');
 				});
 				
 				test('move with collisions right with one', function() {
@@ -99,6 +102,7 @@
 					this.m.move([r1]);
 					equals(this.m.x, 9, 'collided in the x');
 					equals(this.m.y, 5, 'did not collide in the y');
+					equals(this.m.vel.x, 10, 'velocity did not change');
 				});
 				
 				test('move with collisions up with two', function() {
@@ -110,6 +114,7 @@
 					this.m.move([r1, r2]);
 					equals(this.m.x, 5, 'did not collide in the x');
 					equals(this.m.y, 5, 'collided in the y');
+					equals(this.m.vel.y, -10, 'velocity did not change');
 				});
 				
 				test('move with collisions up and to the left', function() {
@@ -123,6 +128,8 @@
 					this.m.move([r1, r2]);
 					equals(this.m.x, 1, 'collided in the x');
 					equals(this.m.y, 1, 'collided in the y');
+					equals(this.m.vel.x, -10, 'velocity x did not change');
+					equals(this.m.vel.y, -10, 'velocity y did not change');
 				});
 			});
 		</script>
