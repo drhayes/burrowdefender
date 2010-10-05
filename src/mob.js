@@ -62,18 +62,18 @@
         var oyi = utils.intersect(mob.y, mob.y + mob.size.y, r.y1, r.y2);
         if (!oyi) {
           if (mob.vel.y < 0) {
-            mob.vel.y += r.y2 - npy1;
+            mob.vel.y += r.y2 - npy1 + 1;
           }
           else if (mob.vel.y > 0) {
-            mob.vel.y -= npy2 - r.y1;
+            mob.vel.y -= npy2 - r.y1 + 1;
           }          
         }
         if (!oyx) {
           if (mob.vel.x < 0) {
-            mob.vel.x += r.x2 - npx1;
+            mob.vel.x += r.x2 - npx1 + 1;
           }
           else if (mob.vel.x > 0) {
-            mob.vel.x -= npx2 - r.x1;
+            mob.vel.x -= npx2 - r.x1 + 1;
           }          
         }
       });

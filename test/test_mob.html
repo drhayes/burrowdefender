@@ -68,7 +68,7 @@
 					var r1 = {x1: -25, y1: -30, x2: 50, y2: 0};
 					this.m.move([r1]);
 					equals(this.m.x, 5, 'did not collide in the x');
-					equals(this.m.y, 0, 'collided in the y');
+					equals(this.m.y, 1, 'collided in the y');
 				});
 
 				test('move with collisions down with one', function() {
@@ -78,7 +78,7 @@
 					var r1 = {x1: -25, y1: 40, x2: 50, y2: 75};
 					this.m.move([r1]);
 					equals(this.m.x, 5, 'did not collide in the x');
-					equals(this.m.y, 10, 'collided in the y');
+					equals(this.m.y, 9, 'collided in the y');
 				});
 				
 				test('move with collisions left with one', function() {
@@ -87,7 +87,7 @@
 					// collide in the x from the right
 					var r1 = {x1: -35, y1: 0, x2: 0, y2: 30};
 					this.m.move([r1]);
-					equals(this.m.x, 0, 'collided in the x');
+					equals(this.m.x, 1, 'collided in the x');
 					equals(this.m.y, 5, 'did not collide in the y');
 				});
 				
@@ -97,7 +97,7 @@
 					// collide in the x from the left
 					var r1 = {x1: 40, y1: 0, x2: 70, y2: 30};
 					this.m.move([r1]);
-					equals(this.m.x, 10, 'collided in the x');
+					equals(this.m.x, 9, 'collided in the x');
 					equals(this.m.y, 5, 'did not collide in the y');
 				});
 				
@@ -109,7 +109,7 @@
 					var r2 = {x1: 16, y1: -30, x2: 40, y2: 4};
 					this.m.move([r1, r2]);
 					equals(this.m.x, 5, 'did not collide in the x');
-					equals(this.m.y, 4, 'collided in the y');
+					equals(this.m.y, 5, 'collided in the y');
 				});
 				
 				test('move with collisions up and to the left', function() {
@@ -121,8 +121,8 @@
 					// collide in the x from the right
 					var r2 = {x1: -40, y1: 0, x2: 0, y2: 50};
 					this.m.move([r1, r2]);
-					equals(this.m.x, 0, 'collided in the x');
-					equals(this.m.y, 0, 'collided in the y');
+					equals(this.m.x, 1, 'collided in the x');
+					equals(this.m.y, 1, 'collided in the y');
 				});
 			});
 		</script>
