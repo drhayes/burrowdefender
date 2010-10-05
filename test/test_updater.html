@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Updater</title>
+		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/updater.js"></script>
+		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+				module('updater');
+				
+				test('namespaces', function() {
+					ok(typeof(window.Updater) !== 'undefined', 'updater');
+				});
+				
+				test('ctor', function() {
+					var updater1 = new Updater();
+					ok(typeof(updater1.processes) !== 'undefined', 'processes array defined');
+					ok(typeof(updater1.currentFrame) !== 'undefined', 'currentFrame counter defined');
+				});
+				
+				test('add', function() {
+					var updater1 = new Updater();
+					ok(typeof(updater1.add) === 'function', 'is a function');
+					ok(updater1.processes.length === 0, 'no processes yet');
+					updater1.add(function() {});
+					ok(updater1.processes.length === 1, 'one process now');
+					try {
+						updater1.add(null);
+						ok(false, 'null process');
+					}
+					catch (error) {
+						ok(true, 'null process');
+					}
+					try {
+						updater1.add({});
+						ok(false, 'must be a function');
+					}
+					catch (error) {
+						ok(true, 'must be a function');
+					}
+					var func1 = function() {};
+					ok(typeof(func1.frequency) === 'undefined', 'frequency not defined initially');
+					updater1.add(func1);
+					ok(typeof(func1.frequency) !== 'undefined', 'frequency is now defined');
+				});
+				
+				test('remove', function() {
+					var updater1 = new Updater();
+					ok(typeof(updater1.remove) === 'function', 'is a function');
+					var func1 = function() {};
+					var func2 = function() {};
+					var func3 = function() {};
+					updater1.add(func1);
+					updater1.add(func2);
+					updater1.add(func3);
+					ok(updater1.processes.length === 3, '3 processes');
+					updater1.remove(func2);
+					ok(updater1.processes.length === 2, 'should have removed 1');
+					ok(updater1.processes[0] === func1, 'func1 should still be there');
+					ok(updater1.processes[1] === func3, 'func3 should still be there');
+				});
+				
+				test('update', function() {
+					var updater1 = new Updater();
+					ok(typeof(updater1.update) === 'function', 'is a function');
+					var func1Called = false;
+					var func1 = function() {
+						func1Called = true;
+					};
+					var func2Called = false;
+					var func2 = function() {
+						func2Called = true;
+					};
+					var func3Called = false;
+					var func3 = function() {
+						func3Called = true;
+					};
+					updater1.add(func1);
+					updater1.add(func2);
+					updater1.add(func3);
+					ok(!func1Called, '1 not called');
+					ok(!func2Called, '2 not called');
+					ok(!func3Called, '3 not called');
+					ok(updater1.currentFrame === 0, 'currentFrame is 0');
+					updater1.update();
+					ok(func1Called, '1 called');
+					ok(func2Called, '2 called');
+					ok(func3Called, '3 called');
+					ok(updater1.currentFrame === 1, 'currentFrame is 1');
+				});
+				
+				test('update on frequency', function() {
+					var updater1 = new Updater();
+					var func1Called = 0;
+					var func1 = function() {
+						func1Called++;
+					};
+					func1.frequency = 2;
+					var func2Called = 0;
+					var func2 = function() {
+						func2Called++;
+					}
+					func2.frequency = 3;
+					updater1.add(func1);
+					updater1.add(func2);
+					ok(updater1.currentFrame === 0, 'currentFrame is 0');
+					updater1.update();
+					ok(func1Called === 1, 'func1 called once');
+					ok(func2Called === 1, 'func2 called once');
+					ok(updater1.currentFrame === 1, 'currentFrame is 1');
+					updater1.update();
+					ok(func1Called === 1, 'func1 called once');
+					ok(func2Called === 1, 'func2 called once');
+					ok(updater1.currentFrame === 2, 'currentFrame is 2');
+					updater1.update();
+					ok(func1Called === 2, 'func1 called twice');
+					ok(func2Called === 1, 'func2 called once');
+					ok(updater1.currentFrame === 3, 'currentFrame is 3');
+					updater1.update();
+					ok(func1Called === 2, 'func1 called twice');
+					ok(func2Called === 2, 'func2 called twice');
+					ok(updater1.currentFrame === 4, 'currentFrame is 4');
+				});
+				
+				test('start', function() {
+					expect(3);
+					var updater1 = new Updater();
+					ok(typeof(updater1.start) === 'function', 'is a function');
+					stop();
+					updater1.add(function() {
+						ok(true, 'should have been called');
+						ok(typeof(updater1.timer) !== 'undefined', 'stored timer');
+						start();
+					});
+					updater1.start();
+				});
+				
+				test('stop', function() {
+					var updater1 = new Updater();
+					// set a dummy timer on it to prove that stop removes it
+					updater1.timer = setTimeout(function() {}, 100);
+					updater1.stop();
+					ok(typeof updater1.timer === 'undefined', 'timer is gone now');
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1 id="qunit-header">Updater Test</h1>
+		<h2 id="qunit-banner"></h2>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">test markup, will be hidden</div>
+	</body>
+</html>
