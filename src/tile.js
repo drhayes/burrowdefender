@@ -8,6 +8,9 @@
 (function(global, $) {
   
   var Tile = function() {
+    this.draw = function(x, y, ctx) {
+      // this version doesn't do anything
+    };
   };
   
   // Tiles are square with this length on a side.
@@ -27,6 +30,12 @@
 
   // The other really common tile.
   Tile.Dirt = new Tile();
+  Tile.Dirt.draw = function(x, y, ctx) {
+    var oldFillStyle = ctx.fillStyle;
+    ctx.fillStyle = "rgb(102,51,0)";
+    ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize);
+    ctx.fillStyle = oldFillStyle;
+  }
   
   global.Tile = Tile;
   
