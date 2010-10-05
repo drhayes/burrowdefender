@@ -43,7 +43,17 @@
       y: nums[1]
     };
   }
-  
+
+  // given a position in tilespace, return the rect in world space
+  TileMap.getrect = function(x, y) {
+    return {
+      x1: x * Tile.tilesize,
+      y1: y * Tile.tilesize,
+      x2: (x + 1) * Tile.tilesize - 1,
+      y2: (y + 1) * Tile.tilesize - 1
+    };
+  }
+
   global.TileMap = TileMap;
   
 })(window, jQuery)
