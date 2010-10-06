@@ -54,7 +54,7 @@
 					var o2 = {x1: 64, y1: 64, x2: 80, y2: 80};
 					this.sh.set(o1);
 					this.sh.set(o2);
-					var o3 = {x1: 63, y1: 63, x2: 65, y2: 65};
+					var o3 = {x1: 63, y1: 63, x2: 64, y2: 64};
 					var x = this.sh.get(o3, 1, 1);
 					equals(x.length, 2, 'get with velocity returned two objects');
 					equals(x[0], o1, 'first object');
@@ -92,6 +92,21 @@
 					this.sh.remove(r1);
 					equals(this.sh.get(r2).length, 0, 'removed from 0,0');
 					equals(this.sh.get(r3).length, 0, 'removed from 64, 64');
+				});
+				
+				test('get big rect', function() {
+					// this test will break if cellsize changes too much
+					var r1 = {x1: 0, y1: 0, x2: 16, y2: 16};
+					var r2 = {x1: 64, y1: 64, x2: 80, y2: 80};
+					var r3 = {x1: 32, y1: 32, x2: 120, y2: 120};
+					this.sh.set(r1);
+					this.sh.set(r2);
+					// verify that both those come back because our query rect
+					// is so frickin' huge
+					var x = this.sh.get(r3);
+					equals(x.length, 2, 'got two rects');
+					equals(x[0], r1, 'r1');
+					equals(x[1], r2, 'r2');
 				});
 			});
 		</script>

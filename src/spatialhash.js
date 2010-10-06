@@ -26,27 +26,13 @@
   var SpatialHash = function() {
     this.spacemap = {};
     
-    var innerget = function(x, y) {
-      var key = makekey(x, y);
+    var innerget = function(key) {
       if (this.spacemap.hasOwnProperty(key)) {
         return this.spacemap[key];
       }
       return [];
     }
 
-    // Given in world coordinates.
-    this.get = function(r, vx, vy) {
-      var posresults = innerget.apply(this, [r.x1, r.y1]);
-      // we must account for velocity, if any
-      vx = vx || 0;
-      vy = vy || 0;
-      var velresults = [];
-      if (vx !== 0 || vy !== 0) {
-        velresults = innerget.apply(this, [r.x1 + vx, r.y1 + vy]);
-      }
-      return posresults.concat(velresults);
-    };
-    
     this.iterate = function(r, func) {
       var kx1 = keyscalar(r.x1);
       var ky1 = keyscalar(r.y1);
@@ -60,6 +46,34 @@
       }
     };
 
+    // Given in world coordinates.
+    this.get = function(r, vx, vy) {
+      var things = [];
+      var seenkeys = {};
+      var addemup = function(key, r) {
+        seenkeys[key] = true;
+        things = things.concat(innerget.apply(this, [key]));
+      };
+      this.iterate(r, function(key, r) {
+        addemup.apply(this, [key, r]);
+      });
+      // we must account for velocity
+      var rv = {
+        x1: r.x1 + vx,
+        y1: r.y1 + vy,
+        x2: r.x2 + vx,
+        y2: r.y2 + vy
+      };
+      this.iterate(rv, function(key, r) {
+        // dedupe on velocity check
+        if (seenkeys.hasOwnProperty(key)) {
+          return;
+        }
+        addemup.apply(this, [key, r]);
+      })
+      return things;
+    };
+    
     // Given a {x1,y1,x2,y2} rect, put it in the right place in the
     // spatial hash. If it's a big rect, let it span buckets in the hash.
     this.set = function(r) {
