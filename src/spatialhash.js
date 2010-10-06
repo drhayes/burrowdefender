@@ -63,18 +63,18 @@
       }
     };
 
-    this.remove = function(x, y, o) {
-      var l = this.get(x, y);
+    this.remove = function(r) {
+      var l = this.get(r.x1, r.y1);
       // find the element we're trying to remove
       var index = -1;
       for (var i = 0; i < l.length; i++) {
-        if (l[i] === o) {
+        if (l[i] === r) {
           index = i;
           break;
         }
       }
       if (index !== -1) {
-        var key = makekey(x, y);
+        var key = makekey(r.x1, r.y1);
         this.spacemap[key].splice(index, 1);
       }
     };
