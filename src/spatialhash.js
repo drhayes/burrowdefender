@@ -16,9 +16,7 @@
   }
 
   var makekey = function(x, y) {
-    var kx = Math.floor(x / cellsize);
-    var ky = Math.floor(y / cellsize);
-    return kx + ':' + ky;
+    return keyscalar(x) + ':' + keyscalar(y);
   };
 
   var SpatialHash = function() {
