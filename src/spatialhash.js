@@ -43,13 +43,15 @@
       return posresults.concat(velresults);
     };
 
-    this.set = function(x, y, o) {
-      var key = makekey(x, y);
+    // Given a {x1,y1,x2,y2} rect, put it in the right place in the
+    // spatial hash.
+    this.set = function(r) {
+      var key = makekey(r.x1, r.y1);
       if (this.spacemap.hasOwnProperty(key)) {
-        this.spacemap[key].push(o);
+        this.spacemap[key].push(r);
       }
       else {
-        this.spacemap[key] = [o];
+        this.spacemap[key] = [r];
       }
     };
 
