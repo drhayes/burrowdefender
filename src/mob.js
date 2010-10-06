@@ -79,7 +79,11 @@
             vely -= npy2 - r.y1 + 1;
           }          
         }
-        if (!oix) {
+        // since we're maybe not conflicting on y anymore, check again
+        npy1 = mob.y + vely;
+        npy2 = mob.y + mob.size.y + vely;
+        oiy = utils.intersect(npy1, npy2, r.y1, r.y2);
+        if (oiy && !oix) {
           if (velx < 0) {
             velx += r.x2 - npx1 + 1;
           }
