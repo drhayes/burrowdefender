@@ -28,18 +28,24 @@
 	
 		// set up an initial, easy tilemap
 		var tilemap = new TileMap();
-		tilemap.set(0, 3, Tile.Dirt);
-		tilemap.set(1, 3, Tile.Dirt);
-		tilemap.set(2, 3, Tile.Dirt);
-	
 		// set up the spatial hash
 		var spatialhash = new SpatialHash();
-		var rect1 = TileMap.getrect(0, 3);
-		var rect2 = TileMap.getrect(1, 3);
-		var rect3 = TileMap.getrect(2, 3);
-		spatialhash.set(rect1);
-		spatialhash.set(rect2);
-		spatialhash.set(rect3);
+		// make a utility function for adding tiles and collision blocks together
+		var adddirt = function(x, y) {
+			tilemap.set(x, y, Tile.Dirt);
+			spatialhash.set(TileMap.getrect(x, y));
+		}
+		// add some dirt tiles
+		adddirt(0, 3);
+		adddirt(1, 3);
+		adddirt(2, 3);
+		adddirt(3, 4);
+		adddirt(4, 5);
+		adddirt(5, 6);
+		adddirt(6, 7);
+		adddirt(7, 7);
+		adddirt(8, 7);
+		adddirt(9, 7);
 	
 		// set up a player
 		var player = new Mob({
@@ -51,7 +57,7 @@
 			},
 			vel: {
 				x: 0,
-				y: 1,
+				y: 2.2,
 			}
 		});
 		player.draw = function(ctx) {
