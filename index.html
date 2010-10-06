@@ -71,24 +71,7 @@
 		// set up the keyboardmanager
 		var keyboardmanager = new KeyboardManager();
 		keyboardmanager.eventer.subscribe('a', function() {
-			player.thing = true;
 			player.vel.x = 1;
-			var oldy = player.y;
-			var oldmove = player.move;
-			var newmove = function(collides) {
-				var ox = this.x;
-				var oy = this.y;
-				oldmove.apply(player, [collides]);
-				if (this.y > oldy) {
-					console.log(ox + ',' + oy);
-					console.log(collides);
-					console.log(this);
-					this.vel.x = 0;
-					this.vel.y = 0;
-					this.move = function() {};
-				}
-			}
-			player.move = newmove;
 		});
 	
 		// set up the updater
@@ -100,7 +83,7 @@
 		});
 		// move the player
 		updater.add(function() {
-			player.move(spatialhash.get(player.x, player.y));
+			player.move(spatialhash.get(player.x, player.y, player.vel.x, player.vel.y));
 		});
 		// draw the stuff
 		updater.add(function() {
