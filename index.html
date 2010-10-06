@@ -47,7 +47,7 @@
 			y: 0,
 			size: {
 				x: 16,
-				y: 16
+				y: 20
 			},
 			vel: {
 				x: 0,
@@ -57,7 +57,7 @@
 		player.draw = function(ctx) {
 			var oldFillStyle = ctx.fillStyle;
 			ctx.fillStyle = 'rgb(0, 0, 0)';
-			ctx.fillRect(this.x, this.y, this.size.x, this.size.y);
+			ctx.fillRect(this.x, this.y, this.size.x + 1, this.size.y + 1);
 			ctx.fillStyle = oldFillStyle;
 		};
 	
@@ -70,9 +70,16 @@
 	
 		// set up the keyboardmanager
 		var keyboardmanager = new KeyboardManager();
+		// set up the navigation keys
 		keyboardmanager.eventer.subscribe('a', function() {
+			player.vel.x = -1;
+		});
+		keyboardmanager.eventer.subscribe('d', function() {
 			player.vel.x = 1;
 		});
+		keyboardmanager.eventer.subscribe('s', function() {
+			player.vel.x = 0;
+		})
 	
 		// set up the updater
 		var updater = new Updater();
