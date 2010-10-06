@@ -15,10 +15,14 @@
     return Math.floor(x / cellsize);
   }
 
-  var makekey = function(x, y) {
-    return keyscalar(x) + ':' + keyscalar(y);
-  };
+  var makerawkey = function(x, y) {
+    return x + ':' + y;
+  }
 
+  var makekey = function(x, y) {
+    return makerawkey(keyscalar(x), keyscalar(y));
+  };
+  
   var SpatialHash = function() {
     this.spacemap = {};
     
@@ -42,41 +46,49 @@
       }
       return posresults.concat(velresults);
     };
-
-    // Given a {x1,y1,x2,y2} rect, put it in the right place in the
-    // spatial hash. If it's a big rect, let it span buckets in the hash.
-    this.set = function(r) {
+    
+    this.iterate = function(r, func) {
       var kx1 = keyscalar(r.x1);
       var ky1 = keyscalar(r.y1);
       var kx2 = keyscalar(r.x2);
       var ky2 = keyscalar(r.y2);
       for (var i = kx1; i <= kx2; i++) {
         for (var j = ky1; j <= ky2; j++) {
-          var key = i + ':' + j;
-          if (this.spacemap.hasOwnProperty(key)) {
-            this.spacemap[key].push(r);
-          }
-          else {
-            this.spacemap[key] = [r];
-          }
+          var key = makerawkey(i, j);
+          func.apply(this, [key, r]);
         }
       }
     };
 
-    this.remove = function(r) {
-      var l = this.get(r.x1, r.y1);
-      // find the element we're trying to remove
-      var index = -1;
-      for (var i = 0; i < l.length; i++) {
-        if (l[i] === r) {
-          index = i;
-          break;
+    // Given a {x1,y1,x2,y2} rect, put it in the right place in the
+    // spatial hash. If it's a big rect, let it span buckets in the hash.
+    this.set = function(r) {
+      this.iterate(r, function(key, r) {
+        if (this.spacemap.hasOwnProperty(key)) {
+          this.spacemap[key].push(r);
         }
-      }
-      if (index !== -1) {
-        var key = makekey(r.x1, r.y1);
-        this.spacemap[key].splice(index, 1);
-      }
+        else {
+          this.spacemap[key] = [r];
+        }
+      });
+    };
+    
+    this.remove = function(r) {
+      this.iterate(r, function(key, r) {
+        if (this.spacemap.hasOwnProperty(key)) {
+          var l = this.spacemap[key];
+          var index = -1;
+          for (var i = 0; i < l.length; i++) {
+            if (l[i] === r) {
+              index = i;
+              break;
+            }
+          }
+          if (index !== -1) {
+            this.spacemap[key].splice(index, 1);
+          }
+        }
+      });
     };
   };
 
