@@ -23,7 +23,7 @@
     // Given in world coordinates.
     this.get = function(x, y) {
       var key = this.makekey(x, y);
-      if (key in this.spacemap) {
+      if (this.spacemap.hasOwnProperty(key)) {
         return this.spacemap[key];
       }
       return [];
@@ -31,7 +31,7 @@
 
     this.set = function(x, y, o) {
       var key = this.makekey(x, y);
-      if (key in this.spacemap) {
+      if (this.spacemap.hasOwnProperty(key)) {
         this.spacemap[key].push(o);
       }
       else {
