@@ -11,17 +11,21 @@
 
   var cellsize = Tile.tilesize * 2;
 
+  var keyscalar = function(x) {
+    return Math.floor(x / cellsize);
+  }
+
+  var makekey = function(x, y) {
+    var kx = Math.floor(x / cellsize);
+    var ky = Math.floor(y / cellsize);
+    return kx + ':' + ky;
+  };
+
   var SpatialHash = function() {
     this.spacemap = {};
-
-    this.makekey = function(x, y) {
-      var kx = Math.floor(x / cellsize);
-      var ky = Math.floor(y / cellsize);
-      return kx + ':' + ky;
-    };
     
     var innerget = function(x, y) {
-      var key = this.makekey(x, y);
+      var key = makekey(x, y);
       if (this.spacemap.hasOwnProperty(key)) {
         return this.spacemap[key];
       }
@@ -42,7 +46,7 @@
     };
 
     this.set = function(x, y, o) {
-      var key = this.makekey(x, y);
+      var key = makekey(x, y);
       if (this.spacemap.hasOwnProperty(key)) {
         this.spacemap[key].push(o);
       }
@@ -62,7 +66,7 @@
         }
       }
       if (index !== -1) {
-        var key = this.makekey(x, y);
+        var key = makekey(x, y);
         this.spacemap[key].splice(index, 1);
       }
     };
