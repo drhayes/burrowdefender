@@ -53,6 +53,18 @@
 					ok(x.length === 1, 'remove pulled the o1 object');
 					equals(x[0], o2, 'o2 is the object that is left');
 				});
+				
+				test('get with velocity', function() {
+					// this test will break if cellsize changes
+					var o1 = {x: 1};
+					var o2 = {x: 2};
+					this.sh.set(0, 0, o1);
+					this.sh.set(64, 64, o2);
+					var x = this.sh.get(63, 63, 1, 1);
+					equals(x.length, 2, 'get with velocity returned two objects');
+					equals(x[0], o1, 'first object');
+					equals(x[1], o2, 'second object');
+				});
 			});
 		</script>
 	</head>

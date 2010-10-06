@@ -19,14 +19,26 @@
       var ky = Math.floor(y / cellsize);
       return kx + ':' + ky;
     };
-
-    // Given in world coordinates.
-    this.get = function(x, y) {
+    
+    var innerget = function(x, y) {
       var key = this.makekey(x, y);
       if (this.spacemap.hasOwnProperty(key)) {
         return this.spacemap[key];
       }
       return [];
+    }
+
+    // Given in world coordinates.
+    this.get = function(x, y, vx, vy) {
+      var posresults = innerget.apply(this, [x, y]);
+      // we must account for velocity, if any
+      vx = vx || 0;
+      vy = vy || 0;
+      var velresults = [];
+      if (vx !== 0 || vy !== 0) {
+        velresults = innerget.apply(this, [x + vx, y + vy]);
+      }
+      return posresults.concat(velresults);
     };
 
     this.set = function(x, y, o) {
