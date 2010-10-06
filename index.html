@@ -83,7 +83,7 @@
 		});
 		// move the player
 		updater.add(function() {
-			player.move(spatialhash.get(player.x, player.y, player.vel.x, player.vel.y));
+			player.move(spatialhash.get(player.getrect(), player.vel.x, player.vel.y));
 		});
 		// draw the stuff
 		updater.add(function() {

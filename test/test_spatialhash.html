@@ -26,23 +26,24 @@
 				test('get and set', function() {
 					ok(this.sh.get, 'get method');
 					ok(this.sh.set, 'set method');
-					ok(this.sh.get(0, 0).length == 0, 'get from empty returns empty list');
-					var o = {x1: 0, y1: 0, x2: 32, y2: 32};
-					this.sh.set(o);
-					var x = this.sh.get(0, 0);
+					var r1 = {x1: 0, y1: 0, x2: 32, y2: 32};
+					ok(this.sh.get(r1).length == 0, 'get from empty returns empty list');
+					this.sh.set(r1);
+					var x = this.sh.get(r1);
 					ok(x.length === 1, 'get with one object returns it in list');
-					equals(x[0], o, 'it is the o object');
+					equals(x[0], r1, 'it is the o object');
 				});
 				
 				test('set and remove', function() {
+					ok(this.sh.remove, 'remove method');
 					var o1 = {x1: 0, y1: 0, x2: 10, y2: 10};
 					var o2 = {x1: 15, y1: 15, x2: 25, y2: 25};
 					this.sh.set(o1);
 					this.sh.set(o2);
-					var x = this.sh.get(32, 32);
+					var x = this.sh.get(o1);
 					ok(x.length === 2, 'get with two objects returns them in a list');
 					this.sh.remove(o1);
-					x = this.sh.get(32, 32);
+					x = this.sh.get(o1);
 					ok(x.length === 1, 'remove pulled the o1 object');
 					equals(x[0], o2, 'o2 is the object that is left');
 				});
@@ -53,7 +54,8 @@
 					var o2 = {x1: 64, y1: 64, x2: 80, y2: 80};
 					this.sh.set(o1);
 					this.sh.set(o2);
-					var x = this.sh.get(63, 63, 1, 1);
+					var o3 = {x1: 63, y1: 63, x2: 65, y2: 65};
+					var x = this.sh.get(o3, 1, 1);
 					equals(x.length, 2, 'get with velocity returned two objects');
 					equals(x[0], o1, 'first object');
 					equals(x[1], o2, 'second object');
@@ -62,11 +64,13 @@
 				test('get and set with big rect', function() {
 					// this test will break if cellsize changes too much
 					var r1 = {x1: 0, y1: 0, x2: 120, y2: 120};
+					var r2 = {x1: 0, y1: 0, x2: 16, y2: 16};
+					var r3 = {x1: 64, y1: 64, x2: 80, y2: 80};
 					this.sh.set(r1);
-					var x = this.sh.get(0, 0);
+					var x = this.sh.get(r2);
 					equals(x.length, 1, 'get 0,0');
 					equals(x[0], r1, 'it is the rect we set');
-					x = this.sh.get(64, 64);
+					x = this.sh.get(r3);
 					equals(x.length, 1, 'get 64, 64');
 					equals(x[0], r1, 'it is the rect we set');
 				});
@@ -74,18 +78,20 @@
 				test('set and remove with big rect', function() {
 					// this test will break if cellsize changes too much
 					var r1 = {x1: 0, y1: 0, x2: 120, y2: 120};
+					var r2 = {x1: 0, y1: 0, x2: 16, y2: 16};
+					var r3 = {x1: 64, y1: 64, x2: 80, y2: 80};
 					this.sh.set(r1);
 					// verify it is there in a couple of places
-					var x = this.sh.get(0, 0);
+					var x = this.sh.get(r2);
 					equals(x.length, 1, 'get 0,0');
 					equals(x[0], r1, 'it is the rect we set');
-					x = this.sh.get(64, 64);
+					x = this.sh.get(r3);
 					equals(x.length, 1, 'get 64, 64');
 					equals(x[0], r1, 'it is the rect we set');
 					// now remove it
 					this.sh.remove(r1);
-					equals(this.sh.get(0, 0).length, 0, 'removed from 0,0');
-					equals(this.sh.get(64, 64).length, 0, 'removed from 64, 64');
+					equals(this.sh.get(r2).length, 0, 'removed from 0,0');
+					equals(this.sh.get(r3).length, 0, 'removed from 64, 64');
 				});
 			});
 		</script>

@@ -35,14 +35,14 @@
     }
 
     // Given in world coordinates.
-    this.get = function(x, y, vx, vy) {
-      var posresults = innerget.apply(this, [x, y]);
+    this.get = function(r, vx, vy) {
+      var posresults = innerget.apply(this, [r.x1, r.y1]);
       // we must account for velocity, if any
       vx = vx || 0;
       vy = vy || 0;
       var velresults = [];
       if (vx !== 0 || vy !== 0) {
-        velresults = innerget.apply(this, [x + vx, y + vy]);
+        velresults = innerget.apply(this, [r.x1 + vx, r.y1 + vy]);
       }
       return posresults.concat(velresults);
     };
