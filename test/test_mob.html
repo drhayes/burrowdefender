@@ -50,7 +50,16 @@
 							}
 						});
 					}
-				})
+				});
+				
+				test('getrect', function() {
+					ok(typeof(this.m.getrect) !== 'undefined', 'getrect defined');
+					var r = this.m.getrect();
+					equals(r.x1, this.m.x, 'x1 is m.x');
+					equals(r.y1, this.m.y, 'y1 is m.y');
+					equals(r.x2, this.m.x + this.m.size.x, 'x2 is m.x + m.size.x');
+					equals(r.y2, this.m.y + this.m.size.y, 'y2 is m.y + m.size.y');
+				});
 
 				test('move', function() {
 					ok(typeof(this.m.move) !== 'undefined', 'move defined');

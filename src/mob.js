@@ -34,6 +34,15 @@
       y: options.vel.y
     };
     
+    this.getrect = function() {
+      return {
+        x1: this.x,
+        y1: this.y,
+        x2: this.x + this.size.x,
+        y2: this.y + this.size.y
+      };
+    }
+    
     // Given a list of rects, don't let the mob move into any of them.
     this.move = function(collides) {
       collides = collides || [];
