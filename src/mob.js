@@ -69,9 +69,9 @@
         }
         // okay, we're doing this
         // check our old intersections to prevent teleporting
-        var oyx = utils.intersect(mob.x, mob.x + mob.size.x, r.x1, r.x2)
-        var oyi = utils.intersect(mob.y, mob.y + mob.size.y, r.y1, r.y2);
-        if (!oyi) {
+        var oix = utils.intersect(mob.x, mob.x + mob.size.x, r.x1, r.x2)
+        var oiy = utils.intersect(mob.y, mob.y + mob.size.y, r.y1, r.y2);
+        if (!oiy) {
           if (vely < 0) {
             vely += r.y2 - npy1 + 1;
           }
@@ -79,7 +79,7 @@
             vely -= npy2 - r.y1 + 1;
           }          
         }
-        if (!oyx) {
+        if (!oix) {
           if (velx < 0) {
             velx += r.x2 - npx1 + 1;
           }

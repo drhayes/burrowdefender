@@ -140,6 +140,36 @@
 					equals(this.m.vel.x, -10, 'velocity x did not change');
 					equals(this.m.vel.y, -10, 'velocity y did not change');
 				});
+				
+				test('move left and down on two adjacent objects', function() {
+					var r1 = {x1: 0, y1: 96, x2: 31, y2: 127};
+					var r2 = {x2: 32, y1: 96, x2: 63, y2: 127};
+					// modify the mob we're testing to match the failing scenario
+					this.m.x = 32;
+					this.m.y = 75;
+					this.m.vel.x = -1;
+					this.m.vel.y = 1;
+					this.m.size.x = 16;
+					this.m.size.y = 20;
+					this.m.move([r1, r2]);
+					equals(this.m.x, 31, 'move 1 to the left');
+					equals(this.m.y, 75, 'move 0 downwards');
+				});
+				
+				test('move left and up on two adjacent objects', function() {
+					var r1 = {x1: 0, y1: 96, x2: 31, y2: 127};
+					var r2 = {x2: 32, y1: 96, x2: 63, y2: 127};
+					// modify the mob we're testing to match the failing scenario
+					this.m.x = 32;
+					this.m.y = 128;
+					this.m.vel.x = -1;
+					this.m.vel.y = -1;
+					this.m.size.x = 16;
+					this.m.size.y = 20;
+					this.m.move([r1, r2]);
+					equals(this.m.x, 31, 'move 1 to the right');
+					equals(this.m.y, 128, 'move 0 downwards');
+				});
 			});
 		</script>
 	</head>
