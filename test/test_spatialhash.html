@@ -58,6 +58,18 @@
 					equals(x[0], o1, 'first object');
 					equals(x[1], o2, 'second object');
 				});
+				
+				test('get and set with big rect', function() {
+					// this test will break if cellsize changes too much
+					var r1 = {x1: 0, y1: 0, x2: 120, y2: 120};
+					this.sh.set(r1);
+					var x = this.sh.get(0, 0);
+					equals(x.length, 1, 'get 0,0');
+					equals(x[0], r1, 'it is the rect we set');
+					x = this.sh.get(64, 64);
+					equals(x.length, 1, 'get 64, 64');
+					equals(x[0], r1, 'it is the rect we set');
+				});
 			});
 		</script>
 	</head>

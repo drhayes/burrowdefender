@@ -44,14 +44,22 @@
     };
 
     // Given a {x1,y1,x2,y2} rect, put it in the right place in the
-    // spatial hash.
+    // spatial hash. If it's a big rect, let it span buckets in the hash.
     this.set = function(r) {
-      var key = makekey(r.x1, r.y1);
-      if (this.spacemap.hasOwnProperty(key)) {
-        this.spacemap[key].push(r);
-      }
-      else {
-        this.spacemap[key] = [r];
+      var kx1 = keyscalar(r.x1);
+      var ky1 = keyscalar(r.y1);
+      var kx2 = keyscalar(r.x2);
+      var ky2 = keyscalar(r.y2);
+      for (var i = kx1; i <= kx2; i++) {
+        for (var j = ky1; j <= ky2; j++) {
+          var key = i + ':' + j;
+          if (this.spacemap.hasOwnProperty(key)) {
+            this.spacemap[key].push(r);
+          }
+          else {
+            this.spacemap[key] = [r];
+          }
+        }
       }
     };
 
