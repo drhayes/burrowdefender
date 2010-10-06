@@ -41,8 +41,6 @@
 		spatialhash.set(rect2.x1, rect2.y1, rect2);
 		spatialhash.set(rect3.x1, rect3.y1, rect3);
 	
-		console.log(spatialhash);
-	
 		// set up a player
 		var player = new Mob({
 			x: 3,
@@ -73,8 +71,25 @@
 		// set up the keyboardmanager
 		var keyboardmanager = new KeyboardManager();
 		keyboardmanager.eventer.subscribe('a', function() {
+			player.thing = true;
 			player.vel.x = 1;
-		})
+			var oldy = player.y;
+			var oldmove = player.move;
+			var newmove = function(collides) {
+				var ox = this.x;
+				var oy = this.y;
+				oldmove.apply(player, [collides]);
+				if (this.y > oldy) {
+					console.log(ox + ',' + oy);
+					console.log(collides);
+					console.log(this);
+					this.vel.x = 0;
+					this.vel.y = 0;
+					this.move = function() {};
+				}
+			}
+			player.move = newmove;
+		});
 	
 		// set up the updater
 		var updater = new Updater();
