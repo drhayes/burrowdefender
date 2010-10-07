@@ -94,6 +94,12 @@
       this.y += vely;
       this.updaterect();
     };
+    
+    this.tick = function() {
+    };
+    
+    this.jump = function() {
+    };
   };
   
   global.Mob = Mob;

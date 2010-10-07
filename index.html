@@ -60,11 +60,19 @@
 				y: 2.2,
 			}
 		});
+
 		player.draw = function(ctx) {
 			var oldFillStyle = ctx.fillStyle;
 			ctx.fillStyle = 'rgb(0, 0, 0)';
 			ctx.fillRect(this.x, this.y, this.size.x + 1, this.size.y + 1);
 			ctx.fillStyle = oldFillStyle;
+		};
+
+		// gravity has to have some effect here...
+		player.tick = function() {
+			if (this.vel.y < 3) {
+				this.vel.y += 0.1;
+			}
 		};
 	
 		$('#playerlog').click(function() {
@@ -85,7 +93,10 @@
 		});
 		keyboardmanager.eventer.subscribe('s', function() {
 			player.vel.x = 0;
-		})
+		});
+		keyboardmanager.eventer.subscribe('w', function() {
+			player.jump();
+		});
 	
 		// set up the updater
 		var updater = new Updater();
@@ -96,6 +107,7 @@
 		});
 		// move the player
 		updater.add(function() {
+			player.tick();
 			player.move(spatialhash.get(player, player.vel.x, player.vel.y));
 		});
 		// draw the stuff
