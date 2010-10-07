@@ -52,13 +52,13 @@
 					}
 				});
 				
-				test('getrect', function() {
-					ok(typeof(this.m.getrect) !== 'undefined', 'getrect defined');
-					var r = this.m.getrect();
-					equals(r.x1, this.m.x, 'x1 is m.x');
-					equals(r.y1, this.m.y, 'y1 is m.y');
-					equals(r.x2, this.m.x + this.m.size.x, 'x2 is m.x + m.size.x');
-					equals(r.y2, this.m.y + this.m.size.y, 'y2 is m.y + m.size.y');
+				test('updaterect', function() {
+					ok(typeof(this.m.updaterect) !== 'undefined', 'getrect defined');
+					this.m.updaterect();
+					equals(this.m.x1, this.m.x, 'x1 is m.x');
+					equals(this.m.y1, this.m.y, 'y1 is m.y');
+					equals(this.m.x2, this.m.x + this.m.size.x, 'x2 is m.x + m.size.x');
+					equals(this.m.y2, this.m.y + this.m.size.y, 'y2 is m.y + m.size.y');
 				});
 
 				test('move', function() {
@@ -68,6 +68,10 @@
 					this.m.move();
 					equals(this.m.x, 10, 'x works');
 					equals(this.m.y, 8, 'y works');
+					equals(this.m.x1, this.m.x, 'm.x');
+					equals(this.m.y1, this.m.y, 'm.y');
+					equals(this.m.x2, this.m.x + this.m.size.x, 'm.x + m.size.x');
+					equals(this.m.y2, this.m.y + this.m.size.y, 'm.y + m.size.y');
 				});
 				
 				test('move with collisions up with one', function() {
