@@ -57,7 +57,7 @@
 			},
 			vel: {
 				x: 0,
-				y: 2.2,
+				y: 0,
 			}
 		});
 
@@ -69,11 +69,7 @@
 		};
 
 		// gravity has to have some effect here...
-		player.tick = function() {
-			if (this.vel.y < 3) {
-				this.vel.y += 0.1;
-			}
-		};
+		player.tick = Mob.gravitytick;
 	
 		$('#playerlog').click(function() {
 			console.log(player);

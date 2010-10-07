@@ -62,6 +62,20 @@
 					equals(this.m.x2, this.m.x + this.m.size.x, 'x2 is m.x + m.size.x');
 					equals(this.m.y2, this.m.y + this.m.size.y, 'y2 is m.y + m.size.y');
 				});
+				
+				test('gravitytick', function() {
+					ok(typeof(Mob.gravitytick) === 'function', 'gravity tick is a function');
+					this.m.movestate.standing = true;
+					for (var i = 0; i < 10; i++) {
+						Mob.gravitytick.call(this.m);
+					};
+					equals(this.m.vel.y, 0, 'y did not change because mob is standing');
+					this.m.movestate.standing = false;
+					for (var i = 0; i < 10; i++) {
+						Mob.gravitytick.call(this.m);
+					};
+					ok(this.m.vel.y > 0, 'gravity is taking effect');
+				});
 
 				test('move', function() {
 					ok(typeof(this.m.move) !== 'undefined', 'move defined');
@@ -216,6 +230,7 @@
 					this.m.movestate.standing = true;
 					this.m.jump();
 					equals(this.m.movestate.jumping, true, 'jumping happens when standing');
+					equals(this.m.movestate.standing, false, 'no longer standing when jumping');
 					equals(this.m.vel.y, this.m.velocities.jump, 'jumping velocity');
 					this.m.vel.y = 0;
 					this.m.jump();
@@ -231,6 +246,9 @@
 					this.m.move();
 					equals(this.m.y, 1, 'fell downwards by 1');
 					equals(this.m.movestate.standing, false, 'standing is false when falling');
+					this.m.vel.y = 0;
+					this.m.move();
+					equals(this.m.movestate.standing, false, 'standing happens on collision, not on 0 y velocity');
 				});
 				
 				test('jump twice', function() {

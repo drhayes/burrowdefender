@@ -7,6 +7,9 @@
 // Depends: utils.js
 
 (function(global, $) {
+  
+  var FORCE_OF_GRAVITY = 0.1;
+  var MAX_OF_GRAVITY = 3;
 
   var defaults = {
     x: 0,
@@ -93,6 +96,7 @@
             vely -= npy2 - r.y1 + 1;
             if (Math.abs(vely) < 0.1) {
               mob.movestate.jumping = false;
+              mob.movestate.standing = true;
             }
           }          
         }
@@ -115,10 +119,7 @@
       if (Math.abs(velx) < 0.1) {
         velx = 0;
       }
-      if (vely === 0) {
-        this.movestate.standing = true;
-      }
-      else {
+      if (vely !== 0) {
         this.movestate.standing = false;
       }
       this.x += velx;
@@ -135,7 +136,18 @@
       }
       this.vel.y = this.velocities.jump;
       this.movestate.jumping = true;
+      this.movestate.standing = false;
     };
+  };
+  
+  // meant to be bound to a mob's tick function, or .call-ed from within it
+  Mob.gravitytick = function() {
+    if (this.movestate.standing) {
+      return;
+    }
+		if (this.vel.y < MAX_OF_GRAVITY) {
+			this.vel.y += FORCE_OF_GRAVITY;
+		}
   };
   
   global.Mob = Mob;
