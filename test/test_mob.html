@@ -69,12 +69,15 @@
 					for (var i = 0; i < 10; i++) {
 						Mob.gravitytick.call(this.m);
 					};
-					equals(this.m.vel.y, 0, 'y did not change because mob is standing');
+					equals(this.m.vel.y, 1, 'y velocity set to 1 when standing');
 					this.m.movestate.standing = false;
 					for (var i = 0; i < 10; i++) {
 						Mob.gravitytick.call(this.m);
 					};
 					ok(this.m.vel.y > 0, 'gravity is taking effect');
+					this.m.movestate.standing = true;
+					Mob.gravitytick.call(this.m);
+					ok(this.m.vel.y === 1, 'y velocity is 1 when standing');
 				});
 
 				test('move', function() {

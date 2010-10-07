@@ -9,7 +9,7 @@
 (function(global, $) {
   
   var FORCE_OF_GRAVITY = 0.1;
-  var MAX_OF_GRAVITY = 3;
+  var MAX_OF_GRAVITY = 6;
 
   var defaults = {
     x: 0,
@@ -143,6 +143,7 @@
   // meant to be bound to a mob's tick function, or .call-ed from within it
   Mob.gravitytick = function() {
     if (this.movestate.standing) {
+      this.vel.y = 1;
       return;
     }
 		if (this.vel.y < MAX_OF_GRAVITY) {
