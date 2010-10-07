@@ -104,6 +104,12 @@
           }          
         }
       });
+      if (vely === 0) {
+        this.movestate.standing = true;
+      }
+      else {
+        this.movestate.standing = false;
+      }
       this.x += velx;
       this.y += vely;
       this.updaterect();

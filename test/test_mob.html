@@ -208,6 +208,17 @@
 					this.m.jump();
 					equals(this.m.vel.y, 0, 'y velocity does not change when already jumping');
 				});
+				
+				test('standing', function() {
+					equals(this.m.movestate.standing, false, 'standing starts false');
+					this.m.vel.y = 1;
+					var r1 = {x1: 0, y1: 11, x2: 10, y2: 21};
+					this.m.move([r1]);
+					equals(this.m.movestate.standing, true, 'standing is true when collide downward');
+					this.m.move();
+					equals(this.m.y, 1, 'fell downwards by 1');
+					equals(this.m.movestate.standing, false, 'standing is false when falling');
+				});
 			});
 		</script>
 	</head>
