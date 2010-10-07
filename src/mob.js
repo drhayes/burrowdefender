@@ -24,7 +24,7 @@
       standing: false
     },
     velocities: {
-      jump: -4
+      jump: -3
     }
   };
 
@@ -41,7 +41,9 @@
       y: options.vel.y
     };
     this.movestate = {
+      // jumping is defined as having jumped but not having become standing yet
       jumping: options.movestate.jumping,
+      // standing is having 0 effective y velocity
       standing: options.movestate.standing
     };
     this.velocities = {
@@ -89,6 +91,9 @@
           }
           else if (vely > 0) {
             vely -= npy2 - r.y1 + 1;
+            if (Math.abs(vely) < 0.1) {
+              mob.movestate.jumping = false;
+            }
           }          
         }
         // since we're maybe not conflicting on y anymore, check again
@@ -104,6 +109,12 @@
           }          
         }
       });
+      if (Math.abs(vely) < 0.1) {
+        vely = 0;
+      }
+      if (Math.abs(velx) < 0.1) {
+        velx = 0;
+      }
       if (vely === 0) {
         this.movestate.standing = true;
       }

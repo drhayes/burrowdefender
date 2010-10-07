@@ -76,6 +76,19 @@
 					equals(this.m.y2, this.m.y + this.m.size.y, 'm.y + m.size.y');
 				});
 				
+				test('might as well be zero', function() {
+					this.m.vel.x = 0.05;
+					this.m.vel.y = 0.05;
+					this.m.move();
+					equals(this.m.x, 5, 'x velocity corrected to 0 from 0.05');
+					equals(this.m.y, 5, 'y velocity corrected to 0 from 0.05');
+					this.m.vel.x = -0.05;
+					this.m.vel.y = -0.05;
+					this.m.move();
+					equals(this.m.x, 5, 'x velocity corrected to 0 from -0.05');
+					equals(this.m.y, 5, 'y velocity corrected to 0 from -0.05');
+				});
+				
 				test('move with collisions up with one', function() {
 					// set the mob velocity up
 					this.m.vel.y = -10;
@@ -218,6 +231,22 @@
 					this.m.move();
 					equals(this.m.y, 1, 'fell downwards by 1');
 					equals(this.m.movestate.standing, false, 'standing is false when falling');
+				});
+				
+				test('jump twice', function() {
+					this.m.movestate.standing = true;
+					this.m.jump();
+					equals(this.m.movestate.jumping, true, 'jumping while standing');
+					this.m.vel.x = 0;
+					this.m.vel.y = 0;
+					this.m.jump();
+					equals(this.m.vel.y, 0, 'y velocity still 0 because mob thinks it is still jumping');
+					this.m.move();
+					equals(this.m.movestate.jumping, true, 'y velocity 0 does not necessarily mean not jumping');
+					var r = {x1: 0, y1: 11, x2: 20, y2: 21};
+					this.m.vel.y = 1;
+					this.m.move([r]);
+					equals(this.m.movestate.jumping, false, 'jumping stops on downward collision');
 				});
 			});
 		</script>
