@@ -18,6 +18,13 @@
     vel: {
       x: 0,
       y: 0
+    },
+    movestate: {
+      jumping: false,
+      standing: false
+    },
+    velocities: {
+      jump: -4
     }
   };
 
@@ -33,6 +40,13 @@
       x: options.vel.x,
       y: options.vel.y
     };
+    this.movestate = {
+      jumping: options.movestate.jumping,
+      standing: options.movestate.standing
+    };
+    this.velocities = {
+      jump: options.velocities.jump
+    }
     
     this.updaterect = function() {
       this.x1 = this.x;
@@ -99,6 +113,11 @@
     };
     
     this.jump = function() {
+      if (this.movestate.jumping || !this.movestate.standing) {
+        return;
+      }
+      this.vel.y = this.velocities.jump;
+      this.movestate.jumping = true;
     };
   };
   

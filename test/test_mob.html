@@ -20,6 +20,8 @@
 					equals(mob.size.y, 16, 'initial y size');
 					equals(mob.vel.x, 0, 'initial x velocity');
 					equals(mob.vel.y, 0, 'initial y velocity');
+					ok(mob.movestate, 'movestate');
+					ok(mob.velocities, 'velocities');
 				});
 				
 				test('ctor with options', function() {
@@ -173,6 +175,38 @@
 					this.m.move([r1, r2]);
 					equals(this.m.x, 31, 'move 1 to the right');
 					equals(this.m.y, 128, 'move 0 downwards');
+				});
+				
+				module('jumping', {
+					setup: function() {
+						this.m = new Mob({
+							x: 0,
+							y: 0,
+							size: {
+								x: 10,
+								y: 10
+							},
+							vel: {
+								x: 0,
+								y: 0
+							}
+						});
+					}
+				});
+				
+				test('basic jumping', function() {
+					ok(this.m.movestate, 'movestate defined');
+					equals(this.m.movestate.jumping, false, 'movestate.jumping');
+					equals(this.m.movestate.standing, false, 'movestate.standing');
+					this.m.jump();
+					equals(this.m.movestate.jumping, false, 'jumping does not happen when not standing');
+					this.m.movestate.standing = true;
+					this.m.jump();
+					equals(this.m.movestate.jumping, true, 'jumping happens when standing');
+					equals(this.m.vel.y, this.m.velocities.jump, 'jumping velocity');
+					this.m.vel.y = 0;
+					this.m.jump();
+					equals(this.m.vel.y, 0, 'y velocity does not change when already jumping');
 				});
 			});
 		</script>
