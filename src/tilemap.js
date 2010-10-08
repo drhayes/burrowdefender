@@ -7,7 +7,9 @@
 
 (function(global, $) {
   
-  var TileMap = function() {
+  var TileMap = function(width, height) {
+    this.width = width;
+    this.height = height;
     this.tilemap = {};
     
     this.get = function(x, y) {
