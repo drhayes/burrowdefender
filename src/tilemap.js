@@ -38,7 +38,7 @@
           var tile = this.get(x, y);
           var tilex = (x - startx) * Tile.tilesize;
           var tiley = (y - starty) * Tile.tilesize;
-          tile.draw(tilex, tiley, ctx);
+          tile.draw(tilex - offsetx, tiley - offsety, ctx);
         }
       }
     };
