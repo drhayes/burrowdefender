@@ -7,28 +7,40 @@
 
 (function(global, $) {
   
-  var TileMap = function() {
+  var TileMap = function(width, height) {
+    this.width = width;
+    this.height = height;
     this.tilemap = {};
     
     this.get = function(x, y) {
       var key = TileMap.makekey(x, y);
-      if (key in this.tilemap) {
+      if (this.tilemap.hasOwnProperty(key)) {
         return this.tilemap[key];
       }
-      return Tile.AirTile;
+      return Tile.Air;
     };
     
     this.set = function(x, y, tile) {
       this.tilemap[TileMap.makekey(x, y)] = tile;
     };
     
-    // given the 2d context thing that comes with a canvas
-    this.draw = function(ctx) {
-      var tilemap = this;
-      $.each(this.tilemap, function(key, tile) {
-        var pos = TileMap.parsekey(key);
-        tile.draw(pos.x * Tile.tilesize, pos.y * Tile.tilesize, ctx);
-      })
+    // given the 2d context thing that comes with a canvas.
+    // the offsets are given in pixels and are optional.
+    this.draw = function(ctx, offsetx, offsety) {
+      offsetx = offsetx || 0;
+      offsety = offsety || 0;
+      var startx = Math.floor(offsetx / Tile.tilesize);
+      var starty = Math.floor(offsety / Tile.tilesize);
+      var endx = Math.floor((offsetx + this.width) / Tile.tilesize) + 1;
+      var endy = Math.floor((offsety + this.height) / Tile.tilesize) + 1;
+      for (var x = startx; x < endx; x++) {
+        for (var y = starty; y < endy; y++) {
+          var tile = this.get(x, y);
+          var tilex = x * Tile.tilesize;
+          var tiley = y * Tile.tilesize;
+          tile.draw(tilex - offsetx, tiley - offsety, ctx);
+        }
+      }
     };
   };
   

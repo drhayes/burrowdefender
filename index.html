@@ -27,7 +27,7 @@
 		var ctx = canvas.getContext("2d");
 	
 		// set up an initial, easy tilemap
-		var tilemap = new TileMap();
+		var tilemap = new TileMap(600, 500);
 		// set up the spatial hash
 		var spatialhash = new SpatialHash();
 		// make a utility function for adding tiles and collision blocks together
@@ -55,11 +55,16 @@
 				y: 0,
 			}
 		});
+		
+		var playeroffset = {
+			x: 300,
+			y: 250
+		};
 
 		player.draw = function(ctx) {
 			var oldFillStyle = ctx.fillStyle;
 			ctx.fillStyle = 'rgb(0, 0, 0)';
-			ctx.fillRect(this.x, this.y, this.size.x + 1, this.size.y + 1);
+			ctx.fillRect(playeroffset.x, playeroffset.y, this.size.x + 1, this.size.y + 1);
 			ctx.fillStyle = oldFillStyle;
 		};
 
@@ -69,9 +74,6 @@
 		$('#playerlog').click(function() {
 			console.log(player);
 		})
-	
-		tilemap.draw(ctx);
-		player.draw(ctx);
 	
 		// set up the keyboardmanager
 		var keyboardmanager = new KeyboardManager();
@@ -103,7 +105,7 @@
 		});
 		// draw the stuff
 		updater.add(function() {
-			tilemap.draw(ctx);
+			tilemap.draw(ctx, player.x - playeroffset.x, player.y - playeroffset.y);
 			player.draw(ctx);
 		});
 		$(document).ready(function() {
