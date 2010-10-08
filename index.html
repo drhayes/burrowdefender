@@ -36,16 +36,11 @@
 			spatialhash.set(TileMap.getrect(x, y));
 		}
 		// add some dirt tiles
-		adddirt(0, 3);
-		adddirt(1, 3);
-		adddirt(2, 3);
-		adddirt(3, 4);
-		adddirt(4, 5);
-		adddirt(5, 6);
-		adddirt(6, 7);
-		adddirt(7, 7);
-		adddirt(8, 7);
-		adddirt(9, 7);
+		for (var i = 0; i < 4; i++) {
+			for (var j = 0; j < 5; j++) {
+				adddirt((i * 5) + j, 3 + i);
+			}
+		}
 	
 		// set up a player
 		var player = new Mob({
@@ -82,10 +77,10 @@
 		var keyboardmanager = new KeyboardManager();
 		// set up the navigation keys
 		keyboardmanager.eventer.subscribe('a', function() {
-			player.vel.x = -1;
+			player.vel.x = -2;
 		});
 		keyboardmanager.eventer.subscribe('d', function() {
-			player.vel.x = 1;
+			player.vel.x = 2;
 		});
 		keyboardmanager.eventer.subscribe('s', function() {
 			player.vel.x = 0;
