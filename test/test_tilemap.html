@@ -123,11 +123,11 @@
 					this.tm.draw(this.fakectx, 32, 0);
 					equals(this.fakectx.fillRectArgs.length, 3, 'called three times');
 					var args = this.fakectx.fillRectArgs;
-					equals(args[0].frx, -32, 'first frx');
+					equals(args[0].frx, 0, 'first frx');
 					equals(args[0].fry, 0, 'first fry');
-					equals(args[1].frx, 0, 'second frx');
+					equals(args[1].frx, Tile.tilesize, 'second frx');
 					equals(args[1].fry, 0, 'second fry');
-					equals(args[2].frx, Tile.tilesize, 'third frx');
+					equals(args[2].frx, 2 * Tile.tilesize, 'third frx');
 					equals(args[2].fry, 0, 'third fry');
 				});
 				

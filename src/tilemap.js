@@ -36,8 +36,8 @@
       for (var x = startx; x < endx; x++) {
         for (var y = starty; y < endy; y++) {
           var tile = this.get(x, y);
-          var tilex = (x - startx) * Tile.tilesize;
-          var tiley = (y - starty) * Tile.tilesize;
+          var tilex = x * Tile.tilesize;
+          var tiley = y * Tile.tilesize;
           tile.draw(tilex - offsetx, tiley - offsety, ctx);
         }
       }
