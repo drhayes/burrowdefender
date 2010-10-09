@@ -9,17 +9,19 @@
 (function(global, $) {
   
   var SURFACE_START = 70;
-  
-  var CHUNK_SIZE = Tile.tilesize * 10;
+  var CHUNK_SCALAR = 10;
+  var CHUNK_SIZE = Tile.tilesize * CHUNK_SCALAR;
   
   var TileGenerator = function(tilemap, spatialhash) {
     this.tilemap = tilemap;
     this.spatialhash = spatialhash;
+    this.generated = {};
     
     // x,y given in world coordinates. will check for generation around this
     // coordinate and, if none, will generate some terrain.
     this.generate = function(x, y) {
-      
+      var key = TileGenerator.makekey(x, y);
+      this.generated[key] = true;
     };
   };
   

@@ -18,6 +18,7 @@
 					var tg = new TileGenerator(faketilemap, fakespatialhash);
 					equals(tg.tilemap, faketilemap, 'tg.tilemap');
 					equals(tg.spatialhash, fakespatialhash, 'tg.spatialhash');
+					ok(tg.generated, 'tg.generated');
 				});
 				
 				test('makekey', function() {
@@ -48,6 +49,15 @@
 				test('generate first chunk', function() {
 					ok(typeof(this.tg.generate) === 'function', 'tg.generate is function');
 					this.tg.generate(0, 0);
+					var key = TileGenerator.makekey(0, 0);
+					ok(this.tg.generated.hasOwnProperty(key), 'key defined in generated');
+				});
+
+				test('generate noops if already generated', function() {
+					var key = TileGenerator.makekey(0, 0);
+					this.tg.generated[key] = true;
+					this.tg.generate(0, 0);
+					equals(this.faketilemap.setArgs.length, 0, 'set not called on tilemap');
 				});
 			});
 		</script>
