@@ -32,7 +32,7 @@
 		var spatialhash = new SpatialHash();
 		// make a utility function for adding tiles and collision blocks together
 		var adddirt = function(x, y) {
-			tilemap.set(x, y, Tile.Dirt);
+			tilemap.set(x, y, Tile.DirtWithGrass);
 			spatialhash.set(TileMap.getrect(x, y));
 		}
 		// add some dirt tiles

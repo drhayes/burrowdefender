@@ -37,6 +37,16 @@
     ctx.fillStyle = oldFillStyle;
   }
   
+  // The common tile, but on the surface with grass
+  Tile.DirtWithGrass = new Tile();
+  Tile.DirtWithGrass.draw = function(x, y, ctx) {
+    Tile.Dirt.draw(x, y, ctx);
+    var oldFillStyle = ctx.fillStyle;
+    ctx.fillStyle = "rgb(0, 232, 16)";
+    ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize * 0.2);
+    ctx.fillStyle = oldFillStyle;
+  }
+  
   global.Tile = Tile;
   
 })(window, jQuery)

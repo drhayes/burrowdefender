@@ -44,6 +44,23 @@
 					equals(pos.y, -1, 'converted (-1, -1) y position correctly');
 				});
 				
+				module('tiles', {
+					setup: function() {
+						this.fakectx = {
+							fillStyle: 'old',
+							fillRect: function(frx, fry, frw, frh) {
+								this.fillRectArgs.push({
+									frx: frx,
+									fry: fry,
+									frw: frw,
+									frh: frh
+								});
+							},
+							fillRectArgs: []
+						};
+					}
+				});
+				
 				test('Air', function() {
 					checkexists(Tile.Air, 'Air exists');
 				});
@@ -51,21 +68,26 @@
 				test('Dirt', function() {
 					checkexists(Tile.Dirt, 'Dirt exists');
 					ok(typeof(Tile.Dirt.draw) == 'function', 'dirt draw exists');
-					var called = false;
-					var fakectx = {
-						fillStyle: 'old',
-						fillRect: function(frx, fry, frw, frh) {
-							called = true;
-							equals(frx, 10, 'fillRect x');
-							equals(fry, 20, 'fillRect y');
-							equals(frw, Tile.tilesize, 'fillRect width');
-							equals(frh, Tile.tilesize, 'fillRect height');
-							equals(this.fillStyle, 'rgb(102,51,0)', 'fillstyle');
-						}
-					};
-					Tile.Dirt.draw(10, 20, fakectx);
-					ok(called, 'fillRect on context was called');
-					equals(fakectx.fillStyle, 'old', 'restored fillStyle afterwards');
+					Tile.Dirt.draw(10, 20, this.fakectx);
+					equals(this.fakectx.fillRectArgs.length, 1, 'fill called');
+					var args = this.fakectx.fillRectArgs[0];
+					equals(args.frx, 10, 'fillRect x');
+					equals(args.fry, 20, 'fillRect y');
+					equals(args.frw, Tile.tilesize, 'fillRect width');
+					equals(args.frh, Tile.tilesize, 'fillRect height');
+					equals(this.fakectx.fillStyle, 'old', 'restored fillStyle afterwards');
+				});
+				
+				test('DirtWithGrass', function() {
+					checkexists(Tile.DirtWithGrass, 'DirtWithGrass exists');
+					ok(typeof(Tile.DirtWithGrass.draw) === 'function', 'draw exists');
+					Tile.DirtWithGrass.draw(10, 20, this.fakectx);
+					equals(this.fakectx.fillRectArgs.length, 2, 'fill called twice');
+					var args = this.fakectx.fillRectArgs[1];
+					equals(args.frx, 10, 'fillRect x');
+					equals(args.fry, 20, 'fillRect y');
+					equals(args.frw, Tile.tilesize, 'fillRect width');
+					equals(args.frh, Tile.tilesize * 0.2, 'fillRect height');
 				});
 
 			});
