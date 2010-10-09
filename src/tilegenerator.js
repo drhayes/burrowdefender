@@ -21,6 +21,10 @@
     // coordinate and, if none, will generate some terrain.
     this.generate = function(x, y) {
       var key = TileGenerator.makekey(x, y);
+      if (this.generated.hasOwnProperty(key)) {
+        return;
+      }
+      // generate some stuff!
       this.generated[key] = true;
     };
   };
@@ -30,6 +34,15 @@
     var kx = Math.floor(x / CHUNK_SIZE);
     var ky = Math.floor(y / CHUNK_SIZE);
     return kx + ':' + ky;
+  };
+  
+  // Given an x in tilespace, returns a y in tilespace that is the surface of
+  // the land at this tile x.
+  TileGenerator.gensurface = function(x) {
+    var y = 1.25 * Math.sin(0.02 * x) - 2.3 * Math.sin(0.3 * x) +
+      0.5 * Math.cos(0.9 * x) + 3 * Math.sin(0.1 * x) -
+      5.1 * Math.cos(0.09 * x);
+    return Math.round(y);
   }
 
   global.TileGenerator = TileGenerator;

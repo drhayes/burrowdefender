@@ -28,6 +28,12 @@
 					equals(TileGenerator.makekey(Tile.tilesize * 11, 0), '1:0', 'key for (tilesize*10, 0)');
 				});
 				
+				test('gensurface', function() {
+					ok(typeof(TileGenerator.gensurface) === 'function', 'gensurface defined');
+					var y = TileGenerator.gensurface(0);
+					ok(typeof(y) === 'number', 'y is a number');
+				});
+				
 				module('surface generation', {
 					setup: function() {
 						this.faketilemap = {
