@@ -7,6 +7,9 @@
 
 (function(global, $) {
   
+  var dirtimage = new Image();
+  dirtimage.src = 'assets/images/dirt.png'
+  
   var Tile = function() {
     this.draw = function(x, y, ctx) {
       // this version doesn't do anything
@@ -35,6 +38,7 @@
     ctx.fillStyle = 'rgb(102,51,0)';
     ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize + 1);
     ctx.fillStyle = oldFillStyle;
+    ctx.drawImage(dirtimage, x, y);
   }
   
   // The common tile, but on the surface with grass
