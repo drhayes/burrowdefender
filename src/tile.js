@@ -33,7 +33,7 @@
   Tile.Dirt.draw = function(x, y, ctx) {
     var oldFillStyle = ctx.fillStyle;
     ctx.fillStyle = "rgb(102,51,0)";
-    ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize);
+    ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize + 1);
     ctx.fillStyle = oldFillStyle;
   }
   

@@ -7,9 +7,8 @@
 
 
 (function(global, $) {
-  
-  var SURFACE_START = 70;
-  var CHUNK_SCALAR = 10;
+
+  var CHUNK_SCALAR = 30;
   var CHUNK_SIZE = Tile.tilesize * CHUNK_SCALAR;
   
   var genscalar = function(s) {
@@ -32,13 +31,22 @@
       // generate some stuff!
       this.generated[key] = true;
       // what tile x are we starting from?
-      var x1 = Tile.totilepos(x, 0).x;
+      var x1 = Tile.totilepos(genscalar(x) * CHUNK_SIZE, 0).x
       var x2 = x1 + CHUNK_SCALAR;
       var y = 0;
+      var tile = null;
       for (var i = x1; i < x2; i++) {
         y = TileGenerator.gensurface(i);
-        this.tilemap.set(i, y, Tile.DirtWithGrass);
-        this.spatialhash.set(TileMap.getrect(i, y));
+        for (var j = 0; j < 10; j++) {
+          if (j === 0) {
+            tile = Tile.DirtWithGrass;
+          }
+          else {
+            tile = Tile.Dirt;
+          }
+          this.tilemap.set(i, y + j, tile);
+          this.spatialhash.set(TileMap.getrect(i, y + j));
+        }
       }
     };
   };
