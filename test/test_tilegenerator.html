@@ -22,6 +22,9 @@
 				
 				test('makekey', function() {
 					ok(typeof(TileGenerator.makekey) === 'function', 'makekey defined');
+					equals(TileGenerator.makekey(0, 0), '0:0', 'key for (0,0)');
+					equals(TileGenerator.makekey(-1, 0), '-1:0', 'key for (-1, 0)');
+					equals(TileGenerator.makekey(Tile.tilesize * 11, 0), '1:0', 'key for (tilesize*10, 0)');
 				});
 				
 				module('surface generation', {

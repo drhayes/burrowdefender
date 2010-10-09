@@ -25,7 +25,9 @@
   
   // Given x,y in world-space, give
   TileGenerator.makekey = function(x, y) {
-    
+    var kx = Math.floor(x / CHUNK_SIZE);
+    var ky = Math.floor(y / CHUNK_SIZE);
+    return kx + ':' + ky;
   }
 
   global.TileGenerator = TileGenerator;
