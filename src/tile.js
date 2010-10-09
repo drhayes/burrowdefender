@@ -9,6 +9,8 @@
   
   var dirtimage = new Image();
   dirtimage.src = 'assets/images/dirt.png'
+  var grassimage = new Image();
+  grassimage.src = 'assets/images/grass.png'
   
   var Tile = function() {
     this.draw = function(x, y, ctx) {
@@ -36,7 +38,7 @@
   Tile.Dirt.draw = function(x, y, ctx) {
     var oldFillStyle = ctx.fillStyle;
     ctx.fillStyle = 'rgb(102,51,0)';
-    ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize + 1);
+    ctx.fillRect(x, Tile.tilesize + y - 2, Tile.tilesize, 3);
     ctx.fillStyle = oldFillStyle;
     ctx.drawImage(dirtimage, x, y);
   }
@@ -45,10 +47,8 @@
   Tile.DirtWithGrass = new Tile();
   Tile.DirtWithGrass.draw = function(x, y, ctx) {
     Tile.Dirt.draw(x, y, ctx);
+    ctx.drawImage(grassimage, x, y);
     var oldFillStyle = ctx.fillStyle;
-    ctx.fillStyle = "rgb(0, 232, 16)";
-    ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize * 0.2);
-    ctx.fillStyle = oldFillStyle;
   }
   
   global.Tile = Tile;

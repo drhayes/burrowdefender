@@ -100,7 +100,6 @@
         }
         // okay, we're doing this
         // check our old intersections to prevent teleporting
-        console.log(r);
         var oiy = utils.intersect(mob.y, mob.y + mob.size.y, r.y1, r.y2);
         if (!oiy) {
           if (vely < 0) {
