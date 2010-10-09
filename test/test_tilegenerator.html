@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>TileGenerator</title>
+		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="../src/tile.js"></script>
+		<script type="text/javascript" src="../src/tilegenerator.js"></script>
+		<script type="text/javascript" src="qunit.js"></script>
+		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<script>
+			$(document).ready(function() {
+				module('basics');
+				
+				test('ctor', function() {
+					ok(typeof(window.TileGenerator) !== 'undefined', 'TileGenerator defined');
+					var faketilemap = {};
+					var fakespatialhash = {};
+					var tg = new TileGenerator(faketilemap, fakespatialhash);
+					equals(tg.tilemap, faketilemap, 'tg.tilemap');
+					equals(tg.spatialhash, fakespatialhash, 'tg.spatialhash');
+				});
+				
+				test('makekey', function() {
+					ok(typeof(TileGenerator.makekey) === 'function', 'makekey defined');
+				});
+				
+				module('surface generation', {
+					setup: function() {
+						this.faketilemap = {
+							set: function(x, y, tile) {
+								this.setArgs.push({x: x, y: y, tile: tile});
+							},
+							setArgs: []
+						};
+						this.fakespatialhash = {
+							set: function(r) {
+								this.rects.push(r);
+							},
+							rects: []
+						};
+						this.tg = new TileGenerator(this.faketilemap, this.fakespatialhash);
+					}
+				});
+				
+				test('generate first chunk', function() {
+					ok(typeof(this.tg.generate) === 'function', 'tg.generate is function');
+					this.tg.generate(0, 0);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1 id="qunit-header">TileGenerator Test</h1>
+		<h2 id="qunit-banner"></h2>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">test markup, will be hidden</div>
+	</body>
+</html>
