@@ -1,11 +1,7 @@
 // keyboardmanager.js
 //
-// much of the design of this class is taken from JavaScript: The Definitive Guide
-// with some modifications to work with the rest of the framework and with
-// the knowledge that this is inside an AIR app.
-// does not detect modifier keys themselves, only in combination with
-// printable characters.
-// depends: eventer.js
+// much of the design of this class is taken from JavaScript: The
+// Definitive Guide with some modifications.
 
 (function(global, $) {
 
@@ -15,7 +11,8 @@
       // Note, however that these keycodes may be device-dependent and different
       // keyboard layouts may have different values.
       var keyCodeToFunctionKey = { 
-          8:"backspace", 9:"tab", 13:"return", 19:"pause", 27:"escape", 32:"space",
+          8:"backspace", 9:"tab", 13:"return", 16:"shift", 17:"control",
+          18:"alt", 19:"pause", 27:"escape", 32:"space",
           33:"pageup", 34:"pagedown", 35:"end", 36:"home", 37:"left", 38:"up",
           39:"right", 40:"down", 44:"printscreen", 45:"insert", 46:"delete",
           112:"f1", 113:"f2", 114:"f3", 115:"f4", 116:"f5", 117:"f6", 118:"f7",
@@ -36,21 +33,19 @@
           87:"w", 88:"x", 89:"y", 90:"z", 107:"+", 109:"-", 110:".", 188:",",
           190:".", 191:"/", 192:"`", 219:"[", 220:"\\", 221:"]", 222:"\""
       };
-
-      // used for callbacks and such
+      
       var me = this;
-      this.eventer = new Eventer();
 
       var dispatchCallback = function(event) {
           me.dispatch(event);
       }
 
-      this.keyMap = {};
+      this.keymap = {};
 
       // latch onto keydown and keyup events of the body element
       this.latch = function() {
           $('body').keydown(dispatchCallback);
-          $('body').keypress(dispatchCallback);
+          $('body').keyup(dispatchCallback);
       }
 
       // we are latched on construction
@@ -58,81 +53,29 @@
 
       this.unlatch = function() {
           $('body').unbind('keydown', dispatchCallback);
-          $('body').unbind('keypress', dispatchCallback);
+          $('body').unbind('keyup', dispatchCallback);
       }
 
       // function called when receiving a keyboard event
       this.dispatch = function(event) {
-          var modifiers = '';
           var keyname = '';
-          if (event.type === 'keydown') {
-              var code = event.keyCode;
-              // ignore keydown events for shift, ctrl, and alt
-              if (code === 16 || code === 17 || code === 18) {
-                  return;
-              }
-              // retrieve keyname from our mapping
-              keyname = keyCodeToFunctionKey[code];
+          var code = event.keyCode;
+          // retrieve keyname from our mapping
+          keyname = keyCodeToFunctionKey[code];
 
-              // if this wasn't a function key, but the ctrl or alt modifiers are
-              // down, we want to treat it like a function key
-              if (!keyname && (event.altKey || event.ctrlKey)) {
-                  keyname = keyCodeToPrintableChar[code];
-              }
-
-              // if we found a name for this key, figure out its modifiers
-              // otherwise, return and ignore this keydown event
-              if (keyname) {
-                  if (event.altKey) {
-                      modifiers += 'alt_';
-                  }
-                  if (event.ctrlKey) {
-                      modifiers += 'ctrl_';
-                  }
-                  if (event.shiftKey) {
-                      modifiers += 'shift_';
-                  }
-              }
-              else {
-                  return;
-              }
-          }
-          else if (event.type === 'keypress') {
-              // if ctrl or alt are down, we already handled it
-              if (event.altKey || event.ctrlKey) {
-                  return;
-              }
-
-              // TODO: do we get keypress events for nonprinting keys in AIR?
-              if (event.charCode != undefined && event.charCode === 0) {
-                  return;
-              }
-
-              // the code is an ASCII code, so just convert it to a string
-              keyname = String.fromCharCode(event.charCode);
-
-              // if the name of the key is uppercase, conver to lower and add shift
-              // we do it this way to handle CAPS LOCK; it sends capital letters
-              // without having the shift modifier set
-              var lowercase = keyname.toLowerCase();
-              if (keyname != lowercase) {
-                  keyname = lowercase;
-                  modifiers += 'shift_';
-              }
+          // if this wasn't a function key, check printable
+          if (!keyname) {
+              keyname = keyCodeToPrintableChar[code];
           }
 
-          // now that we've determined modifiers and key name, fire
+          // is this a press or a release?
+          var val = (event.type === 'keydown');
+          // now that we've determined key name, fire
           // the handler function (if present)
-          var resultKey = modifiers + keyname;
-          var eventArg = {};
-          eventArg['key'] = resultKey;
-          this.eventer.fire(resultKey, eventArg);
+          if (keyname) {
+            this.keymap[keyname] = val;
+          }
       }
-
-      this.bind = function(key, handler) {
-          // using the eventer means we can handle multiple events per keypress
-          this.eventer.subscribe(key, handler);
-      }    
   }
   
   global.KeyboardManager = KeyboardManager;

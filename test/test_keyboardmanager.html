@@ -14,7 +14,6 @@
 				
 				test('ctor', function() {
 					var keyman = new KeyboardManager();
-					ok(typeof(keyman.eventer) === 'object', 'eventer field');
 					keyman.unlatch();
 				});
 				
@@ -47,71 +46,30 @@
 					ok(dispatchCalled, 'dispatch was called after latching');
 					keyMan.unlatch();
 				});
+				
+				module('usage', {
+					setup: function() {
+						this.keyman = new KeyboardManager();
+					},
+					teardown: function() {
+						this.keyman.unlatch();
+					}
+				})
 
 				test('bind', function() {
-					var keyMan = new KeyboardManager();
-					ok(typeof(keyMan.keyMap) !== 'undefined', 'keyMap exists on keyboard manager');
-					ok(typeof(keyMan.bind) === 'function', 'bind exists on key man');
+					ok(typeof(this.keyman.keymap) !== 'undefined', 'keymap exists on keyboard manager');
 					
-					var called = false;
-					keyMan.bind('w', function() {
-						called = true;
+					this.keyman.dispatch({
+						type: 'keydown',
+						keyCode: 87 // w
 					});
-					keyMan.dispatch({
-						type: 'keypress',
-						charCode: 119 // w
+					ok(this.keyman.keymap['w'], 'w is pressed right now');
+					this.keyman.dispatch({
+						type: 'keyup',
+						keyCode: 87 // w
 					});
-					ok(called, 'bound');
-					keyMan.unlatch();
-				});
-				
-				test('case', function() {
-					var keyMan = new KeyboardManager();
-					var called = false;
-					called = false;
-					keyMan.bind('1', function() {
-						called = true;
-					})
-					keyMan.dispatch({
-						type: 'keypress',
-						'charCode': 49 // '1'
-					});
-					ok(called, 'should have been called for 1');
-					called = false;
-					keyMan.dispatch({
-						type: 'keypress',
-						'charCode': 33 // '!'
-					});
-					ok(!called, 'should not have been called for !');
-					called = false;
-					keyMan.bind('shift_x', function() {
-						called = true;
-					})
-					keyMan.dispatch({
-						type: 'keypress',
-						'charCode': 88 // 'X'
-					});
-					ok(called, 'called for X');
-					called = false;
-					keyMan.dispatch({
-						type: 'keypress',
-						'charCode': 120 // 'x'
-					});
-					ok(!called, 'not called for x');
-					keyMan.unlatch();
-				});
-				
-				test('spacebar', function() {
-					expect(1);
-					var keyman = new KeyboardManager();
-					keyman.bind(' ', function() {
-						ok(true, 'spacebar called');
-					})
-					keyman.dispatch({
-						type: 'keypress',
-						'charCode': 32 // spacebar
-					});
-				});
+					ok(!this.keyman.keymap['w'], 'w is not pressed anymore');
+				});				
 			});
 		</script>
 	</head>
