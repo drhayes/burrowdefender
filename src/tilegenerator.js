@@ -3,7 +3,7 @@
 // Splits the tilespace into a bunch of chunks and adds a mess of sine and
 // cosine functions together to generate a surface.
 //
-// Depends: tile.js
+// Depends: tile.js, tilemap.js
 
 
 (function(global, $) {
@@ -12,6 +12,10 @@
   var CHUNK_SCALAR = 10;
   var CHUNK_SIZE = Tile.tilesize * CHUNK_SCALAR;
   
+  var genscalar = function(s) {
+    return Math.floor(s / CHUNK_SIZE);
+  }
+  
   var TileGenerator = function(tilemap, spatialhash) {
     this.tilemap = tilemap;
     this.spatialhash = spatialhash;
@@ -19,6 +23,7 @@
     
     // x,y given in world coordinates. will check for generation around this
     // coordinate and, if none, will generate some terrain.
+    // TODO: This only does the surface for now!
     this.generate = function(x, y) {
       var key = TileGenerator.makekey(x, y);
       if (this.generated.hasOwnProperty(key)) {
@@ -26,14 +31,21 @@
       }
       // generate some stuff!
       this.generated[key] = true;
+      // what tile x are we starting from?
+      var x1 = genscalar(x);
+      var x2 = x1 + CHUNK_SCALAR;
+      var y = 0;
+      for (var i = x1; i < x2; i++) {
+        y = TileGenerator.gensurface(i);
+        this.tilemap.set(i, y, Tile.DirtWithGrass);
+        this.spatialhash.set(TileMap.getrect(i, y));
+      }
     };
   };
   
   // Given x,y in world-space, give
   TileGenerator.makekey = function(x, y) {
-    var kx = Math.floor(x / CHUNK_SIZE);
-    var ky = Math.floor(y / CHUNK_SIZE);
-    return kx + ':' + ky;
+    return genscalar(x) + ':' + genscalar(y);
   };
   
   // Given an x in tilespace, returns a y in tilespace that is the surface of

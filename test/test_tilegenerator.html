@@ -4,6 +4,7 @@
 		<title>TileGenerator</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="../src/tile.js"></script>
+		<script type="text/javascript" src="../src/tilemap.js"></script>
 		<script type="text/javascript" src="../src/tilegenerator.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
@@ -57,6 +58,9 @@
 					this.tg.generate(0, 0);
 					var key = TileGenerator.makekey(0, 0);
 					ok(this.tg.generated.hasOwnProperty(key), 'key defined in generated');
+					var expectedtimes = 10;
+					equals(this.faketilemap.setArgs.length, expectedtimes, 'equals CHUNK_SCALAR');
+					equals(this.fakespatialhash.rects.length, expectedtimes, 'equals CHUNK_SCALAR');
 				});
 
 				test('generate noops if already generated', function() {
