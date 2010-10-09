@@ -31,22 +31,26 @@
 		var tilemap = new TileMap(600, 500);
 		// set up the spatial hash
 		var spatialhash = new SpatialHash();
+		// generate some surface!
+		var tilegenerator = new TileGenerator(tilemap, spatialhash);
+		tilegenerator.generate(0, 0);
+		tilegenerator.generate(-10 * Tile.tilesize, 0);
 		// make a utility function for adding tiles and collision blocks together
-		var adddirt = function(x, y) {
-			tilemap.set(x, y, Tile.DirtWithGrass);
-			spatialhash.set(TileMap.getrect(x, y));
-		}
-		// add some dirt tiles
-		for (var i = 0; i < 4; i++) {
-			for (var j = 0; j < 5; j++) {
-				adddirt((i * 5) + j, 3 + i);
-			}
-		}
+		// var adddirt = function(x, y) {
+		// 	tilemap.set(x, y, Tile.DirtWithGrass);
+		// 	spatialhash.set(TileMap.getrect(x, y));
+		// }
+		// // add some dirt tiles
+		// for (var i = 0; i < 4; i++) {
+		// 	for (var j = 0; j < 5; j++) {
+		// 		adddirt((i * 5) + j, 3 + i);
+		// 	}
+		// }
 	
 		// set up a player
 		var player = new Mob({
 			x: 0,
-			y: 0,
+			y: -200,
 			size: {
 				x: 16,
 				y: 20

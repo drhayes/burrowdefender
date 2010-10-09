@@ -32,7 +32,7 @@
       // generate some stuff!
       this.generated[key] = true;
       // what tile x are we starting from?
-      var x1 = genscalar(x);
+      var x1 = Tile.totilepos(x, 0).x;
       var x2 = x1 + CHUNK_SCALAR;
       var y = 0;
       for (var i = x1; i < x2; i++) {

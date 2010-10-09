@@ -26,7 +26,8 @@
 					ok(typeof(TileGenerator.makekey) === 'function', 'makekey defined');
 					equals(TileGenerator.makekey(0, 0), '0:0', 'key for (0,0)');
 					equals(TileGenerator.makekey(-1, 0), '-1:0', 'key for (-1, 0)');
-					equals(TileGenerator.makekey(Tile.tilesize * 11, 0), '1:0', 'key for (tilesize*10, 0)');
+					equals(TileGenerator.makekey(Tile.tilesize * 11, 0), '1:0', 'key for (tilesize*11, 0)');
+					equals(TileGenerator.makekey(Tile.tilesize * 21, 0), '2:0', 'key for (tilesize*21, 0)');
 				});
 				
 				test('gensurface', function() {
@@ -55,11 +56,16 @@
 				
 				test('generate first chunk', function() {
 					ok(typeof(this.tg.generate) === 'function', 'tg.generate is function');
-					this.tg.generate(0, 0);
-					var key = TileGenerator.makekey(0, 0);
+					this.tg.generate(Tile.tilesize * 11, 0);
+					var key = TileGenerator.makekey(Tile.tilesize * 11, 0);
 					ok(this.tg.generated.hasOwnProperty(key), 'key defined in generated');
 					var expectedtimes = 10;
 					equals(this.faketilemap.setArgs.length, expectedtimes, 'equals CHUNK_SCALAR');
+					for (var i = 0; i < expectedtimes; i++) {
+						var args = this.faketilemap.setArgs[i];
+						console.log(args);
+						equals(args.x, 11 + i, 'tile set at tilespace x');
+					}
 					equals(this.fakespatialhash.rects.length, expectedtimes, 'equals CHUNK_SCALAR');
 				});
 
