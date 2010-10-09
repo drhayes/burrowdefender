@@ -36,6 +36,9 @@
 		tilegenerator.generate(31 * Tile.tilesize, 0);
 		tilegenerator.generate(0, 0);
 		tilegenerator.generate(-10 * Tile.tilesize, 0);
+		
+		// set up the keyboardmanager
+		var keyboardmanager = new KeyboardManager();
 	
 		// set up a player
 		var player = new Mob({
@@ -63,28 +66,27 @@
 			ctx.fillStyle = oldFillStyle;
 		};
 
+		// update the player every tick
+		player.tick = function() {
 		// gravity has to have some effect here...
-		player.tick = Mob.gravitytick;
+			Mob.gravitytick.call(this);
+			if (keyboardmanager.keymap['a']) {
+				player.vel.x = -2;
+			}
+			else if (keyboardmanager.keymap['d']) {
+				player.vel.x = 2;
+			}
+			else {
+				player.vel.x = 0;
+			}
+			if (keyboardmanager.keymap['w']) {
+				player.jump();
+			}
+		}
 	
 		$('#playerlog').click(function() {
 			console.log(player);
 		})
-	
-		// set up the keyboardmanager
-		var keyboardmanager = new KeyboardManager();
-		// set up the navigation keys
-		keyboardmanager.eventer.subscribe('a', function() {
-			player.vel.x = -2;
-		});
-		keyboardmanager.eventer.subscribe('d', function() {
-			player.vel.x = 2;
-		});
-		keyboardmanager.eventer.subscribe('s', function() {
-			player.vel.x = 0;
-		});
-		keyboardmanager.eventer.subscribe('w', function() {
-			player.jump();
-		});
 	
 		// set up the updater
 		var updater = new Updater();
