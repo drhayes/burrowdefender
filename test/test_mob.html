@@ -206,6 +206,17 @@
 					equals(this.m.x, 31, 'move 1 to the right');
 					equals(this.m.y, 128, 'move 0 downwards');
 				});
+
+				test('move up near two adjacent objects', function() {
+					var r1 = {x1: -30, y1: -25, x2: 4, y2: 4};
+					var r2 = {x1: -30, y1: 5, x2: 4, y2: 30};
+					// modify the mob we're testing to match failing scenario
+					this.m.vel.x = -5;
+					this.m.vel.y = -5;
+					this.m.move([r1, r2]);
+					equals(this.m.x, 5, 'move 0 to the left');
+					equals(this.m.y, 0, 'move 5 upwards');
+				});
 				
 				module('jumping', {
 					setup: function() {

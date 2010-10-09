@@ -66,7 +66,21 @@
       var mob = this;
       var velx = this.vel.x;
       var vely = this.vel.y;
+      // sort the collides so any that current intersecting come first
+      var firstcollides = [];
+      var secondcollides = [];
       $.each(collides, function(i, r) {
+        var oiy = utils.intersect(mob.y, mob.y + mob.size.y, r.y1, r.y2);
+        var oix = utils.intersect(mob.x, mob.x + mob.size.x, r.x1, r.x2);
+        if (oiy || oix) {
+          firstcollides.push(r);
+        }
+        else {
+          secondcollides.push(r);
+        }
+      });
+      var newcollides = [].concat(firstcollides, secondcollides);
+      $.each(newcollides, function(i, r) {
         // collide at all?
         var npx1 = mob.x + velx;
         var npy1 = mob.y + vely;
@@ -86,7 +100,7 @@
         }
         // okay, we're doing this
         // check our old intersections to prevent teleporting
-        var oix = utils.intersect(mob.x, mob.x + mob.size.x, r.x1, r.x2)
+        console.log(r);
         var oiy = utils.intersect(mob.y, mob.y + mob.size.y, r.y1, r.y2);
         if (!oiy) {
           if (vely < 0) {
@@ -100,6 +114,7 @@
             }
           }          
         }
+        var oix = utils.intersect(mob.x, mob.x + mob.size.x, r.x1, r.x2)
         // since we're maybe not conflicting on y anymore, check again
         npy1 = mob.y + vely;
         npy2 = mob.y + mob.size.y + vely;
