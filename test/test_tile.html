@@ -56,7 +56,15 @@
 									frh: frh
 								});
 							},
-							fillRectArgs: []
+							fillRectArgs: [],
+							drawImage: function(image, ix, iy) {
+								this.drawImageArgs.push({
+									image: image,
+									x: ix,
+									y: iy
+								});
+							},
+							drawImageArgs: []
 						};
 					}
 				});
@@ -69,25 +77,23 @@
 					checkexists(Tile.Dirt, 'Dirt exists');
 					ok(typeof(Tile.Dirt.draw) == 'function', 'dirt draw exists');
 					Tile.Dirt.draw(10, 20, this.fakectx);
+					equals(this.fakectx.drawImageArgs.length, 1, 'drawImage called');
+					var args = this.fakectx.drawImageArgs[0];
+					equals(args.x, 10, 'drawImage x');
+					equals(args.y, 20, 'drawImage y');
 					equals(this.fakectx.fillRectArgs.length, 1, 'fill called');
-					var args = this.fakectx.fillRectArgs[0];
+					args = this.fakectx.fillRectArgs[0];
 					equals(args.frx, 10, 'fillRect x');
-					equals(args.fry, 20, 'fillRect y');
+					equals(args.fry, 50, 'fillRect y');
 					equals(args.frw, Tile.tilesize, 'fillRect width');
-					equals(args.frh, Tile.tilesize, 'fillRect height');
-					equals(this.fakectx.fillStyle, 'old', 'restored fillStyle afterwards');
+					equals(args.frh, 3, 'fillRect height');
 				});
 				
 				test('DirtWithGrass', function() {
 					checkexists(Tile.DirtWithGrass, 'DirtWithGrass exists');
 					ok(typeof(Tile.DirtWithGrass.draw) === 'function', 'draw exists');
 					Tile.DirtWithGrass.draw(10, 20, this.fakectx);
-					equals(this.fakectx.fillRectArgs.length, 2, 'fill called twice');
-					var args = this.fakectx.fillRectArgs[1];
-					equals(args.frx, 10, 'fillRect x');
-					equals(args.fry, 20, 'fillRect y');
-					equals(args.frw, Tile.tilesize, 'fillRect width');
-					equals(args.frh, Tile.tilesize * 0.2, 'fillRect height');
+					equals(this.fakectx.fillRectArgs.length, 1, 'fill called once');
 				});
 
 			});

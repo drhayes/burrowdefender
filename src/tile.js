@@ -32,14 +32,16 @@
   // Default tile (meant to be used by ref by everybody) that fills the
   // map at first.
   Tile.Air = new Tile();
+  Tile.Air.draw = function(x, y, ctx) {
+    ctx.fillStyle = 'rgb(0, 128, 255)';
+    ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize + 1);
+  }
 
   // The other really common tile.
   Tile.Dirt = new Tile();
   Tile.Dirt.draw = function(x, y, ctx) {
-    var oldFillStyle = ctx.fillStyle;
     ctx.fillStyle = 'rgb(102,51,0)';
     ctx.fillRect(x, Tile.tilesize + y - 2, Tile.tilesize, 3);
-    ctx.fillStyle = oldFillStyle;
     ctx.drawImage(dirtimage, x, y);
   }
   
