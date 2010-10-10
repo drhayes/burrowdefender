@@ -70,6 +70,29 @@
 		player.tick = function() {
 		// gravity has to have some effect here...
 			Mob.gravitytick.call(this);
+			// are we mining?
+			if (keyboardmanager.keymap['shift']) {
+				// convert player's current position to tile
+				var tilepos = Tile.totilepos(player.x, player.y);
+				if (keyboardmanager.keymap['a']) { // left
+					tilepos.x -= 1;
+				}
+				else if (keyboardmanager.keymap['d']) { // right
+					tilepos.x += 1;
+				}
+				else if (keyboardmanager.keymap['w']) { // up
+					tilepos.y -= 1;
+				}
+				else if (keyboardmanager.keymap['s']) { // down
+					tilepos.y += 1;
+				}
+				// is it a dirt tile?
+				var digtile = tilemap.get(tilepos.x, tilepos.y);
+				if (digtile === Tile.Dirt || digtile === Tile.DirtWithGrass) {
+					tilemap.set(tilepos.x, tilepos.y, Tile.DirtDug);
+					spatialhash.remove(TileMap.getrect(tilepos.x, tilepos.y));
+				}
+			}
 			if (keyboardmanager.keymap['a']) {
 				player.vel.x = -2;
 			}
