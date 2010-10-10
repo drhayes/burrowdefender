@@ -73,7 +73,8 @@
 			// are we mining?
 			if (keyboardmanager.keymap['shift']) {
 				// convert player's current position to tile
-				var tilepos = Tile.totilepos(player.x, player.y);
+				// respect player's center of mass
+				var tilepos = Tile.totilepos(player.x + player.size.x / 2, player.y + player.size.y / 2);
 				if (keyboardmanager.keymap['a']) { // left
 					tilepos.x -= 1;
 				}
