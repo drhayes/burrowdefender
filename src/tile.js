@@ -51,6 +51,13 @@
     var oldFillStyle = ctx.fillStyle;
   }
   
+  // A dirt tile that has been dug
+  Tile.DirtDug = new Tile();
+  Tile.DirtDug.draw = function(x, y, ctx) {
+    ctx.fillStyle = 'rgb(40, 15, 0)';
+    ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize + 1);
+  };
+  
   global.Tile = Tile;
   
 })(window, jQuery)
