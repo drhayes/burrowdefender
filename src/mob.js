@@ -9,7 +9,7 @@
 (function(global, $) {
   
   var FORCE_OF_GRAVITY = 0.1;
-  var MAX_OF_GRAVITY = 6;
+  var MAX_OF_GRAVITY = 12;
 
   var defaults = {
     x: 0,
