@@ -88,8 +88,9 @@
 					x = this.sh.get(r3);
 					equals(x.length, 1, 'get 64, 64');
 					equals(x[0], r1, 'it is the rect we set');
-					// now remove it
-					this.sh.remove(r1);
+					// now remove an equivalent one
+					var r1again = {x1: r1.x1, y1: r1.y1, x2: r1.x2, y2: r1.y2};
+					this.sh.remove(r1again);
 					equals(this.sh.get(r2).length, 0, 'removed from 0,0');
 					equals(this.sh.get(r3).length, 0, 'removed from 64, 64');
 				});

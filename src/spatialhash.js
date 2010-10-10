@@ -93,7 +93,9 @@
           var l = this.spacemap[key];
           var index = -1;
           for (var i = 0; i < l.length; i++) {
-            if (l[i] === r) {
+            var checkrect = l[i];
+            if (checkrect.x1 === r.x1 && checkrect.y1 === r.y1 &&
+                checkrect.x2 === r.x2 && checkrect.y2 === r.y2) {
               index = i;
               break;
             }
