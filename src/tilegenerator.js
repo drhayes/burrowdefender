@@ -37,7 +37,7 @@
       var tile = null;
       for (var i = x1; i < x2; i++) {
         y = TileGenerator.gensurface(i);
-        for (var j = 0; j < 10; j++) {
+        for (var j = 0; j < 20; j++) {
           if (j === 0) {
             tile = Tile.DirtWithGrass;
           }
