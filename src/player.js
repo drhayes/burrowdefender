@@ -6,9 +6,22 @@
 
 (function(global, $) {
   
-  var Player = function(options) {
-    return new Mob(options);
+  var Player = function() {
   };
+  
+  Player.prototype = new Mob({
+		x: 0,
+		y: -200,
+		size: {
+			x: 16,
+			y: 20
+		},
+		vel: {
+			x: 0,
+			y: 0,
+		}
+	});
+  Player.constructor = Player;
   
   global.Player = Player;
   

@@ -18,9 +18,9 @@
 					ok(typeof(window.Player) !== 'undefined', 'player exists');
 					var p = new Player();
 					equals(p.x, 0, 'initial x pos');
-					equals(p.y, 0, 'initial y pos');
+					equals(p.y, -200, 'initial y pos');
 					equals(p.size.x, 16, 'initial x size');
-					equals(p.size.y, 16, 'initial y size');
+					equals(p.size.y, 20, 'initial y size');
 					equals(p.vel.x, 0, 'initial x velocity');
 					equals(p.vel.y, 0, 'initial y velocity');
 					ok(p.movestate, 'movestate');
