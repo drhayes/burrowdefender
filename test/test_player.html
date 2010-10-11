@@ -33,6 +33,15 @@
 							playeroffset: {
 								x: 16,
 								y: 16
+							},
+							keyboardmanager: {
+								keymap: {
+									'w': false,
+									'a': false,
+									's': false,
+									'd': false,
+									'shift': false
+								}
 							}
 						};
 						this.p = new Player(this.fakegame);
@@ -61,6 +70,11 @@
 					equals(args.fry, this.fakegame.playeroffset.y, 'fillRect y');
 					equals(args.frw, this.p.size.x + 1, 'fillRect w');
 					equals(args.frh, this.p.size.y + 1, 'fillRect h');
+				});
+				
+				test('tick', function() {
+					ok(typeof(this.p.tick) === 'function', 'tick exists');
+					this.p.tick();
 				});
 			});
 		</script>
