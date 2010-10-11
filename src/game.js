@@ -15,6 +15,16 @@
     this.spatialhash = new SpatialHash();
     this.tilegenerator = new TileGenerator(this.tilemap, this.spatialhash);
     this.keyboardmanager = new KeyboardManager();
+    this.playeroffset = {
+      x: this.width / 2,
+      y: this.height / 2
+    };
+    this.updater = new Updater();
+    
+    // methods
+    this.start = function() {
+      this.updater.start();
+    }
   };
   
   global.Game = Game;

@@ -30,6 +30,23 @@
 					ok(g.spatialhash, 'g.spatialhash');
 					ok(g.tilegenerator, 'g.tilegenerator');
 					ok(g.keyboardmanager, 'g.keyboardmanager');
+					ok(g.playeroffset, 'g.playeroffset');
+					equals(g.playeroffset.x, 125, 'g.playeroffset.x');
+					equals(g.playeroffset.y, 75, 'g.playeroffset.y');
+					ok(g.updater, 'g.updater');
+				});
+				
+				module('usage', {
+					setup: function() {
+						this.g = new Game('#testcanvas');
+					}
+				});
+				
+				test('start', function() {
+					ok(typeof(this.g.start) === 'function', 'g.start');
+					this.g.start();
+					ok(this.g.updater.timer, 'timer is running');
+					this.g.updater.stop();
 				});
 			});
 		</script>
