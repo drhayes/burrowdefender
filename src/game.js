@@ -79,6 +79,11 @@
     this.updater.add(function() {
       me.update();
     });
+    
+    this.clearbackground = function(ctx) {
+			ctx.fillStyle = 'rgb(255, 255, 255)';
+			ctx.fillRect(0, 0, this.width, this.height);
+    }
   };
   
   global.Game = Game;
