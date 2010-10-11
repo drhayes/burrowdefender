@@ -86,7 +86,7 @@
     };
     
     this.drawtiles = function(ctx) {
-      
+			this.tilemap.draw(ctx, this.player.x - this.playeroffset.x, this.player.y - this.playeroffset.y);
     };
     
     // last but not least, add the player

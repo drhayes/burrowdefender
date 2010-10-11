@@ -157,8 +157,12 @@
 							this.y = y;
 						}
 					};
+					this.g.player.x = -30;
+					this.g.player.y = 200;
 					this.g.drawtiles(this.fakectx);
-					
+					same(this.g.tilemap.ctx, this.fakectx, 'tilemap has right ctx');
+					equals(this.g.tilemap.x, -155, 'tilemap.draw x');
+					equals(this.g.tilemap.y, 125, 'tilemap.draw y');
 				});
 			});
 		</script>
