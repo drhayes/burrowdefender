@@ -98,6 +98,7 @@
 				
 				test('update', function() {
 					ok(typeof(this.g.update) === 'function', 'update exists');
+					equals(this.g.updater.processes.length, 1, 'there is an update process');
 					var thing = {
 						draw: function() {
 							this.drew = true;

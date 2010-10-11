@@ -69,6 +69,11 @@
         other();
       });
     };
+    
+    // add the update method to the updater thingy
+    this.updater.add(function() {
+      me.update();
+    });
   };
   
   global.Game = Game;
