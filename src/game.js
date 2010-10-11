@@ -42,7 +42,7 @@
       };
       if (typeof(thing.move) === 'function') {
         this.movables.push(function() {
-          thing.move();
+          thing.move(me.spatialhash.get(thing, thing.vel.x, thing.vel.y));
         });
       };
       if (typeof(thing.draw) === 'function') {
