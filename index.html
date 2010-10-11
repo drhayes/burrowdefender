@@ -13,6 +13,8 @@
 	<script type="text/javascript" src="src/tilegenerator.js"></script>
 	<script type="text/javascript" src="src/keyboardmanager.js"></script>
 	<script type="text/javascript" src="src/updater.js"></script>
+	<script type="text/javascript" src="src/player.js"></script>
+	<script type="text/javascript" src="src/game.js"></script>
 	<style type="text/css">
 		#drawme {
 			border: 1px solid #000;
@@ -23,121 +25,9 @@
 	<button id="playerlog">Player log</button><br>
 	<canvas id="drawme" width="600" height="500"></canvas>
 	<script type="text/javascript">
-		// grab the canvas and its context
-		var canvas = $("#drawme")[0];
-		var ctx = canvas.getContext("2d");
-	
-		// set up an initial, easy tilemap
-		var tilemap = new TileMap(600, 500);
-		// set up the spatial hash
-		var spatialhash = new SpatialHash();
-		// generate some surface!
-		var tilegenerator = new TileGenerator(tilemap, spatialhash);
-		tilegenerator.generate(31 * Tile.tilesize, 0);
-		tilegenerator.generate(0, 0);
-		tilegenerator.generate(-10 * Tile.tilesize, 0);
-		
-		// set up the keyboardmanager
-		var keyboardmanager = new KeyboardManager();
-	
-		// set up a player
-		var player = new Mob({
-			x: 0,
-			y: -200,
-			size: {
-				x: 16,
-				y: 20
-			},
-			vel: {
-				x: 0,
-				y: 0,
-			}
-		});
-		
-		var playeroffset = {
-			x: 300,
-			y: 250
-		};
-
-		player.draw = function(ctx) {
-			var oldFillStyle = ctx.fillStyle;
-			ctx.fillStyle = 'rgb(0, 0, 0)';
-			ctx.fillRect(playeroffset.x, playeroffset.y, this.size.x + 1, this.size.y + 1);
-			ctx.fillStyle = oldFillStyle;
-		};
-		
-		var lastmined = 0;
-
-		// update the player every tick
-		player.tick = function() {
-		// gravity has to have some effect here...
-			Mob.gravitytick.call(this);
-			// are we mining?
-			if (keyboardmanager.keymap['shift']) {
-				// convert player's current position to tile
-				// respect player's center of mass
-				var tilepos = Tile.totilepos(player.x + player.size.x / 2, player.y + player.size.y / 2);
-				if (keyboardmanager.keymap['a']) { // left
-					tilepos.x -= 1;
-				}
-				else if (keyboardmanager.keymap['d']) { // right
-					tilepos.x += 1;
-				}
-				else if (keyboardmanager.keymap['w']) { // up
-					tilepos.y -= 1;
-				}
-				else if (keyboardmanager.keymap['s']) { // down
-					tilepos.y += 1;
-				}
-				// is it a dirt tile?
-				var digtile = tilemap.get(tilepos.x, tilepos.y);
-				if (digtile === Tile.Dirt || digtile === Tile.DirtWithGrass) {
-					var currenttime = new Date().getTime();
-					if (currenttime - lastmined > 500) {
-						tilemap.set(tilepos.x, tilepos.y, Tile.DirtDug);
-						spatialhash.remove(TileMap.getrect(tilepos.x, tilepos.y));
-						lastmined = new Date().getTime();
-					}
-				}
-			}
-			if (keyboardmanager.keymap['a']) {
-				player.vel.x = -2;
-			}
-			else if (keyboardmanager.keymap['d']) {
-				player.vel.x = 2;
-			}
-			else {
-				player.vel.x = 0;
-			}
-			if (keyboardmanager.keymap['w']) {
-				player.jump();
-			}
-		}
-	
-		$('#playerlog').click(function() {
-			console.log(player);
-		})
-	
-		// set up the updater
-		var updater = new Updater();
-		// clear the canvas
-		updater.add(function() {
-			ctx.fillStyle = 'rgb(255, 255, 255)';
-			ctx.fillRect(0, 0, 600, 500);
-		});
-		// move the player
-		updater.add(function() {
-			player.tick();
-			player.move(spatialhash.get(player, player.vel.x, player.vel.y));
-		});
-		// draw the stuff
-		updater.add(function() {
-			tilemap.draw(ctx, player.x - playeroffset.x, player.y - playeroffset.y);
-			player.draw(ctx);
-		});
 		$(document).ready(function() {
-			// start the updater
-			updater.start();
+			var game = new Game('#drawme');
+			game.start();
 		});
 	</script>
 </body>
