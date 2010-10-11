@@ -25,6 +25,11 @@
     this.tickables = [];
     this.others = [];
     
+    // temporary tile generation
+		this.tilegenerator.generate(31 * Tile.tilesize, 0);
+		this.tilegenerator.generate(0, 0);
+		this.tilegenerator.generate(-10 * Tile.tilesize, 0);
+    
     // methods
     this.start = function() {
       this.updater.start();
