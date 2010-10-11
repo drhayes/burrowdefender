@@ -83,7 +83,16 @@
     this.clearbackground = function(ctx) {
 			ctx.fillStyle = 'rgb(255, 255, 255)';
 			ctx.fillRect(0, 0, this.width, this.height);
-    }
+    };
+    
+    this.drawtiles = function(ctx) {
+      
+    };
+    
+    // last but not least, add the player
+    this.player = new Player();
+    this.player.x = 0;
+    this.player.y = -200;
   };
   
   global.Game = Game;

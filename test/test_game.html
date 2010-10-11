@@ -13,6 +13,7 @@
 		<script type="text/javascript" src="../src/tilegenerator.js"></script>
 		<script type="text/javascript" src="../src/keyboardmanager.js"></script>
 		<script type="text/javascript" src="../src/updater.js"></script>
+		<script type="text/javascript" src="../src/player.js"></script>
 		<script type="text/javascript" src="../src/game.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
@@ -34,11 +35,26 @@
 					equals(g.playeroffset.x, 125, 'g.playeroffset.x');
 					equals(g.playeroffset.y, 75, 'g.playeroffset.y');
 					ok(g.updater, 'g.updater');
+					ok(g.player, 'g.player');
+					equals(g.player.x, 0, 'g.player.x');
+					equals(g.player.y, -200, 'g.player.y');
 				});
 				
 				module('usage', {
 					setup: function() {
 						this.g = new Game('#testcanvas');
+						this.fakectx = {
+							fillStyle: 'old',
+							fillRect: function(frx, fry, frw, frh) {
+								this.fillRectArgs.push({
+									frx: frx,
+									fry: fry,
+									frw: frw,
+									frh: frh
+								});
+							},
+							fillRectArgs: []
+						};
 					}
 				});
 				
@@ -123,25 +139,26 @@
 				
 				test('clearbackground', function() {
 					ok(typeof(this.g.clearbackground) === 'function', 'clearbackground exists');
-					var fakectx = {
-						fillStyle: 'old',
-						fillRect: function(frx, fry, frw, frh) {
-							this.fillRectArgs.push({
-								frx: frx,
-								fry: fry,
-								frw: frw,
-								frh: frh
-							});
-						},
-						fillRectArgs: []
-					};
-					this.g.clearbackground(fakectx);
-					equals(fakectx.fillRectArgs.length, 1, 'fillRect called');
-					var args = fakectx.fillRectArgs[0];
+					this.g.clearbackground(this.fakectx);
+					equals(this.fakectx.fillRectArgs.length, 1, 'fillRect called');
+					var args = this.fakectx.fillRectArgs[0];
 					equals(args.frx, 0, 'fillRect x');
 					equals(args.fry, 0, 'fillRect y');
 					equals(args.frw, this.g.width, 'fillRect w');
 					equals(args.frh, this.g.height, 'fillRect h');
+				});
+				
+				test('drawtiles', function() {
+					ok(typeof(this.g.drawtiles) === 'function', 'drawtiles exists');
+					this.g.tilemap = {
+						draw: function(ctx, x, y) {
+							this.ctx = ctx;
+							this.x = x;
+							this.y = y;
+						}
+					};
+					this.g.drawtiles(this.fakectx);
+					
 				});
 			});
 		</script>
