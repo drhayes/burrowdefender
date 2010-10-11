@@ -48,6 +48,73 @@
 					ok(this.g.updater.timer, 'timer is running');
 					this.g.updater.stop();
 				});
+				
+				test('add', function() {
+					ok(typeof(this.g.add) === 'function', 'g.add');
+					var drawable = {
+						draw: function() {}
+					};
+					var tickable = {
+						tick: function() {}
+					};
+					var movable = {
+						move: function() {}
+					};
+					var both = {
+						tick: function() {},
+						draw: function() {}
+					};
+					var other = function() {};
+					equals(this.g.drawables.length, 0, 'g.drawables.length is 0');
+					equals(this.g.tickables.length, 0, 'g.tickable.length is 0');
+					equals(this.g.movables.length, 0, 'g.movable.length is 0');
+					equals(this.g.others.length, 0, 'g.others.length is 0');
+					this.g.add(drawable);
+					equals(this.g.drawables.length, 1, 'drawables gets added');
+					equals(this.g.tickables.length, 0, 'tickables is not added');
+					equals(this.g.movables.length, 0, 'movables is not added');
+					equals(this.g.others.length, 0, 'g.others.length is 0');
+					this.g.add(tickable);
+					equals(this.g.drawables.length, 1, 'drawables is not added');
+					equals(this.g.tickables.length, 1, 'tickables gets added');
+					equals(this.g.movables.length, 0, 'movables is not added');
+					equals(this.g.others.length, 0, 'g.others.length is 0');
+					this.g.add(movable);
+					equals(this.g.drawables.length, 1, 'drawables is not added');
+					equals(this.g.tickables.length, 1, 'tickables is not added');
+					equals(this.g.movables.length, 1, 'movables gets added');
+					equals(this.g.others.length, 0, 'g.others.length is 0');
+					this.g.add(both);
+					equals(this.g.drawables.length, 2, 'drawables is not added');
+					equals(this.g.tickables.length, 2, 'tickables is not added');
+					equals(this.g.movables.length, 1, 'movables is not added');
+					equals(this.g.others.length, 0, 'g.others.length is 0');
+					this.g.add(other);
+					equals(this.g.drawables.length, 2, 'drawables is not added');
+					equals(this.g.tickables.length, 2, 'tickables is not added');
+					equals(this.g.movables.length, 1, 'movables is not added');
+					equals(this.g.others.length, 1, 'g.others.length is 1');
+				});
+				
+				test('update', function() {
+					ok(typeof(this.g.update) === 'function', 'update exists');
+					var thing = {
+						draw: function() {
+							this.drew = true;
+						},
+						tick: function() {
+							this.ticked = true;
+						},
+						move: function() {
+							this.moved = true;
+						}
+					};
+					this.g.add(thing);
+					this.g.update();
+					ok(thing.drew, 'drew');
+					ok(thing.ticked, 'ticked');
+					ok(thing.moved, 'moved');
+				});
 			});
 		</script>
 	</head>
