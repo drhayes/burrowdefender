@@ -99,9 +99,10 @@
     this.add(backgrounddraw);
     
     // last but not least, add the player
-    this.player = new Player();
+    this.player = new Player(this);
     this.player.x = 0;
     this.player.y = -200;
+    this.add(this.player);
   };
   
   global.Game = Game;
