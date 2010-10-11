@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Game</title>
+		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/game.js"></script>
+		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<script>
+			$(document).ready(function() {
+				module('basics');
+				
+				test('game', function() {
+					ok(typeof(Game) !== 'undefined', 'game defined');
+					var g = new Game('#testcanvas');
+					ok(g.canvas, 'g.canvas');
+					ok(g.ctx, 'g.ctx');
+					equals(g.width, 250, 'canvas width');
+					equals(g.height, 150, 'canvas height');
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1 id="qunit-header">Game Test</h1>
+		<h2 id="qunit-banner"></h2>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">test markup, will be hidden</div>
+		<canvas id="testcanvas" width="250" height="150"></canvas>
+	</body>
+</html>
