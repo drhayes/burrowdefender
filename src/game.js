@@ -61,6 +61,9 @@
     };
     
     this.update = function() {
+      $.each(this.others, function(index, other) {
+        other();
+      });
       $.each(this.tickables, function(index, tickable) {
         tickable();
       });
@@ -69,9 +72,6 @@
       });
       $.each(this.drawables, function(index, drawable) {
         drawable();
-      });
-      $.each(this.others, function(index, other) {
-        other();
       });
     };
     
@@ -88,6 +88,15 @@
     this.drawtiles = function(ctx) {
 			this.tilemap.draw(ctx, this.player.x - this.playeroffset.x, this.player.y - this.playeroffset.y);
     };
+    
+    // add our drawing tasks
+    var backgrounddraw = {
+      draw: function(ctx) {
+        me.clearbackground(ctx);
+        me.drawtiles(ctx);
+      }
+    };
+    this.add(backgrounddraw);
     
     // last but not least, add the player
     this.player = new Player();

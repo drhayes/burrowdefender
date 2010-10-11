@@ -38,6 +38,7 @@
 					ok(g.player, 'g.player');
 					equals(g.player.x, 0, 'g.player.x');
 					equals(g.player.y, -200, 'g.player.y');
+					equals(g.drawables.length, 1, 'already drawing background in update task');
 				});
 				
 				module('usage', {
@@ -81,32 +82,32 @@
 						draw: function() {}
 					};
 					var other = function() {};
-					equals(this.g.drawables.length, 0, 'g.drawables.length is 0');
+					equals(this.g.drawables.length, 1, 'g.drawables.length is 0');
 					equals(this.g.tickables.length, 0, 'g.tickable.length is 0');
 					equals(this.g.movables.length, 0, 'g.movable.length is 0');
 					equals(this.g.others.length, 0, 'g.others.length is 0');
 					this.g.add(drawable);
-					equals(this.g.drawables.length, 1, 'drawables gets added');
+					equals(this.g.drawables.length, 2, 'drawables gets added');
 					equals(this.g.tickables.length, 0, 'tickables is not added');
 					equals(this.g.movables.length, 0, 'movables is not added');
 					equals(this.g.others.length, 0, 'g.others.length is 0');
 					this.g.add(tickable);
-					equals(this.g.drawables.length, 1, 'drawables is not added');
+					equals(this.g.drawables.length, 2, 'drawables is not added');
 					equals(this.g.tickables.length, 1, 'tickables gets added');
 					equals(this.g.movables.length, 0, 'movables is not added');
 					equals(this.g.others.length, 0, 'g.others.length is 0');
 					this.g.add(movable);
-					equals(this.g.drawables.length, 1, 'drawables is not added');
+					equals(this.g.drawables.length, 2, 'drawables is not added');
 					equals(this.g.tickables.length, 1, 'tickables is not added');
 					equals(this.g.movables.length, 1, 'movables gets added');
 					equals(this.g.others.length, 0, 'g.others.length is 0');
 					this.g.add(both);
-					equals(this.g.drawables.length, 2, 'drawables is not added');
+					equals(this.g.drawables.length, 3, 'drawables is not added');
 					equals(this.g.tickables.length, 2, 'tickables is not added');
 					equals(this.g.movables.length, 1, 'movables is not added');
 					equals(this.g.others.length, 0, 'g.others.length is 0');
 					this.g.add(other);
-					equals(this.g.drawables.length, 2, 'drawables is not added');
+					equals(this.g.drawables.length, 3, 'drawables is not added');
 					equals(this.g.tickables.length, 2, 'tickables is not added');
 					equals(this.g.movables.length, 1, 'movables is not added');
 					equals(this.g.others.length, 1, 'g.others.length is 1');
@@ -130,6 +131,8 @@
 							y: 0
 						}
 					};
+					// get rid of the game's built-in background draw for this test
+					this.g.drawables = [];
 					this.g.add(thing);
 					this.g.update();
 					ok(thing.drew, 'drew');
