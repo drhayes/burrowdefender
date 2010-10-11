@@ -6,7 +6,12 @@
 
 (function(global, $) {
   
-  var Player = function() {
+  var Player = function(game) {
+    this.draw = function(ctx) {
+			ctx.fillStyle = 'rgb(0, 0, 0)';
+			// draw a little bigger than player size so player is standing on ground
+			ctx.fillRect(game.playeroffset.x, game.playeroffset.y, this.size.x + 1, this.size.y + 1);
+    };
   };
   
   Player.prototype = new Mob({

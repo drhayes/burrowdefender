@@ -26,6 +26,42 @@
 					ok(p.movestate, 'movestate');
 					ok(p.velocities, 'velocities');
 				});
+				
+				module('usage', {
+					setup: function() {
+						this.fakegame = {
+							playeroffset: {
+								x: 16,
+								y: 16
+							}
+						};
+						this.p = new Player(this.fakegame);
+					}
+				});
+				
+				test('draw', function() {
+					var fakectx = {
+						fillStyle: 'old',
+						fillRect: function(frx, fry, frw, frh) {
+							this.fillRectArgs.push({
+								frx: frx,
+								fry: fry,
+								frw: frw,
+								frh: frh
+							});
+						},
+						fillRectArgs: []
+					};
+					ok(typeof(this.p.draw) === 'function', 'draw exists');
+					this.p.draw(fakectx);
+					equals(fakectx.fillStyle, 'rgb(0, 0, 0)', 'fill style set correctly');
+					equals(fakectx.fillRectArgs.length, 1, 'fillRect was called once');
+					var args = fakectx.fillRectArgs[0];
+					equals(args.frx, this.fakegame.playeroffset.x, 'fillRect x');
+					equals(args.fry, this.fakegame.playeroffset.y, 'fillRect y');
+					equals(args.frw, this.p.size.x + 1, 'fillRect w');
+					equals(args.frh, this.p.size.y + 1, 'fillRect h');
+				});
 			});
 		</script>
 	</head>
