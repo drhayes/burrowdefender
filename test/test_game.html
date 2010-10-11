@@ -4,6 +4,15 @@
 		<title>Game</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/eventer.js"></script>
+		<script type="text/javascript" src="../src/utils.js"></script>
+		<script type="text/javascript" src="../src/tile.js"></script>
+		<script type="text/javascript" src="../src/tilemap.js"></script>
+		<script type="text/javascript" src="../src/mob.js"></script>
+		<script type="text/javascript" src="../src/spatialhash.js"></script>
+		<script type="text/javascript" src="../src/tilegenerator.js"></script>
+		<script type="text/javascript" src="../src/keyboardmanager.js"></script>
+		<script type="text/javascript" src="../src/updater.js"></script>
 		<script type="text/javascript" src="../src/game.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
@@ -17,6 +26,10 @@
 					ok(g.ctx, 'g.ctx');
 					equals(g.width, 250, 'canvas width');
 					equals(g.height, 150, 'canvas height');
+					ok(g.tilemap, 'g.tilemap');
+					ok(g.spatialhash, 'g.spatialhash');
+					ok(g.tilegenerator, 'g.tilegenerator');
+					ok(g.keyboardmanager, 'g.keyboardmanager');
 				});
 			});
 		</script>
