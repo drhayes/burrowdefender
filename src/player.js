@@ -64,7 +64,7 @@
   
   Player.prototype = new Mob({
 		x: 0,
-		y: -200,
+		y: 0,
 		size: {
 			x: 16,
 			y: 20
