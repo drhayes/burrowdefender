@@ -60,13 +60,9 @@
 					this.tg.generate(Tile.tilesize * testoffset, 0);
 					var key = TileGenerator.makekey(Tile.tilesize * testoffset, 0);
 					ok(this.tg.generated.hasOwnProperty(key), 'key defined in generated');
-					var expectedtimes = testoffset - 1;
-					equals(this.faketilemap.setArgs.length, expectedtimes, 'equals CHUNK_SCALAR');
-					for (var i = 0; i < expectedtimes; i++) {
-						var args = this.faketilemap.setArgs[i];
-						equals(args.x, testoffset - 1 + i, 'tile set at tilespace x');
-					}
-					equals(this.fakespatialhash.rects.length, expectedtimes, 'equals CHUNK_SCALAR');
+					var expectedslices = testoffset - 1;
+					equals(this.faketilemap.setArgs.length, expectedslices * 20, 'equals CHUNK_SCALAR');
+					equals(this.fakespatialhash.rects.length, expectedslices * 20, 'equals CHUNK_SCALAR');
 				});
 
 				test('generate noops if already generated', function() {
