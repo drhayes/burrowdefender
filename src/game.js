@@ -70,20 +70,30 @@
       });
     };
     
-    var drawiterate = function(layer) {
-      $.each(me.drawables, function(i, drawable) {
-        if (drawable.hasOwnProperty(layer)) {
-          drawable[layer](me.ctx);
-        }
+    var drawiterate = function(drawthing, layer) {
+      var drawthings = drawthing[layer];
+      $.each(drawthings, function(i, thing) {
+        thing(me.ctx);
       });
-    }
+    };
     
     this.draw = function() {
-      drawiterate('background');
-      drawiterate('tile');
-      drawiterate('sprite1');
-      drawiterate('sprite2');
-      drawiterate('hud');
+      var drawthing = {
+        background: [],
+        tile: [],
+        sprite1: [],
+        sprite2: [],
+        hud: []
+      };
+      // get all the drawable functions from people
+      $.each(this.drawables, function(i, drawable) {
+        drawable.draw(drawthing);
+      });
+      drawiterate(drawthing, 'background');
+      drawiterate(drawthing, 'tile');
+      drawiterate(drawthing, 'sprite1');
+      drawiterate(drawthing, 'sprite2');
+      drawiterate(drawthing, 'hud');
     };
     
     // add the update method to the updater thingy

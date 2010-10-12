@@ -10,5 +10,13 @@ var FakeCtx = function() {
 			frw: frw,
 			frh: frh
     });
-  }
+  },
+  this.drawImage = function(img, drx, dry) {
+    this.drawImageArgs.push({
+      img: img,
+      drx: drx,
+      dry: dry
+    });
+  };
+  this.drawImageArgs = [];
 };

@@ -6,6 +6,7 @@
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="../src/tile.js"></script>
 		<script type="text/javascript" src="../src/tilemap.js"></script>
+		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" media="screen" title="no title">
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
@@ -79,18 +80,7 @@
 						// for the purposes of these tests, Air doesn't have a draw method
 						this.olddraw = Tile.Air.draw;
 						this.tm = new TileMap(64, 64);
-						this.fakectx = {
-							fillStyle: 'old',
-							fillRect: function(frx, fry, frw, frh) {
-								this.fillRectArgs.push({
-									frx: frx,
-									fry: fry,
-									frw: frw,
-									frh: frh
-								});
-							},
-							fillRectArgs: []
-						};
+						this.fakectx = new FakeCtx();
 					},
 					teardown: function() {
 						Tile.Air.draw = this.olddraw;

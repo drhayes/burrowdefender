@@ -177,8 +177,10 @@
 				
 				test('background draw', function() {
 					var backgroundthing = {
-						background: function(ctx) {
-							this.ctx = ctx;
+						draw: function(drawthing) {
+							drawthing.background.push(function(ctx) {
+								backgroundthing.ctx = ctx;
+							});
 						}
 					};
 					this.g.drawables = [backgroundthing];
@@ -189,12 +191,14 @@
 				test('background and sprite', function() {
 					expect(3);
 					var backandsprite = {
-						background: function(ctx) {
-							this.drewback = true;
-						},
-						sprite1: function(ctx) {
-							ok(this.drewback, 'drew the background first');
-							this.drewsprite = true;
+						draw: function(drawthing) {
+							drawthing.background.push(function(ctx) {
+								backandsprite.drewback = true;
+							});
+							drawthing.sprite1.push(function(ctx) {
+								ok(backandsprite.drewback, 'drew the background first');
+								backandsprite.drewsprite = true;
+							});
 						}
 					};
 					this.g.drawables = [backandsprite];
@@ -205,20 +209,22 @@
 				
 				test('order', function() {
 					var all = {
-						background: function(ctx) {
-							this.order.push('background');
-						},
-						tile: function(ctx) {
-							this.order.push('tile');
-						},
-						sprite1: function(ctx) {
-							this.order.push('sprite1');
-						},
-						sprite2: function(ctx) {
-							this.order.push('sprite2');
-						},
-						hud: function(ctx) {
-							this.order.push('hud');
+						draw: function(drawthing) {
+							drawthing.background.push(function(ctx) {
+								all.order.push('background');
+							});
+							drawthing.tile.push(function(ctx) {
+								all.order.push('tile');
+							});
+							drawthing.sprite1.push(function(ctx) {
+								all.order.push('sprite1');
+							});
+							drawthing.sprite2.push(function(ctx) {
+								all.order.push('sprite2');
+							});
+							drawthing.hud.push(function(ctx) {
+								all.order.push('hud');
+							});
 						},
 						order: []
 					};
