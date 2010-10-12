@@ -15,6 +15,7 @@
 		<script type="text/javascript" src="../src/updater.js"></script>
 		<script type="text/javascript" src="../src/player.js"></script>
 		<script type="text/javascript" src="../src/game.js"></script>
+		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
 			$(document).ready(function() {
@@ -51,18 +52,7 @@
 						this.g.tickables = [];
 						this.g.movables = [];
 						this.g.others = [];
-						this.fakectx = {
-							fillStyle: 'old',
-							fillRect: function(frx, fry, frw, frh) {
-								this.fillRectArgs.push({
-									frx: frx,
-									fry: fry,
-									frw: frw,
-									frh: frh
-								});
-							},
-							fillRectArgs: []
-						};
+						this.fakectx = new FakeCtx();
 					}
 				});
 				
@@ -76,7 +66,7 @@
 				test('add', function() {
 					ok(typeof(this.g.add) === 'function', 'g.add');
 					var drawable = {
-						draw: function() {}
+						draw: {}
 					};
 					var tickable = {
 						tick: function() {}
@@ -86,7 +76,7 @@
 					};
 					var both = {
 						tick: function() {},
-						draw: function() {}
+						draw: {}
 					};
 					var other = function() {};
 					equals(this.g.drawables.length, 0, 'g.drawables.length is 0');
@@ -124,9 +114,6 @@
 					ok(typeof(this.g.update) === 'function', 'update exists');
 					equals(this.g.updater.processes.length, 1, 'there is an update process');
 					var thing = {
-						draw: function() {
-							this.drew = true;
-						},
 						tick: function() {
 							this.ticked = true;
 						},
@@ -140,7 +127,6 @@
 					};
 					this.g.add(thing);
 					this.g.update();
-					ok(thing.drew, 'drew');
 					ok(thing.ticked, 'ticked');
 					ok(thing.moved, 'moved');
 				});
@@ -172,6 +158,8 @@
 					equals(this.g.tilemap.x, -155, 'tilemap.draw x');
 					equals(this.g.tilemap.y, 125, 'tilemap.draw y');
 				});
+				
+				module('layered drawing')
 			});
 		</script>
 	</head>

@@ -50,10 +50,8 @@
           thing.move(me.spatialhash.get(thing, thing.vel.x, thing.vel.y));
         });
       };
-      if (typeof(thing.draw) === 'function') {
-        this.drawables.push(function() {
-          thing.draw(me.ctx);
-        });
+      if (typeof(thing.draw) === 'object') {
+        this.drawables.push(thing.draw);
       };
       if (typeof(thing) === 'function') {
         this.others.push(thing);
@@ -71,7 +69,7 @@
         movable();
       });
       $.each(this.drawables, function(index, drawable) {
-        drawable();
+        // drawable();
       });
     };
     
@@ -91,10 +89,11 @@
     
     // add our drawing tasks
     var backgrounddraw = {
-      draw: function(ctx) {
-        me.clearbackground(ctx);
-        me.drawtiles(ctx);
-      }
+      draw: {}
+      // draw: function(ctx) {
+      //   me.clearbackground(ctx);
+      //   me.drawtiles(ctx);
+      // }
     };
     this.add(backgrounddraw);
     
