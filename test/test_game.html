@@ -66,7 +66,7 @@
 				test('add', function() {
 					ok(typeof(this.g.add) === 'function', 'g.add');
 					var drawable = {
-						draw: {}
+						draw: function() {}
 					};
 					var tickable = {
 						tick: function() {}
@@ -76,7 +76,7 @@
 					};
 					var both = {
 						tick: function() {},
-						draw: {}
+						draw: function() {}
 					};
 					var other = function() {};
 					equals(this.g.drawables.length, 0, 'g.drawables.length is 0');
@@ -183,7 +183,7 @@
 							});
 						}
 					};
-					this.g.drawables = [backgroundthing];
+					this.g.drawables = [backgroundthing.draw];
 					this.g.draw();
 					equals(backgroundthing.ctx, this.g.ctx, 'saved the context correctly');
 				});
@@ -201,7 +201,7 @@
 							});
 						}
 					};
-					this.g.drawables = [backandsprite];
+					this.g.drawables = [backandsprite.draw];
 					this.g.draw();
 					ok(backandsprite.drewback, 'drew background');
 					ok(backandsprite.drewsprite, 'drew sprite');
@@ -228,7 +228,7 @@
 						},
 						order: []
 					};
-					this.g.drawables = [all];
+					this.g.drawables = [all.draw];
 					this.g.draw();
 					equals(all.order[0], 'background', '1. background');
 					equals(all.order[1], 'tile', '2. tile');

@@ -50,7 +50,7 @@
           thing.move(me.spatialhash.get(thing, thing.vel.x, thing.vel.y));
         });
       };
-      if (typeof(thing.draw) === 'object') {
+      if (typeof(thing.draw) === 'function') {
         this.drawables.push(thing.draw);
       };
       if (typeof(thing) === 'function') {
@@ -87,7 +87,7 @@
       };
       // get all the drawable functions from people
       $.each(this.drawables, function(i, drawable) {
-        drawable.draw(drawthing);
+        drawable(drawthing);
       });
       drawiterate(drawthing, 'background');
       drawiterate(drawthing, 'tile');
@@ -116,13 +116,13 @@
     
     // add our drawing tasks
     var backgrounddraw = {
-      draw: {
-        background: function(ctx) {
+      draw: function(drawthing) {
+        drawthing.background.push(function(ctx) {
           me.clearbackground(ctx);
-        },
-        tile: function(ctx) {
+        });
+        drawthing.tile.push(function(ctx) {
           me.drawtiles(ctx);
-        }
+        });
       }
     };
     this.add(backgrounddraw);
