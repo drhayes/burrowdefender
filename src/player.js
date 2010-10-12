@@ -7,11 +7,12 @@
 (function(global, $) {
   
   var Player = function(game) {
-    this.draw = function(ctx) {
-			ctx.fillStyle = 'rgb(0, 0, 0)';
-			// draw a little bigger than player size so player is standing on ground
-			ctx.fillRect(game.playeroffset.x, game.playeroffset.y, this.size.x + 1, this.size.y + 1);
-    };
+    this.draw = {};
+      //     this.draw = function(ctx) {
+      // ctx.fillStyle = 'rgb(0, 0, 0)';
+      // // draw a little bigger than player size so player is standing on ground
+      // ctx.fillRect(game.playeroffset.x, game.playeroffset.y, this.size.x + 1, this.size.y + 1);
+      //     };
     
 		var lastmined = 0;
 
