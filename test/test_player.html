@@ -9,6 +9,7 @@
 		<script type="text/javascript" src="../src/keyboardmanager.js"></script>
 		<script type="text/javascript" src="../src/tile.js"></script>
 		<script type="text/javascript" src="../src/player.js"></script>
+		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
 			$(document).ready(function() {
@@ -49,20 +50,10 @@
 				});
 				
 				test('draw', function() {
-					var fakectx = {
-						fillStyle: 'old',
-						fillRect: function(frx, fry, frw, frh) {
-							this.fillRectArgs.push({
-								frx: frx,
-								fry: fry,
-								frw: frw,
-								frh: frh
-							});
-						},
-						fillRectArgs: []
-					};
-					ok(typeof(this.p.draw) === 'function', 'draw exists');
-					this.p.draw(fakectx);
+					var fakectx = new FakeCtx();
+					ok(typeof(this.p.draw) === 'object', 'draw object exists');
+					ok(this.p.draw.sprite1, 'drawing in sprite1 layer');
+					this.p.draw.sprite1(fakectx);
 					equals(fakectx.fillStyle, 'rgb(0, 0, 0)', 'fill style set correctly');
 					equals(fakectx.fillRectArgs.length, 1, 'fillRect was called once');
 					var args = fakectx.fillRectArgs[0];
