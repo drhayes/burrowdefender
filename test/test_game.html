@@ -112,7 +112,7 @@
 				
 				test('update', function() {
 					ok(typeof(this.g.update) === 'function', 'update exists');
-					equals(this.g.updater.processes.length, 1, 'there is an update process');
+					equals(this.g.updater.processes.length, 2, 'there is an update and a draw process');
 					var thing = {
 						tick: function() {
 							this.ticked = true;
@@ -159,7 +159,77 @@
 					equals(this.g.tilemap.y, 125, 'tilemap.draw y');
 				});
 				
-				module('layered drawing')
+				module('layered drawing', {
+					setup: function() {
+						this.g = new Game('#testcanvas');
+						// get rid of the game's built-in tasks for these tests
+						this.g.drawables = [];
+						this.g.tickables = [];
+						this.g.movables = [];
+						this.g.others = [];
+						this.g.ctx = new FakeCtx();
+					}
+				});
+				
+				test('draw method', function() {
+					equals(typeof(this.g.draw), 'function', 'game.draw exists');
+				});
+				
+				test('background draw', function() {
+					var backgroundthing = {
+						background: function(ctx) {
+							this.ctx = ctx;
+						}
+					};
+					this.g.drawables = [backgroundthing];
+					this.g.draw();
+					equals(backgroundthing.ctx, this.g.ctx, 'saved the context correctly');
+				});
+				
+				test('background and sprite', function() {
+					expect(3);
+					var backandsprite = {
+						background: function(ctx) {
+							this.drewback = true;
+						},
+						sprite1: function(ctx) {
+							ok(this.drewback, 'drew the background first');
+							this.drewsprite = true;
+						}
+					};
+					this.g.drawables = [backandsprite];
+					this.g.draw();
+					ok(backandsprite.drewback, 'drew background');
+					ok(backandsprite.drewsprite, 'drew sprite');
+				});
+				
+				test('order', function() {
+					var all = {
+						background: function(ctx) {
+							this.order.push('background');
+						},
+						tile: function(ctx) {
+							this.order.push('tile');
+						},
+						sprite1: function(ctx) {
+							this.order.push('sprite1');
+						},
+						sprite2: function(ctx) {
+							this.order.push('sprite2');
+						},
+						hud: function(ctx) {
+							this.order.push('hud');
+						},
+						order: []
+					};
+					this.g.drawables = [all];
+					this.g.draw();
+					equals(all.order[0], 'background', '1. background');
+					equals(all.order[1], 'tile', '2. tile');
+					equals(all.order[2], 'sprite1', '3. sprite1');
+					equals(all.order[3], 'sprite2', '4. sprite2');
+					equals(all.order[4], 'hud', '5. hud');
+				});
 			});
 		</script>
 	</head>

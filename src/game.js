@@ -68,14 +68,31 @@
       $.each(this.movables, function(index, movable) {
         movable();
       });
-      $.each(this.drawables, function(index, drawable) {
-        // drawable();
+    };
+    
+    var drawiterate = function(layer) {
+      $.each(me.drawables, function(i, drawable) {
+        if (drawable.hasOwnProperty(layer)) {
+          drawable[layer](me.ctx);
+        }
       });
+    }
+    
+    this.draw = function() {
+      drawiterate('background');
+      drawiterate('tile');
+      drawiterate('sprite1');
+      drawiterate('sprite2');
+      drawiterate('hud');
     };
     
     // add the update method to the updater thingy
     this.updater.add(function() {
       me.update();
+    });
+    // add the draw method to the updater thing
+    this.updater.add(function() {
+      me.draw();
     });
     
     this.clearbackground = function(ctx) {
@@ -89,11 +106,14 @@
     
     // add our drawing tasks
     var backgrounddraw = {
-      draw: {}
-      // draw: function(ctx) {
-      //   me.clearbackground(ctx);
-      //   me.drawtiles(ctx);
-      // }
+      draw: {
+        background: function(ctx) {
+          me.clearbackground(ctx);
+        },
+        tile: function(ctx) {
+          me.drawtiles(ctx);
+        }
+      }
     };
     this.add(backgrounddraw);
     
