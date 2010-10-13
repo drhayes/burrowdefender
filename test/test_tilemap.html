@@ -79,6 +79,7 @@
 					setup: function() {
 						// for the purposes of these tests, Air doesn't have a draw method
 						this.olddraw = Tile.Air.draw;
+						Tile.Air.draw = function() {};
 						this.tm = new TileMap(64, 64);
 						this.fakectx = new FakeCtx();
 					},
@@ -96,13 +97,13 @@
 					equals(this.fakectx.fillRectArgs.length, 2, 'called twice');
 					var args = this.fakectx.fillRectArgs
 					equals(args[0].frx, 0, 'first frx');
-					equals(args[0].fry, 3 * Tile.tilesize, 'first fry');
+					equals(args[0].fry, 3 * Tile.tilesize + 30, 'first fry');
 					equals(args[0].frw, Tile.tilesize, 'first frw');
-					equals(args[0].frh, Tile.tilesize, 'first frh');
+					equals(args[0].frh, 3, 'first frh');
 					equals(args[1].frx, 1 * Tile.tilesize, 'second frx');
-					equals(args[1].fry, 3 * Tile.tilesize, 'second fry');
+					equals(args[1].fry, 3 * Tile.tilesize + 30, 'second fry');
 					equals(args[1].frw, Tile.tilesize, 'second frw');
-					equals(args[1].frh, Tile.tilesize, 'second frh');
+					equals(args[1].frh, 3, 'second frh');
 				});
 				
 				test('draw with two tiles scroll tilesize aligned', function() {
@@ -114,11 +115,11 @@
 					equals(this.fakectx.fillRectArgs.length, 3, 'called three times');
 					var args = this.fakectx.fillRectArgs;
 					equals(args[0].frx, 0, 'first frx');
-					equals(args[0].fry, 0, 'first fry');
+					equals(args[0].fry, 30, 'first fry');
 					equals(args[1].frx, Tile.tilesize, 'second frx');
-					equals(args[1].fry, 0, 'second fry');
+					equals(args[1].fry, 30, 'second fry');
 					equals(args[2].frx, 2 * Tile.tilesize, 'third frx');
-					equals(args[2].fry, 0, 'third fry');
+					equals(args[2].fry, 30, 'third fry');
 				});
 				
 				test('draw with three tiles not tilesize aligned', function() {
@@ -132,6 +133,13 @@
 					equals(args[0].frx, -20, 'first frx');
 					equals(args[1].frx, -20 + Tile.tilesize, 'second frx');
 					equals(args[2].frx, -20 + (Tile.tilesize * 2), 'third frx');
+				});
+				
+				test('mining damage', function() {
+					ok(this.tm.miningdamage, 'tm.miningdamage');
+					equals(this.tm.miningdamage.x, 0, 'miningdamage.x');
+					equals(this.tm.miningdamage.y, 0, 'miningdamage.y');
+					equals(this.tm.miningdamage.damage, 0, 'miningdamage.damage');
 				});
 			});
 		</script>

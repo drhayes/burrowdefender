@@ -11,6 +11,11 @@
     this.width = width;
     this.height = height;
     this.tilemap = {};
+    this.miningdamage = {
+      x: 0,
+      y: 0,
+      damage: 0
+    };
     
     this.get = function(x, y) {
       var key = TileMap.makekey(x, y);
