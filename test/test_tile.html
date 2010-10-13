@@ -71,11 +71,13 @@
 				
 				test('Air', function() {
 					checkexists(Tile.Air, 'Air exists');
+					ok(!Tile.Air.diggable, 'Air is not diggable');
 				});
 
 				test('Dirt', function() {
 					checkexists(Tile.Dirt, 'Dirt exists');
 					ok(typeof(Tile.Dirt.draw) == 'function', 'dirt draw exists');
+					ok(Tile.Dirt.diggable, 'dirt is diggable');
 					Tile.Dirt.draw(10, 20, this.fakectx);
 					equals(this.fakectx.drawImageArgs.length, 1, 'drawImage called');
 					var args = this.fakectx.drawImageArgs[0];
@@ -92,6 +94,7 @@
 				test('DirtWithGrass', function() {
 					checkexists(Tile.DirtWithGrass, 'DirtWithGrass exists');
 					ok(typeof(Tile.DirtWithGrass.draw) === 'function', 'draw exists');
+					ok(Tile.DirtWithGrass.diggable, 'DirtWithGrass is diggable');
 					Tile.DirtWithGrass.draw(10, 20, this.fakectx);
 					equals(this.fakectx.fillRectArgs.length, 1, 'fill called once');
 				});

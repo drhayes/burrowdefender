@@ -32,6 +32,7 @@
   // Default tile (meant to be used by ref by everybody) that fills the
   // map at first.
   Tile.Air = new Tile();
+  Tile.Air.diggable = false;
   Tile.Air.draw = function(x, y, ctx) {
     ctx.fillStyle = 'rgb(0, 128, 255)';
     ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize + 1);
@@ -39,6 +40,7 @@
 
   // The other really common tile.
   Tile.Dirt = new Tile();
+  Tile.Dirt.diggable = true;
   Tile.Dirt.draw = function(x, y, ctx) {
     ctx.fillStyle = 'rgb(102,51,0)';
     ctx.fillRect(x, Tile.tilesize + y - 2, Tile.tilesize, 3);
@@ -47,6 +49,7 @@
   
   // The common tile, but on the surface with grass
   Tile.DirtWithGrass = new Tile();
+  Tile.DirtWithGrass.diggable = true;
   Tile.DirtWithGrass.draw = function(x, y, ctx) {
     Tile.Dirt.draw(x, y, ctx);
     ctx.drawImage(grassimage, x, y);
@@ -55,6 +58,7 @@
   
   // A dirt tile that has been dug
   Tile.DirtDug = new Tile();
+  Tile.DirtDug.diggable = false;
   Tile.DirtDug.draw = function(x, y, ctx) {
     ctx.fillStyle = 'rgb(40, 15, 0)';
     ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize + 1);
