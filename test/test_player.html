@@ -70,6 +70,24 @@
 					ok(typeof(this.p.tick) === 'function', 'tick exists');
 					this.p.tick();
 				});
+				
+				test('readkeyboard', function() {
+					var me = this;
+					var setkey = function(key, value) {
+						me.fakegame.keyboardmanager.keymap[key] = value;
+					}
+					ok(typeof(this.p.readkeyboard) === 'function', 'readkeyboard exists');
+					ok(this.p.movestate.hasOwnProperty('mining'), 'p.movestate.mining');
+					ok(this.p.movestate.hasOwnProperty('wantstojump'), 'p.movestate.wantstojump');
+					equals(this.p.movestate.mining, false, 'not mining');
+					setkey('shift', true);
+					this.p.readkeyboard();
+					equals(this.p.movestate.mining, true, 'mining now');
+					equals(this.p.movestate.wantstojump, false, 'not wants to jump');
+					setkey('w', true);
+					this.p.readkeyboard();
+					equals(this.p.movestate.wantstojump, true, 'wants to jump now');
+				});
 			});
 		</script>
 	</head>

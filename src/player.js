@@ -9,12 +9,33 @@
   var Player = function(game) {
     var me = this;
     
+    this.game = game;
+    
+    // special player movestates
+    this.movestate.mining = false;
+    this.movestate.wantstojump = false;
+    
     this.draw = function(drawthing) {
       drawthing.sprite1.push(function(ctx) {
         ctx.fillStyle = 'rgb(0, 0, 0)';
         // draw a little bigger than player size so player is standing on ground
         ctx.fillRect(game.playeroffset.x, game.playeroffset.y, me.size.x + 1, me.size.y + 1);        
       });
+    };
+    
+    this.readkeyboard = function() {
+      if (this.game.keyboardmanager.keymap['shift']) {
+        this.movestate.mining = true;
+      }
+      else {
+        this.movestate.mining = false;
+      };
+      if (this.game.keyboardmanager.keymap['w']) {
+        this.movestate.wantstojump = true;
+      }
+      else {
+        this.movestate.wantstojump = false;
+      };
     };
     
 		var lastmined = 0;
