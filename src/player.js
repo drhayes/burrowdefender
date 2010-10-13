@@ -9,7 +9,8 @@
   var walking = {
     LEFT: -1,
     STANDING: 0,
-    RIGHT: 1
+    RIGHT: 1,
+    DOWN: 2
   };
   
   var Player = function(game) {
@@ -43,7 +44,12 @@
       else {
         this.movestate.wantstojump = false;
       };
-      if (this.game.keyboardmanager.keymap['a']) {
+      // this order is probably pretty important.
+      // don't want down to be the one that wins out.
+      if (this.game.keyboardmanager.keymap['s']) {
+        this.movestate.walking = walking.DOWN;
+      }
+      else if (this.game.keyboardmanager.keymap['a']) {
         this.movestate.walking = walking.LEFT;
       }
       else if (this.game.keyboardmanager.keymap['d']) {
@@ -55,51 +61,62 @@
     };
     
 		var lastmined = 0;
-
-		// update the player every tick
-		this.tick = function() {
-		// gravity has to have some effect here...
-			Mob.gravitytick.call(this);
-			// are we mining?
-			if (game.keyboardmanager.keymap['shift']) {
+		
+		this.mine = function() {
+			if (this.movestate.mining) {
 				// convert player's current position to tile
 				// respect player's center of mass
 				var tilepos = Tile.totilepos(this.x + this.size.x / 2, this.y + this.size.y / 2);
-				if (game.keyboardmanager.keymap['a']) { // left
+				if (this.movestate.walking === walking.LEFT) {
 					tilepos.x -= 1;
 				}
-				else if (game.keyboardmanager.keymap['d']) { // right
+				else if (this.movestate.walking === walking.RIGHT) {
 					tilepos.x += 1;
 				}
-				else if (game.keyboardmanager.keymap['w']) { // up
+				else if (this.movestate.wantstojump) {
 					tilepos.y -= 1;
 				}
-				else if (game.keyboardmanager.keymap['s']) { // down
+				else if (this.movestate.walking === walking.DOWN) {
 					tilepos.y += 1;
 				}
 				// is it a dirt tile?
-				var digtile = game.tilemap.get(tilepos.x, tilepos.y);
+				var digtile = this.game.tilemap.get(tilepos.x, tilepos.y);
 				if (digtile === Tile.Dirt || digtile === Tile.DirtWithGrass) {
 					var currenttime = new Date().getTime();
 					if (currenttime - lastmined > 500) {
-						game.tilemap.set(tilepos.x, tilepos.y, Tile.DirtDug);
-						game.spatialhash.remove(TileMap.getrect(tilepos.x, tilepos.y));
+						this.game.tilemap.set(tilepos.x, tilepos.y, Tile.DirtDug);
+						this.game.spatialhash.remove(TileMap.getrect(tilepos.x, tilepos.y));
 						lastmined = new Date().getTime();
 					}
 				}
 			}
-			if (game.keyboardmanager.keymap['a']) {
+		};
+		
+		this.walk = function() {
+			if (this.movestate.walking === walking.LEFT) {
 				this.vel.x = -2;
 			}
-			else if (game.keyboardmanager.keymap['d']) {
+			else if (this.movestate.walking === walking.RIGHT) {
 				this.vel.x = 2;
 			}
 			else {
 				this.vel.x = 0;
 			}
-			if (game.keyboardmanager.keymap['w']) {
+			if (this.movestate.wantstojump) {
 				this.jump();
 			}
+		};
+
+		// update the player every tick
+		this.tick = function() {
+		// gravity has to have some effect here...
+			Mob.gravitytick.call(this);
+			// read the state of the keyboard
+			this.readkeyboard();
+			// are we mining?
+			this.mine();
+			// walk somewhere
+			this.walk();
 		}
   };
   

@@ -100,6 +100,35 @@
 					setkey('d', false);
 					this.p.readkeyboard();
 					equals(this.p.movestate.walking, 0, 'walking is set to STANDING');
+					setkey('s', true);
+					this.p.readkeyboard();
+					equals(this.p.movestate.walking, 2, 'walking is set to DOWN');
+				});
+				
+				test('mine', function() {
+					ok(typeof(this.p.mine) === 'function', 'mine exists');
+					// I would test mine, but I'm about to change the hell out of it.
+				});
+				
+				test('walk', function() {
+					expect(6)
+					ok(typeof(this.p.walk) === 'function', 'walk exists');
+					equals(this.p.vel.x, 0, 'vel.x === 0');
+					this.p.movestate.walking = -1;
+					this.p.walk();
+					equals(this.p.vel.x, -2, 'vel.x === -2');
+					this.p.movestate.walking = 0;
+					this.p.walk();
+					equals(this.p.vel.x, 0, 'vel.x === 0');
+					this.p.movestate.walking = 1;
+					this.p.walk();
+					equals(this.p.vel.x, 2, 'vel.x === 2');
+					this.p.movestate.walking = 0;
+					this.p.movestate.wantstojump = true;
+					this.p.jump = function() {
+						ok(true, 'jump was called');
+					}
+					this.p.walk();
 				});
 			});
 		</script>
