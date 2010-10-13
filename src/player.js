@@ -6,6 +6,12 @@
 
 (function(global, $) {
   
+  var walking = {
+    LEFT: -1,
+    STANDING: 0,
+    RIGHT: 1
+  };
+  
   var Player = function(game) {
     var me = this;
     
@@ -14,6 +20,7 @@
     // special player movestates
     this.movestate.mining = false;
     this.movestate.wantstojump = false;
+    this.movestate.walking = walking.STANDING;
     
     this.draw = function(drawthing) {
       drawthing.sprite1.push(function(ctx) {
@@ -36,6 +43,15 @@
       else {
         this.movestate.wantstojump = false;
       };
+      if (this.game.keyboardmanager.keymap['a']) {
+        this.movestate.walking = walking.LEFT;
+      }
+      else if (this.game.keyboardmanager.keymap['d']) {
+        this.movestate.walking = walking.RIGHT;
+      }
+      else {
+        this.movestate.walking = walking.STANDING;
+      }
     };
     
 		var lastmined = 0;

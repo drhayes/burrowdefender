@@ -79,6 +79,7 @@
 					ok(typeof(this.p.readkeyboard) === 'function', 'readkeyboard exists');
 					ok(this.p.movestate.hasOwnProperty('mining'), 'p.movestate.mining');
 					ok(this.p.movestate.hasOwnProperty('wantstojump'), 'p.movestate.wantstojump');
+					ok(this.p.movestate.hasOwnProperty('walking'), 'p.movestate.walking');
 					equals(this.p.movestate.mining, false, 'not mining');
 					setkey('shift', true);
 					this.p.readkeyboard();
@@ -87,6 +88,18 @@
 					setkey('w', true);
 					this.p.readkeyboard();
 					equals(this.p.movestate.wantstojump, true, 'wants to jump now');
+					equals(this.p.movestate.walking, 0, 'walking is set to STANDING');
+					setkey('a', true);
+					this.p.readkeyboard();
+					equals(this.p.movestate.walking, -1, 'walking is set to LEFT');
+					setkey('a', false);
+					setkey('d', true);
+					this.p.readkeyboard();
+					equals(this.p.movestate.walking, 1, 'walking is set to RIGHT');
+					setkey('a', false);
+					setkey('d', false);
+					this.p.readkeyboard();
+					equals(this.p.movestate.walking, 0, 'walking is set to STANDING');
 				});
 			});
 		</script>
