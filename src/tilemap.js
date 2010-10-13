@@ -7,6 +7,13 @@
 
 (function(global, $) {
   
+  var cracks1image = new Image();
+  cracks1image.src = 'assets/images/cracks1.png';
+  var cracks2image = new Image();
+  cracks2image.src = 'assets/images/cracks2.png';
+  var cracks3image = new Image();
+  cracks3image.src = 'assets/images/cracks3.png';
+  
   var TileMap = function(width, height) {
     this.width = width;
     this.height = height;
@@ -14,7 +21,7 @@
     this.miningdamage = {
       x: 0,
       y: 0,
-      damage: 0
+      damage: 1
     };
     
     this.get = function(x, y) {
@@ -46,6 +53,12 @@
           tile.draw(tilex - offsetx, tiley - offsety, ctx);
         }
       }
+      // draw the mining damage, if any
+      if (this.miningdamage.damage !== 0) {
+        var dmgx = (this.miningdamage.x * Tile.tilesize) - offsetx;
+        var dmgy = (this.miningdamage.y * Tile.tilesize) - offsety;
+        ctx.drawImage(cracks3image, dmgx, dmgy);
+      };
     };
   };
   

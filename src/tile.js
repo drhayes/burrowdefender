@@ -41,6 +41,7 @@
   // The other really common tile.
   Tile.Dirt = new Tile();
   Tile.Dirt.diggable = true;
+  Tile.Dirt.health = 20;
   Tile.Dirt.draw = function(x, y, ctx) {
     ctx.fillStyle = 'rgb(102,51,0)';
     ctx.fillRect(x, Tile.tilesize + y - 2, Tile.tilesize, 3);
@@ -50,6 +51,7 @@
   // The common tile, but on the surface with grass
   Tile.DirtWithGrass = new Tile();
   Tile.DirtWithGrass.diggable = true;
+  Tile.DirtWithGrass.health = 20;
   Tile.DirtWithGrass.draw = function(x, y, ctx) {
     Tile.Dirt.draw(x, y, ctx);
     ctx.drawImage(grassimage, x, y);
