@@ -13,7 +13,7 @@
     this.height = this.canvas.height;
     this.tilemap = new TileMap(this.width, this.height);
     this.spatialhash = new SpatialHash();
-    this.tilegenerator = new TileGenerator(this.tilemap, this.spatialhash);
+    this.tilegenerator = new TileGenerator(this);
     this.keyboardmanager = new KeyboardManager();
     this.playeroffset = {
       x: this.width / 2,

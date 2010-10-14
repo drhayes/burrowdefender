@@ -14,11 +14,13 @@
 				
 				test('ctor', function() {
 					ok(typeof(window.TileGenerator) !== 'undefined', 'TileGenerator defined');
-					var faketilemap = {};
-					var fakespatialhash = {};
-					var tg = new TileGenerator(faketilemap, fakespatialhash);
-					equals(tg.tilemap, faketilemap, 'tg.tilemap');
-					equals(tg.spatialhash, fakespatialhash, 'tg.spatialhash');
+					var fakegame = {
+						tilemap: {},
+						spatialhash: {}
+					};
+					var tg = new TileGenerator(fakegame);
+					same(tg.tilemap, fakegame.tilemap, 'tg.tilemap');
+					same(tg.spatialhash, fakegame.spatialhash, 'tg.spatialhash');
 					ok(tg.generated, 'tg.generated');
 				});
 				
@@ -50,7 +52,11 @@
 							},
 							rects: []
 						};
-						this.tg = new TileGenerator(this.faketilemap, this.fakespatialhash);
+						this.fakegame = {
+							tilemap: this.faketilemap,
+							spatialhash: this.fakespatialhash
+						}
+						this.tg = new TileGenerator(this.fakegame);
 					}
 				});
 				

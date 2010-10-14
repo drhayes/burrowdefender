@@ -15,9 +15,10 @@
     return Math.floor(s / CHUNK_SIZE);
   }
   
-  var TileGenerator = function(tilemap, spatialhash) {
-    this.tilemap = tilemap;
-    this.spatialhash = spatialhash;
+  var TileGenerator = function(game) {
+    this.game = game;
+    this.tilemap = game.tilemap;
+    this.spatialhash = game.spatialhash;
     this.generated = {};
     
     // x,y given in world coordinates. will check for generation around this
@@ -39,10 +40,10 @@
         y = TileGenerator.gensurface(i);
         for (var j = 0; j < 20; j++) {
           if (j === 0) {
-            tile = new Tile.DirtWithGrass();
+            tile = new Tile.DirtWithGrass(this.game);
           }
           else {
-            tile = new Tile.Dirt();
+            tile = new Tile.Dirt(this.game);
           }
           this.tilemap.set(i, y + j, tile);
           this.spatialhash.set(TileMap.getrect(i, y + j));
