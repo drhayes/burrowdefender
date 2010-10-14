@@ -101,6 +101,28 @@
 					equals(this.fakectx.fillRectArgs.length, 1, 'fill called once');
 				});
 
+				test('drawdamage', function() {
+					equals(typeof(Tile.drawdamage), 'function', 'drawdamage exists');
+					Tile.drawdamage(0, 0, this.fakectx, 1);
+					equals(this.fakectx.drawImageArgs.length, 0, 'drawImage not called');
+					Tile.drawdamage(0, 0, this.fakectx, 0.9);
+					equals(this.fakectx.drawImageArgs.length, 1, 'drawImage called');
+					var args = this.fakectx.drawImageArgs[0];
+					equals(args.x, 0, 'x is 0');
+					equals(args.y, 0, 'y is 0');
+					console.log(args.image.src.substr(-11));
+					equals(args.image.src.substr(-11), 'cracks1.png', 'cracks1');
+					Tile.drawdamage(0, 0, this.fakectx, 0.6);
+					equals(this.fakectx.drawImageArgs.length, 2, 'drawImage called');
+					var args = this.fakectx.drawImageArgs[1];
+					console.log(args.image.src.substr(-11));
+					equals(args.image.src.substr(-11), 'cracks2.png', 'cracks2');
+					Tile.drawdamage(0, 0, this.fakectx, 0.3);
+					equals(this.fakectx.drawImageArgs.length, 3, 'drawImage called');
+					var args = this.fakectx.drawImageArgs[2];
+					console.log(args.image.src.substr(-11));
+					equals(args.image.src.substr(-11), 'cracks3.png', 'cracks3');
+				});
 			});
 		</script>
 	</head>

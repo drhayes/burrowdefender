@@ -7,13 +7,6 @@
 
 (function(global, $) {
   
-  var cracks1image = new Image();
-  cracks1image.src = 'assets/images/cracks1.png';
-  var cracks2image = new Image();
-  cracks2image.src = 'assets/images/cracks2.png';
-  var cracks3image = new Image();
-  cracks3image.src = 'assets/images/cracks3.png';
-  
   var TileMap = function(width, height) {
     this.width = width;
     this.height = height;

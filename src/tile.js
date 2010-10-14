@@ -8,6 +8,12 @@
   dirtimage.src = 'assets/images/dirt.png'
   var grassimage = new Image();
   grassimage.src = 'assets/images/grass.png'
+  var cracks1image = new Image();
+  cracks1image.src = 'assets/images/cracks1.png';
+  var cracks2image = new Image();
+  cracks2image.src = 'assets/images/cracks2.png';
+  var cracks3image = new Image();
+  cracks3image.src = 'assets/images/cracks3.png';
   
   var Tile = function() {
     this.diggable = true;
@@ -18,6 +24,21 @@
   
   // Tiles are square with this length on a side.
   Tile.tilesize = 32;
+  
+  // Draw the tile damage tiles
+  Tile.drawdamage = function(x, y, ctx, percentage) {
+    if (percentage === 1) {
+      return;
+    };
+    var image = cracks1image;
+    if (percentage <= 0.3) {
+      image = cracks3image;
+    }
+    else if (percentage <= 0.6) {
+      image = cracks2image;
+    }
+    ctx.drawImage(image, x, y);
+  };
   
   // Given an x,y in worldspace returns an {x,y} position in tilespace.
   Tile.totilepos = function(x, y) {
