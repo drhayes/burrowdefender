@@ -44,20 +44,6 @@
 					equals(key.y, -4, 'y for key -3:-4');
 				});
 				
-				test('getrect', function() {
-					ok(typeof(TileMap.getrect) === 'function', 'getrect is a function');
-					var rect = TileMap.getrect(0, 0);
-					equals(rect.x1, 0, 'x1');
-					equals(rect.y1, 0, 'y1');
-					equals(rect.x2, Tile.tilesize - 1, 'x2');
-					equals(rect.y2, Tile.tilesize - 1, 'y2');
-					rect = TileMap.getrect(1, 1);
-					equals(rect.x1, Tile.tilesize, 'x1');
-					equals(rect.y1, Tile.tilesize, 'y1');
-					equals(rect.x2, Tile.tilesize * 2 - 1, 'x2');
-					equals(rect.y2, Tile.tilesize * 2 - 1, 'y2');
-				});
-				
 				module('usage', {
 					'setup': function() {
 						this.tm = new TileMap();

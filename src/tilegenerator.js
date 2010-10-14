@@ -46,7 +46,7 @@
             tile = new Tile.Dirt(this.game);
           }
           this.tilemap.set(i, y + j, tile);
-          this.spatialhash.set(TileMap.getrect(i, y + j));
+          this.spatialhash.set(Tile.getrect(i, y + j));
         }
       }
     };

@@ -44,8 +44,36 @@
 					equals(pos.y, -1, 'converted (-1, -1) y position correctly');
 				});
 				
+				test('getrect', function() {
+					ok(typeof(Tile.getrect) === 'function', 'getrect is a function');
+					var rect = Tile.getrect(0, 0);
+					equals(rect.x1, 0, 'x1');
+					equals(rect.y1, 0, 'y1');
+					equals(rect.x2, Tile.tilesize - 1, 'x2');
+					equals(rect.y2, Tile.tilesize - 1, 'y2');
+					rect = Tile.getrect(1, 1);
+					equals(rect.x1, Tile.tilesize, 'x1');
+					equals(rect.y1, Tile.tilesize, 'y1');
+					equals(rect.x2, Tile.tilesize * 2 - 1, 'x2');
+					equals(rect.y2, Tile.tilesize * 2 - 1, 'y2');
+				});
+				
 				module('tiles', {
 					setup: function() {
+						this.fakegame = {
+							tilemap: {
+								set: function(x, y, tile) {
+									this.sx = x;
+									this.sy = y;
+									this.stile = tile;
+								}
+							},
+							spatialhash: {
+								remove: function(r) {
+									this.rr = r;
+								}
+							},
+						};
 						this.fakectx = {
 							fillStyle: 'old',
 							fillRect: function(frx, fry, frw, frh) {
@@ -110,17 +138,14 @@
 					var args = this.fakectx.drawImageArgs[0];
 					equals(args.x, 0, 'x is 0');
 					equals(args.y, 0, 'y is 0');
-					console.log(args.image.src.substr(-11));
 					equals(args.image.src.substr(-11), 'cracks1.png', 'cracks1');
 					Tile.drawdamage(0, 0, this.fakectx, 0.6);
 					equals(this.fakectx.drawImageArgs.length, 2, 'drawImage called');
 					var args = this.fakectx.drawImageArgs[1];
-					console.log(args.image.src.substr(-11));
 					equals(args.image.src.substr(-11), 'cracks2.png', 'cracks2');
 					Tile.drawdamage(0, 0, this.fakectx, 0.3);
 					equals(this.fakectx.drawImageArgs.length, 3, 'drawImage called');
 					var args = this.fakectx.drawImageArgs[2];
-					console.log(args.image.src.substr(-11));
 					equals(args.image.src.substr(-11), 'cracks3.png', 'cracks3');
 				});
 				
@@ -140,6 +165,44 @@
 					d.lasthealed = currenttime - 1500;
 					d.tick();
 					equals(d.health, tilehealth + 2, 'tile is healing more');
+				});
+				
+				test('mine', function() {
+					expect(6);
+					var d = new Tile.Dirt(this.fakegame);
+					equals(d.game, this.fakegame, 'game is set in ctor');
+					equals(typeof(d.mine), 'function', 'mine exists');
+					var currenthealth = d.health;
+					var digger = {
+						minedamage: 1
+					};
+					d.mine(digger, 0, 0);
+					equals(d.health, currenthealth - digger.minedamage, 'health decremented');
+					d.health = currenthealth;
+					digger.minedamage = 2;
+					d.mine(digger, 0, 0);
+					equals(d.health, currenthealth - digger.minedamage, 'health decremented');
+					d.health = 0;
+					digger.minedamage = 1;
+					d.kill = function(x, y) {
+						equals(x, 0, 'x is 0');
+						equals(y, 0, 'y is 0');
+					}
+					d.mine(digger, 0, 0);
+				});
+				
+				test('dirt kill', function() {
+					var d = new Tile.Dirt(this.fakegame);
+					equals(typeof(d.kill), 'function', 'kill exists');
+					d.kill(0, 0);
+					equals(this.fakegame.tilemap.sx, 0, 'tilemap set x is 0');
+					equals(this.fakegame.tilemap.sy, 0, 'tilemap set y is 0');
+					var rr = this.fakegame.spatialhash.rr;
+					var er = Tile.getrect(0, 0);
+					equals(rr.x1, er.x1, 'x1');
+					equals(rr.y1, er.y1, 'y1');
+					equals(rr.x2, er.x2, 'x2');
+					equals(rr.y2, er.y2, 'y2');
 				});
 			});
 		</script>
