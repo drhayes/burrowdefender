@@ -67,8 +67,11 @@
 				test('get and set', function() {
 					ok(typeof(this.tm.get) == 'function', 'get is a function');
 					ok(typeof(this.tm.set) == 'function', 'set is a function');
-					ok(!this.tm.get(0, 0).diggable, '0,0 has an non-diggable tile');
-					ok(!this.tm.get(3, -2).diggable, 'gee, looks like it is all non-diggable');
+					var tile = this.tm.get(0, 0);
+					ok(!tile.diggable, '0,0 has an non-diggable tile');
+					var tile2 = this.tm.get(3, -2);
+					ok(!tile2.diggable, 'gee, looks like it is all non-diggable');
+					equals(tile, tile2, 'since they are the same, I bet they are air tiles');
 					var dirt = new Tile.Dirt();
 					this.tm.set(0, 0, dirt);
 					var key = TileMap.makekey(0, 0);

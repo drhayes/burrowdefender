@@ -7,6 +7,8 @@
 
 (function(global, $) {
   
+  var theAir = new Tile.Air();
+  
   var TileMap = function(width, height) {
     this.width = width;
     this.height = height;
@@ -19,7 +21,7 @@
       if (this.tilemap.hasOwnProperty(key)) {
         return this.tilemap[key];
       }
-      return new Tile.Air();
+      return theAir;
     };
     
     this.set = function(x, y, tile) {
