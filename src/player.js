@@ -10,7 +10,8 @@
     LEFT: -1,
     STANDING: 0,
     RIGHT: 1,
-    DOWN: 2
+    DOWN: 2,
+    UP: 3
   };
   
   var Player = function(game) {
@@ -38,7 +39,7 @@
       else {
         this.movestate.mining = false;
       };
-      if (this.game.keyboardmanager.keymap['w']) {
+      if (this.game.keyboardmanager.keymap['space']) {
         this.movestate.wantstojump = true;
       }
       else {
@@ -54,6 +55,9 @@
       }
       else if (this.game.keyboardmanager.keymap['d']) {
         this.movestate.walking = walking.RIGHT;
+      }
+      else if (this.game.keyboardmanager.keymap['w']) {
+        this.movestate.walking = walking.UP;
       }
       else {
         this.movestate.walking = walking.STANDING;
@@ -71,7 +75,7 @@
 				else if (this.movestate.walking === walking.RIGHT) {
 					tilepos.x += 1;
 				}
-				else if (this.movestate.wantstojump) {
+				else if (this.movestate.walking === walking.UP) {
 					tilepos.y -= 1;
 				}
 				else if (this.movestate.walking === walking.DOWN) {

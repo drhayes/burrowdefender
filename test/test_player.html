@@ -86,10 +86,15 @@
 					this.p.readkeyboard();
 					equals(this.p.movestate.mining, true, 'mining now');
 					equals(this.p.movestate.wantstojump, false, 'not wants to jump');
-					setkey('w', true);
+					setkey('space', true);
 					this.p.readkeyboard();
 					equals(this.p.movestate.wantstojump, true, 'wants to jump now');
 					equals(this.p.movestate.walking, 0, 'walking is set to STANDING');
+					setkey('space', false);
+					setkey('w', true);
+					this.p.readkeyboard();
+					equals(this.p.movestate.walking, 3, 'walking is set to UP');
+					setkey('w', false);
 					setkey('a', true);
 					this.p.readkeyboard();
 					equals(this.p.movestate.walking, -1, 'walking is set to LEFT');
