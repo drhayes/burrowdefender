@@ -81,6 +81,7 @@
 				var digtile = this.game.tilemap.get(tilepos.x, tilepos.y);
 				if (digtile.diggable) {
 				  digtile.health -= 1;
+				  digtile.lasthealed = null;
 				  if (digtile.health <= 0) {
 				    this.game.tilemap.set(tilepos.x, tilepos.y, new Tile.DirtDug());
 				    this.game.spatialhash.remove(TileMap.getrect(tilepos.x, tilepos.y));
