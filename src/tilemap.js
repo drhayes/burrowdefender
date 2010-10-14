@@ -29,7 +29,7 @@
       if (this.tilemap.hasOwnProperty(key)) {
         return this.tilemap[key];
       }
-      return Tile.Air;
+      return new Tile.Air();
     };
     
     this.set = function(x, y, tile) {

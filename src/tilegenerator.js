@@ -39,10 +39,10 @@
         y = TileGenerator.gensurface(i);
         for (var j = 0; j < 20; j++) {
           if (j === 0) {
-            tile = Tile.DirtWithGrass;
+            tile = new Tile.DirtWithGrass();
           }
           else {
-            tile = Tile.Dirt;
+            tile = new Tile.Dirt();
           }
           this.tilemap.set(i, y + j, tile);
           this.spatialhash.set(TileMap.getrect(i, y + j));

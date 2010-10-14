@@ -81,10 +81,10 @@
 				}
 				// is it a dirt tile?
 				var digtile = this.game.tilemap.get(tilepos.x, tilepos.y);
-				if (digtile === Tile.Dirt || digtile === Tile.DirtWithGrass) {
+				if (digtile.diggable) {
 					var currenttime = new Date().getTime();
 					if (currenttime - lastmined > 500) {
-						this.game.tilemap.set(tilepos.x, tilepos.y, Tile.DirtDug);
+						this.game.tilemap.set(tilepos.x, tilepos.y, new Tile.DirtDug());
 						this.game.spatialhash.remove(TileMap.getrect(tilepos.x, tilepos.y));
 						lastmined = new Date().getTime();
 					}
