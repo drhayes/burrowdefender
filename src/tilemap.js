@@ -21,7 +21,7 @@
     this.miningdamage = {
       x: 0,
       y: 0,
-      damage: 1
+      damage: 0
     };
     
     this.get = function(x, y) {
