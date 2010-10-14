@@ -69,6 +69,7 @@
       ctx.fillStyle = 'rgb(102,51,0)';
       ctx.fillRect(x, Tile.tilesize + y - 2, Tile.tilesize, 3);
       ctx.drawImage(dirtimage, x, y);
+      Tile.drawdamage(x, y, ctx, this.health / this.maxhealth);
     };
   };
   Tile.Dirt.prototype = new Tile();
@@ -81,7 +82,7 @@
     this.draw = function(x, y, ctx) {
       Tile.DirtWithGrass.prototype.draw(x, y, ctx);
       ctx.drawImage(grassimage, x, y);
-      var oldFillStyle = ctx.fillStyle;
+      Tile.drawdamage(x, y, ctx, this.health / this.maxhealth);
     };
   };
   Tile.DirtWithGrass.prototype = new Tile.Dirt();
