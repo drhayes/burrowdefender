@@ -8,6 +8,7 @@
 		<script type="text/javascript" src="../src/mob.js"></script>
 		<script type="text/javascript" src="../src/keyboardmanager.js"></script>
 		<script type="text/javascript" src="../src/tile.js"></script>
+		<script type="text/javascript" src="../src/tilemap.js"></script>
 		<script type="text/javascript" src="../src/player.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
@@ -107,7 +108,50 @@
 				
 				test('mine', function() {
 					ok(typeof(this.p.mine) === 'function', 'mine exists');
-					// I would test mine, but I'm about to change the hell out of it.
+					// set up the fake tilemap
+					this.fakegame.tilemap = {
+						get: function(x, y) {
+							this.gx = x;
+							this.gy = y;
+							return this.miningdamage;
+						},
+						set: function(x, y, tile) {
+							this.sx = x;
+							this.sy = y;
+							this.stile = tile;
+						},
+						hasset: false,
+						miningdamage: {
+							health: 10,
+							diggable: false
+						}
+					};
+					this.fakegame.spatialhash = {
+						remove: function(rect) {
+							this.rect = rect;
+						}
+					};
+					// we are mining to the left
+					this.p.movestate.mining = true;
+					this.p.movestate.walking = -1;
+					equals(this.p.x, 0, 'player is at x 0');
+					equals(this.p.y, 0, 'player is at y 0');
+					this.p.mine();
+					equals(this.fakegame.tilemap.gx, -1, 'mining x -1');
+					equals(this.fakegame.tilemap.gy, 0, 'mining y 0');
+					equals(this.fakegame.tilemap.miningdamage.health, 10, 'tile health is 10');
+					ok(!this.fakegame.tilemap.hasset, 'set not called');
+					ok(!this.fakegame.spatialhash.rect, 'spatialhash not set');
+					this.fakegame.tilemap.miningdamage.diggable = true;
+					this.p.mine();
+					equals(this.fakegame.tilemap.miningdamage.health, 9, 'tile health is 9');
+					ok(!this.fakegame.tilemap.hasset, 'set not called');
+					ok(!this.fakegame.spatialhash.rect, 'spatialhash not set');
+					this.fakegame.tilemap.miningdamage.health = 1;
+					this.p.mine();
+					equals(this.fakegame.tilemap.sx, -1, 'set x -1');
+					equals(this.fakegame.tilemap.sy, 0, 'set y 0');
+					ok(this.fakegame.spatialhash.rect, 'spatialhash.rect set');
 				});
 				
 				test('walk', function() {

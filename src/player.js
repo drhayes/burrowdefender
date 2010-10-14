@@ -59,8 +59,6 @@
         this.movestate.walking = walking.STANDING;
       }
     };
-    
-		var lastmined = 0;
 		
 		this.mine = function() {
 			if (this.movestate.mining) {
@@ -79,15 +77,14 @@
 				else if (this.movestate.walking === walking.DOWN) {
 					tilepos.y += 1;
 				}
-				// is it a dirt tile?
+				// is it a diggable tile?
 				var digtile = this.game.tilemap.get(tilepos.x, tilepos.y);
 				if (digtile.diggable) {
-					var currenttime = new Date().getTime();
-					if (currenttime - lastmined > 500) {
-						this.game.tilemap.set(tilepos.x, tilepos.y, new Tile.DirtDug());
-						this.game.spatialhash.remove(TileMap.getrect(tilepos.x, tilepos.y));
-						lastmined = new Date().getTime();
-					}
+				  digtile.health -= 1;
+				  if (digtile.health <= 0) {
+				    this.game.tilemap.set(tilepos.x, tilepos.y, new Tile.DirtDug());
+				    this.game.spatialhash.remove(TileMap.getrect(tilepos.x, tilepos.y));
+				  }
 				}
 			}
 		};
