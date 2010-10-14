@@ -26,7 +26,7 @@
         return;
       }
   	  this.health -= digger.minedamage;
-  	  this.lastmined = new Date().getTime();
+  	  this.lasthealed = null;
   	  if (this.health <= 0) {
   	    this.kill(x, y);
   	  }
