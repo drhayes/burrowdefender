@@ -24,6 +24,9 @@
     this.movestate.wantstojump = false;
     this.movestate.walking = walking.STANDING;
     
+    // mining damage
+    this.minedamage = 1;
+    
     this.draw = function(drawthing) {
       drawthing.sprite1.push(function(ctx) {
         ctx.fillStyle = 'rgb(0, 0, 0)';
@@ -83,14 +86,7 @@
 				}
 				// is it a diggable tile?
 				var digtile = this.game.tilemap.get(tilepos.x, tilepos.y);
-				if (digtile.diggable) {
-				  digtile.health -= 1;
-				  digtile.lasthealed = null;
-				  if (digtile.health <= 0) {
-				    this.game.tilemap.set(tilepos.x, tilepos.y, new Tile.DirtDug());
-				    this.game.spatialhash.remove(TileMap.getrect(tilepos.x, tilepos.y));
-				  }
-				}
+				digtile.mine(this, tilepos.x, tilepos.y);
 			}
 		};
 		
