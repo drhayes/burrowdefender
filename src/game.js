@@ -59,6 +59,8 @@
     };
     
     this.update = function() {
+      // update the tilemap
+      this.tilemap.tick();
       $.each(this.others, function(index, other) {
         other();
       });

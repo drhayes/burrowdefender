@@ -47,6 +47,22 @@
       y: Math.floor(y/Tile.tilesize)
     };
   };
+
+  Tile.healtick = function() {
+    if (this.health === this.maxhealth) {
+      return;
+    }
+    if (!this.lasthealed) {
+      this.lasthealed = new Date().getTime();
+    };
+    var currenttime = new Date().getTime();
+    if (currenttime - this.lasthealed >= 750) {
+      this.health += 1;
+    };
+    if (this.health >= this.maxhealth) {
+      this.lasthealed = null;
+    };
+  };
   
   // Default tile (meant to be used by ref by everybody) that fills the
   // map at first.
@@ -71,6 +87,8 @@
       ctx.drawImage(dirtimage, x, y);
       Tile.drawdamage(x, y, ctx, this.health / this.maxhealth);
     };
+    
+    this.tick = Tile.healtick;
   };
   Tile.Dirt.prototype = new Tile();
   
@@ -84,6 +102,8 @@
       ctx.drawImage(grassimage, x, y);
       Tile.drawdamage(x, y, ctx, this.health / this.maxhealth);
     };
+    
+    this.tick = Tile.healtick;
   };
   Tile.DirtWithGrass.prototype = new Tile.Dirt();
   

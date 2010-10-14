@@ -123,6 +123,24 @@
 					console.log(args.image.src.substr(-11));
 					equals(args.image.src.substr(-11), 'cracks3.png', 'cracks3');
 				});
+				
+				test('tile tick', function() {
+					var d = new Tile.Dirt();
+					equals(d.health / d.maxhealth, 1, 'percentage healed is 1');
+					d.health -= 3;
+					var tilehealth = d.health;
+					var currenttime = new Date().getTime();
+					d.lasthealed = null;
+					d.tick();
+					ok(d.lasthealed !== null, 'lasthealed is no longer null');
+					equals(d.health, tilehealth, 'tile is not healing yet');
+					d.lasthealed = currenttime - 750;
+					d.tick();
+					equals(d.health, tilehealth + 1, 'tile is healing');
+					d.lasthealed = currenttime - 1500;
+					d.tick();
+					equals(d.health, tilehealth + 2, 'tile is healing more');
+				});
 			});
 		</script>
 	</head>

@@ -11,11 +11,8 @@
     this.width = width;
     this.height = height;
     this.tilemap = {};
-    this.miningdamage = {
-      x: 0,
-      y: 0,
-      damage: 0
-    };
+    
+    var me = this;
     
     this.get = function(x, y) {
       var key = TileMap.makekey(x, y);
@@ -29,29 +26,38 @@
       this.tilemap[TileMap.makekey(x, y)] = tile;
     };
     
+    var iterateviewabletiles = function(tilefunc) {
+      var startx = Math.floor(me.offsetx / Tile.tilesize);
+      var starty = Math.floor(me.offsety / Tile.tilesize);
+      var endx = Math.floor((me.offsetx + me.width) / Tile.tilesize) + 1;
+      var endy = Math.floor((me.offsety + me.height) / Tile.tilesize) + 1;
+      for (var x = startx; x < endx; x++) {
+        for (var y = starty; y < endy; y++) {
+          var tile = me.get(x, y);
+          var tilex = x * Tile.tilesize;
+          var tiley = y * Tile.tilesize;
+          tilefunc(tile, tilex, tiley);
+        }
+      }
+    };
+    
     // given the 2d context thing that comes with a canvas.
     // the offsets are given in pixels and are optional.
     this.draw = function(ctx, offsetx, offsety) {
-      offsetx = offsetx || 0;
-      offsety = offsety || 0;
-      var startx = Math.floor(offsetx / Tile.tilesize);
-      var starty = Math.floor(offsety / Tile.tilesize);
-      var endx = Math.floor((offsetx + this.width) / Tile.tilesize) + 1;
-      var endy = Math.floor((offsety + this.height) / Tile.tilesize) + 1;
-      for (var x = startx; x < endx; x++) {
-        for (var y = starty; y < endy; y++) {
-          var tile = this.get(x, y);
-          var tilex = x * Tile.tilesize;
-          var tiley = y * Tile.tilesize;
-          tile.draw(tilex - offsetx, tiley - offsety, ctx);
-        }
-      }
-      // draw the mining damage, if any
-      if (this.miningdamage.damage !== 0) {
-        var dmgx = (this.miningdamage.x * Tile.tilesize) - offsetx;
-        var dmgy = (this.miningdamage.y * Tile.tilesize) - offsety;
-        ctx.drawImage(cracks3image, dmgx, dmgy);
-      };
+      this.offsetx = offsetx || 0;
+      this.offsety = offsety || 0;
+      iterateviewabletiles(function(tile, tilex, tiley) {
+        tile.draw(tilex - me.offsetx, tiley - me.offsety, ctx);
+      });
+    };
+    
+    // any visible tile that has a tick method will get it called.
+    this.tick = function() {
+      iterateviewabletiles(function(tile, tilex, tiley) {
+        if (tile.hasOwnProperty('tick')) {
+          tile.tick();
+        };
+      });
     };
   };
   
