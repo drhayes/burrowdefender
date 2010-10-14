@@ -133,31 +133,7 @@
 					equals(args[0].frx, -20, 'first frx');
 					equals(args[1].frx, -20, 'second frx');
 					equals(args[2].frx, -20, 'third frx');
-				});
-				
-				test('mining damage', function() {
-					ok(this.tm.miningdamage, 'tm.miningdamage');
-					equals(this.tm.miningdamage.x, 0, 'miningdamage.x');
-					equals(this.tm.miningdamage.y, 0, 'miningdamage.y');
-					equals(this.tm.miningdamage.damage, 0, 'miningdamage.damage');
-					this.tm.set(0, 0, new Tile.Dirt());
-					this.tm.draw(this.fakectx, 0, 0);
-					equals(this.fakectx.fillRectArgs.length, 9, 'fillRect called once');
-					equals(this.fakectx.drawImageArgs.length, 1, 'drawImage called twice');
-					this.fakectx = new FakeCtx();
-					// set some damage and watch the cracks...
-					this.tm.miningdamage = {
-						x: 0,
-						y: 0,
-						damage: 1
-					};
-					this.tm.draw(this.fakectx, 0, 0);
-					equals(this.fakectx.fillRectArgs.length, 9, 'fillRect called once');
-					equals(this.fakectx.drawImageArgs.length, 2, 'drawImage called twice');
-					var args = this.fakectx.drawImageArgs[1];
-					equals(args.drx, 0, 'drawImage args.x is 0');
-					equals(args.dry, 0, 'drawImage args.y is 0');
-				});
+				});				
 			});
 		</script>
 	</head>
