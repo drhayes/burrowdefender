@@ -1,9 +1,6 @@
 // tile.js
 //
 // The thing a player and mobs walk on top of. Tend not to move.
-// Holy flyweight pattern, Batman! Each individual tile is not
-// instantiated per tile in the map; each tile type is created once
-// and stored in the map as a reference to the same object each time.
 
 (function(global, $) {
   
@@ -13,6 +10,7 @@
   grassimage.src = 'assets/images/grass.png'
   
   var Tile = function() {
+    this.diggable = true;
     this.draw = function(x, y, ctx) {
       // this version doesn't do anything
     };
@@ -31,40 +29,52 @@
   
   // Default tile (meant to be used by ref by everybody) that fills the
   // map at first.
-  Tile.Air = new Tile();
-  Tile.Air.diggable = false;
-  Tile.Air.draw = function(x, y, ctx) {
-    ctx.fillStyle = 'rgb(0, 128, 255)';
-    ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize + 1);
-  }
+  Tile.Air = function() {
+    this.diggable = false;
+    
+    this.draw = function(x, y, ctx) {
+      ctx.fillStyle = 'rgb(0, 128, 255)';
+      ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize + 1);
+    };
+  };
+  Tile.Air.prototype = new Tile();
 
   // The other really common tile.
-  Tile.Dirt = new Tile();
-  Tile.Dirt.diggable = true;
-  Tile.Dirt.health = 20;
-  Tile.Dirt.draw = function(x, y, ctx) {
-    ctx.fillStyle = 'rgb(102,51,0)';
-    ctx.fillRect(x, Tile.tilesize + y - 2, Tile.tilesize, 3);
-    ctx.drawImage(dirtimage, x, y);
-  }
+  Tile.Dirt = function() {
+    this.health = 20;
+    this.maxhealth = 20;
+    
+    this.draw = function(x, y, ctx) {
+      ctx.fillStyle = 'rgb(102,51,0)';
+      ctx.fillRect(x, Tile.tilesize + y - 2, Tile.tilesize, 3);
+      ctx.drawImage(dirtimage, x, y);
+    };
+  };
+  Tile.Dirt.prototype = new Tile();
   
   // The common tile, but on the surface with grass
-  Tile.DirtWithGrass = new Tile();
-  Tile.DirtWithGrass.diggable = true;
-  Tile.DirtWithGrass.health = 20;
-  Tile.DirtWithGrass.draw = function(x, y, ctx) {
-    Tile.Dirt.draw(x, y, ctx);
-    ctx.drawImage(grassimage, x, y);
-    var oldFillStyle = ctx.fillStyle;
-  }
+  Tile.DirtWithGrass = function() {
+    this.health = 20;
+    this.maxhealth = 20;
+    
+    this.draw = function(x, y, ctx) {
+      Tile.DirtWithGrass.prototype.draw(x, y, ctx);
+      ctx.drawImage(grassimage, x, y);
+      var oldFillStyle = ctx.fillStyle;
+    };
+  };
+  Tile.DirtWithGrass.prototype = new Tile.Dirt();
   
   // A dirt tile that has been dug
-  Tile.DirtDug = new Tile();
-  Tile.DirtDug.diggable = false;
-  Tile.DirtDug.draw = function(x, y, ctx) {
-    ctx.fillStyle = 'rgb(40, 15, 0)';
-    ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize + 1);
+  Tile.DirtDug = function() {
+    this.diggable = false;
+    
+    this.draw = function(x, y, ctx) {
+      ctx.fillStyle = 'rgb(40, 15, 0)';
+      ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize + 1);
+    };
   };
+  Tile.DirtDug.prototype = new Tile();
   
   global.Tile = Tile;
   
