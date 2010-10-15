@@ -18,11 +18,11 @@
     };
     
     this.fillRect = function(x, y, w, h) {
-      this.ctx.fillRect(x - this.offset.x, y - this.offset.y, w, h);
+      this.ctx.fillRect(x + this.offset.x, y + this.offset.y, w, h);
     };
     
     this.drawImage = function(img, x, y) {
-      this.ctx.drawImage(img, x - this.offset.x, y - this.offset.y);
+      this.ctx.drawImage(img, x + this.offset.x, y + this.offset.y);
     };
   };
   

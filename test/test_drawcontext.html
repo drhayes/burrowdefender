@@ -56,8 +56,8 @@
 					this.dc.offset.y = 100;
 					this.dc.fillRect(0, 0, 32, 32);
 					var args = this.fakectx.fillRectArgs[0];
-					equals(args.frx, -200, 'x');
-					equals(args.fry, -100, 'y');
+					equals(args.frx, 200, 'x');
+					equals(args.fry, 100, 'y');
 					equals(args.frw, 32, 'w');
 					equals(args.frh, 32, 'h');
 				});
@@ -67,8 +67,8 @@
 					this.dc.offset.y = 300;
 					this.dc.drawImage({}, 10, 20);
 					var args = this.fakectx.drawImageArgs[0];
-					equals(args.drx, -390, 'x');
-					equals(args.dry, -280, 'y');
+					equals(args.drx, 410, 'x');
+					equals(args.dry, 320, 'y');
 				});
 			});
 		</script>
