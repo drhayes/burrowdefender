@@ -90,9 +90,10 @@
 					equals(args[0].frw, Tile.tilesize, 'first frw');
 					equals(args[0].frh, 33, 'first frh');
 					equals(args[1].frx, 0, 'second frx');
-					equals(args[1].fry, 32, 'second fry');
+					equals(args[1].fry, 0, 'second fry');
 					equals(args[1].frw, Tile.tilesize, 'second frw');
 					equals(args[1].frh, 33, 'second frh');
+					equals(args[1].offy, 32, 'offset.y');
 				});
 				
 				test('draw with two tiles scroll tilesize aligned', function() {
@@ -106,9 +107,11 @@
 					equals(args[0].frx, 0, 'first frx');
 					equals(args[0].fry, 30, 'first fry');
 					equals(args[1].frx, 0, 'second frx');
-					equals(args[1].fry, 32, 'second fry');
+					equals(args[1].fry, 0, 'second fry');
+					equals(args[1].offy, 32, 'offset.y');
 					equals(args[2].frx, 0, 'third frx');
-					equals(args[2].fry, 64, 'third fry');
+					equals(args[2].fry, 0, 'third fry');
+					equals(args[2].offy, 64, 'offset.y');
 				});
 				
 				test('draw with three tiles not tilesize aligned', function() {
@@ -119,9 +122,12 @@
 					this.tm.draw(this.fakectx, 20, 0);
 					equals(this.fakectx.fillRectArgs.length, 9, 'called 9 times');
 					var args = this.fakectx.fillRectArgs;
-					equals(args[0].frx, -20, 'first frx');
-					equals(args[1].frx, -20, 'second frx');
-					equals(args[2].frx, -20, 'third frx');
+					equals(args[0].frx, 0, 'first frx');
+					equals(args[0].offx, -20, 'offset.y');
+					equals(args[1].frx, 0, 'second frx');
+					equals(args[1].offx, -20, 'offset.y');
+					equals(args[2].frx, 0, 'third frx');
+					equals(args[2].offx, -20, 'offset.y');
 				});				
 			});
 		</script>

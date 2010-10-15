@@ -31,7 +31,7 @@
       drawthing.sprite1.push(function(ctx) {
         ctx.fillStyle('rgb(0, 0, 0)');
         // draw a little bigger than player size so player is standing on ground
-        ctx.fillRect(game.playeroffset.x, game.playeroffset.y, me.size.x + 1, me.size.y + 1);        
+        ctx.fillRect(0, 0, me.size.x + 1, me.size.y + 1);        
       });
     };
     

@@ -75,6 +75,10 @@
     var drawiterate = function(drawthing, layer) {
       var drawthings = drawthing[layer];
       $.each(drawthings, function(i, thing) {
+        me.ctx.offset = {
+          x: me.playeroffset.x,
+          y: me.playeroffset.y
+        };
         thing(me.ctx);
       });
     };

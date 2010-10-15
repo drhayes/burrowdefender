@@ -11,15 +11,23 @@ var FakeCtx = function() {
 			frx: frx,
 			fry: fry,
 			frw: frw,
-			frh: frh
+			frh: frh,
+			offx: this.offset.x,
+			offy: this.offset.y
     });
   },
   this.drawImage = function(img, drx, dry) {
     this.drawImageArgs.push({
       img: img,
       drx: drx,
-      dry: dry
+      dry: dry,
+      offx: this.offset.x,
+      offy: this.offset.y
     });
   };
   this.drawImageArgs = [];
+  this.offset = {
+    x: 0,
+    y: 0
+  };
 };

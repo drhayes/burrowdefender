@@ -44,7 +44,7 @@
   Tile.tilesize = 32;
   
   // Draw the tile damage tiles
-  Tile.drawdamage = function(x, y, ctx, percentage) {
+  Tile.drawdamage = function(ctx, percentage) {
     if (percentage === 1) {
       return;
     };
@@ -55,7 +55,7 @@
     else if (percentage <= 0.6) {
       image = cracks2image;
     }
-    ctx.drawImage(image, x, y);
+    ctx.drawImage(image, 0, 0);
   };
   
   // Given an x,y in worldspace returns an {x,y} position in tilespace.
@@ -97,9 +97,9 @@
   Tile.Air = function() {
     this.diggable = false;
     
-    this.draw = function(x, y, ctx) {
+    this.draw = function(ctx) {
       ctx.fillStyle('rgb(0, 128, 255)');
-      ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize + 1);
+      ctx.fillRect(0, 0, Tile.tilesize, Tile.tilesize + 1);
     };
   };
   Tile.Air.prototype = new Tile();
@@ -110,11 +110,11 @@
     this.health = 20;
     this.maxhealth = 20;
     
-    this.draw = function(x, y, ctx) {
+    this.draw = function(ctx) {
       ctx.fillStyle('rgb(102,51,0)');
-      ctx.fillRect(x, Tile.tilesize + y - 2, Tile.tilesize, 3);
-      ctx.drawImage(dirtimage, x, y);
-      Tile.drawdamage(x, y, ctx, this.health / this.maxhealth);
+      ctx.fillRect(0, Tile.tilesize - 2, Tile.tilesize, 3);
+      ctx.drawImage(dirtimage, 0, 0);
+      Tile.drawdamage(ctx, this.health / this.maxhealth);
     };
     
     this.tick = Tile.healtick;
@@ -127,10 +127,10 @@
     this.health = 20;
     this.maxhealth = 20;
     
-    this.draw = function(x, y, ctx) {
-      Tile.DirtWithGrass.prototype.draw.call(this, x, y, ctx);
-      ctx.drawImage(grassimage, x, y);
-      Tile.drawdamage(x, y, ctx, this.health / this.maxhealth);
+    this.draw = function(ctx) {
+      Tile.DirtWithGrass.prototype.draw.call(this, ctx);
+      ctx.drawImage(grassimage, 0, 0);
+      Tile.drawdamage(ctx, this.health / this.maxhealth);
     };
     
     this.tick = Tile.healtick;
@@ -141,9 +141,9 @@
   Tile.Dug = function() {
     this.diggable = false;
     
-    this.draw = function(x, y, ctx) {
+    this.draw = function(ctx) {
       ctx.fillStyle('rgb(40, 15, 0)');
-      ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize + 1);
+      ctx.fillRect(0, 0, Tile.tilesize, Tile.tilesize + 1);
     };
   };
   Tile.Dug.prototype = new Tile();

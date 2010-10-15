@@ -49,7 +49,11 @@
       this.offsetx = offsetx || 0;
       this.offsety = offsety || 0;
       iterateviewabletiles(function(tile, tilex, tiley) {
-        tile.draw(tilex - me.offsetx, tiley - me.offsety, ctx);
+        ctx.offset = {
+          x: tilex - me.offsetx,
+          y: tiley - me.offsety
+        };
+        tile.draw(ctx);
       });
     };
     
