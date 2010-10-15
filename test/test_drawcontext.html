@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>DrawContext</title>
+		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/drawcontext.js"></script>
+		<script type="text/javascript" src="fakes.js"></script>
+		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<script>
+			$(document).ready(function() {
+				module('basics');
+				
+				test('ctor', function() {
+					equals(typeof(window.DrawContext), 'function', 'DrawContext exists');
+					var dc = new DrawContext();
+					equals(typeof(dc.fillStyle), 'function', 'fillStyle function');
+					equals(typeof(dc.fillRect), 'function', 'fillRect function');
+					equals(typeof(dc.drawImage), 'function', 'drawImage function');
+				});
+				
+				module('usage', {
+					setup: function() {
+						this.fakectx = new FakeCtx();
+						this.dc = new DrawContext(this.fakectx);
+					}
+				});
+				
+				test('fillStyle', function() {
+					this.dc.fillStyle('new');
+					equals(this.fakectx.fillStyle, 'new', 'fill style set');
+				});
+				
+				test('fillRect', function() {
+					this.dc.fillRect(1, 2, 3, 4);
+					equals(this.fakectx.fillRectArgs.length, 1, 'fillRect called');
+					var args = this.fakectx.fillRectArgs[0];
+					equals(args.frx, 1, 'x');
+					equals(args.fry, 2, 'y');
+					equals(args.frw, 3, 'w');
+					equals(args.frh, 4, 'h');
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1 id="qunit-header">DrawContext Test</h1>
+		<h2 id="qunit-banner"></h2>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">test markup, will be hidden</div>
+	</body>
+</html>
