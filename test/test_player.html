@@ -59,7 +59,7 @@
 					};
 					this.p.draw(drawthing);
 					drawthing.sprite1[0](fakectx);
-					equals(fakectx.fillStyle, 'rgb(0, 0, 0)', 'fill style set correctly');
+					equals(fakectx.fillStyleArgs[0], 'rgb(0, 0, 0)', 'fill style set correctly');
 					equals(fakectx.fillRectArgs.length, 1, 'fillRect was called once');
 					var args = fakectx.fillRectArgs[0];
 					equals(args.frx, this.fakegame.playeroffset.x, 'fillRect x');

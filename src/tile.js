@@ -98,7 +98,7 @@
     this.diggable = false;
     
     this.draw = function(x, y, ctx) {
-      ctx.fillStyle = 'rgb(0, 128, 255)';
+      ctx.fillStyle('rgb(0, 128, 255)');
       ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize + 1);
     };
   };
@@ -111,7 +111,7 @@
     this.maxhealth = 20;
     
     this.draw = function(x, y, ctx) {
-      ctx.fillStyle = 'rgb(102,51,0)';
+      ctx.fillStyle('rgb(102,51,0)');
       ctx.fillRect(x, Tile.tilesize + y - 2, Tile.tilesize, 3);
       ctx.drawImage(dirtimage, x, y);
       Tile.drawdamage(x, y, ctx, this.health / this.maxhealth);
@@ -142,7 +142,7 @@
     this.diggable = false;
     
     this.draw = function(x, y, ctx) {
-      ctx.fillStyle = 'rgb(40, 15, 0)';
+      ctx.fillStyle('rgb(40, 15, 0)');
       ctx.fillRect(x, y, Tile.tilesize, Tile.tilesize + 1);
     };
   };

@@ -8,7 +8,7 @@
   
   var Game = function(canvasid) {
     this.canvas = $(canvasid)[0];
-    this.ctx = this.canvas.getContext('2d');
+    this.ctx = new DrawContext(this.canvas.getContext('2d'));
     this.width = this.canvas.width;
     this.height = this.canvas.height;
     this.tilemap = new TileMap(this.width, this.height);
@@ -108,7 +108,7 @@
     });
     
     this.clearbackground = function(ctx) {
-			ctx.fillStyle = 'rgb(255, 255, 255)';
+			ctx.fillStyle('rgb(255, 255, 255)');
 			ctx.fillRect(0, 0, this.width, this.height);
     };
     
