@@ -8,17 +8,21 @@
   
   var DrawContext = function(ctx) {
     this.ctx = ctx;
+    this.offset = {
+      x: 0,
+      y: 0
+    };
     
     this.fillStyle = function(fill) {
       this.ctx.fillStyle = fill;
     };
     
     this.fillRect = function(x, y, w, h) {
-      this.ctx.fillRect(x, y, w, h);
+      this.ctx.fillRect(x - this.offset.x, y - this.offset.y, w, h);
     };
     
     this.drawImage = function(img, x, y) {
-      this.ctx.drawImage(img, x, y);
+      this.ctx.drawImage(img, x - this.offset.x, y - this.offset.y);
     };
   };
   
