@@ -17,7 +17,9 @@
       this.ctx.fillRect(x, y, w, h);
     };
     
-    this.drawImage = function() {};
+    this.drawImage = function(img, x, y) {
+      this.ctx.drawImage(img, x, y);
+    };
   };
   
   global.DrawContext = DrawContext;

@@ -19,7 +19,7 @@
 					equals(typeof(dc.drawImage), 'function', 'drawImage function');
 				});
 				
-				module('usage', {
+				module('basic usage', {
 					setup: function() {
 						this.fakectx = new FakeCtx();
 						this.dc = new DrawContext(this.fakectx);
@@ -39,6 +39,16 @@
 					equals(args.fry, 2, 'y');
 					equals(args.frw, 3, 'w');
 					equals(args.frh, 4, 'h');
+				});
+				
+				test('drawImage', function() {
+					var image = {};
+					this.dc.drawImage(image, 6, 7);
+					equals(this.fakectx.drawImageArgs.length, 1, 'drawImage called');
+					var args = this.fakectx.drawImageArgs[0];
+					same(args.img, image, 'image');
+					equals(args.drx, 6, 'x');
+					equals(args.dry, 7, 'y');
 				});
 			});
 		</script>
