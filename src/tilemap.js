@@ -18,6 +18,8 @@
     
     this.get = function(x, y) {
       var key = TileMap.makekey(x, y);
+      // TODO: figure out why commenting out the following three lines
+      // makes the CPU usage drop 15%
       if (this.tilemap.hasOwnProperty(key)) {
         return this.tilemap[key];
       }
