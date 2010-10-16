@@ -20,10 +20,8 @@
       y: this.height / 2
     };
     this.updater = new Updater();
-    this.drawables = [];
-    this.movables = [];
-    this.tickables = [];
-    this.others = [];
+    this.things = [];
+    this.addthings = [];
     
     // temporary tile generation
 		this.tilegenerator.generate(31 * Tile.tilesize, 0);
@@ -40,84 +38,48 @@
     // Whatever this thing is, add it to the appropriate update buckets. If it
     // can draw itself, add to drawables. If it ticks, add it there. Etc...
     this.add = function(thing) {
-      if (typeof(thing.tick) === 'function') {
-        var tick = function() {
-          thing.tick();
-        };
-        tick.thing = thing;
-        this.tickables.push(tick);
-      };
-      if (typeof(thing.move) === 'function') {
-        var move = function() {
-          thing.move(me.spatialhash.get(thing, thing.vel.x, thing.vel.y));
-        };
-        move.thing = thing;
-        this.movables.push(move);
-      };
-      if (typeof(thing.draw) === 'function') {
-        var draw = function(drawthing) {
-          thing.draw(drawthing);
-        }
-        draw.thing = thing;
-        this.drawables.push(draw);
-      };
-      if (typeof(thing) === 'function') {
-        // this statement is awesome!
-        thing.thing = thing;
-        this.others.push(thing);
-      };
-    };
-    
-    // removes the given thing from all the update lists.
-    this.remove = function(thing) {
-      var indextoremove = function(list) {
-        var index = -1;
-        $.each(list, function(i, t) {
-          if (t.thing === thing) {
-            index = i;
-            return false;
-          }
-        });
-        return index;
-      };
-      var index = indextoremove(this.tickables);
-      if (index !== -1) {
-        this.tickables.splice(index, 1);
-      };
-      index = indextoremove(this.movables);
-      if (index !== -1) {
-        this.movables.splice(index, 1);
-      };
-      index = indextoremove(this.drawables);
-      if (index !== -1) {
-        this.drawables.splice(index, 1);
-      };
-      index = indextoremove(this.others);
-      if (index !== -1) {
-        this.others.splice(index, 1);
-      };
+      this.addthings.push(thing);
     };
     
     this.update = function() {
       // update the tilemap
       this.tilemap.tick();
-      $.each(this.others, function(index, other) {
-        other();
+      // things can kill themselves on tick, so we need a new list of the
+      // unkilled things after each update cycle...
+      var newthings = [];
+      // gather the drawables
+      this.drawables = [];
+      // run all the updates on the things
+      $.each(this.things, function(index, thing) {
+        if (typeof(thing) === 'function') {
+          thing();
+        };
+        if (thing.tick) {
+          thing.tick();
+        };
+        if (thing.move) {
+          thing.move(me.spatialhash.get(thing, thing.vel.x, thing.vel.y));
+        };
+        if (thing.draw) {
+          me.drawables.push(function(drawthing) {
+            thing.draw(drawthing);
+          });
+        };
+        if (!thing.hasOwnProperty('killed') || !thing.killed) {
+          newthings.push(thing);
+        }
       });
-      $.each(this.tickables, function(index, tickable) {
-        tickable();
-      });
-      $.each(this.movables, function(index, movable) {
-        movable();
-      });
+      // swap the list if anything was killed and add anything that was added
+      // during the update cycle.
+      this.things = newthings;
+      this.things = newthings.concat(this.addthings);
+      this.addthings = [];
     };
     
     var drawiterate = function(drawthing, layer) {
       var drawthings = drawthing[layer];
       $.each(drawthings, function(i, thing) {
         me.ctx.offset = {
-          // x: me.playeroffset.x,
-          // y: me.playeroffset.y
           x: -(me.player.x - me.playeroffset.x),
           y: -(me.player.y - me.playeroffset.y)
         };
