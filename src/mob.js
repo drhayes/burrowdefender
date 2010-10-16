@@ -32,6 +32,7 @@
   };
 
   var Mob = function(options) {
+    var me = this;
     options = $.extend({}, defaults, options);
     this.x = options.x;
     this.y = options.y;
@@ -99,6 +100,10 @@
           return;
         }
         // okay, we're doing this
+        // does what we're colliding with have a collide function?
+        if (r.hasOwnProperty('collide') && typeof(r.collide) === 'function') {
+          r.collide(me);
+        }
         // check our old intersections to prevent teleporting
         var oiy = utils.intersect(mob.y, mob.y + mob.size.y, r.y1, r.y2);
         if (!oiy) {

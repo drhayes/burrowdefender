@@ -218,6 +218,26 @@
 					equals(this.m.y, 0, 'move 5 upwards');
 				});
 				
+				test('call collide passing in self on collision', function() {
+					var me = this;
+					expect(2);
+					var r1 = {
+						x1: -20, y1: -20, x2: 0, y2: 0,
+						collide: function(mob) {
+							ok(true, 'got called');
+							equals(mob, me.m, 'mob was passed in');
+						}
+					};
+					var r2 = {
+						x1: -20, y1: 1, x2: 0, y2: 20,
+						collide: 'cats'
+					}
+					this.m.vel.x = -10;
+					this.m.vel.y = -10;
+					this.m.move([r1]);
+					this.m.move([r2])
+				});
+				
 				module('jumping', {
 					setup: function() {
 						this.m = new Mob({
