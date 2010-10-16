@@ -104,6 +104,9 @@
         if (r.hasOwnProperty('collide') && typeof(r.collide) === 'function') {
           r.collide(me);
         }
+        if (r.hasOwnProperty('solid') && !r.solid) {
+          return;
+        }
         // check our old intersections to prevent teleporting
         var oiy = utils.intersect(mob.y, mob.y + mob.size.y, r.y1, r.y2);
         if (!oiy) {

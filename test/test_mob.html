@@ -238,6 +238,18 @@
 					this.m.move([r2])
 				});
 				
+				test('solid', function() {
+					var r1 = {
+						x1: -20, y1: -20, x2: 0, y2: 10,
+						solid: false
+					};
+					this.m.vel.x = -10;
+					this.m.vel.y = -10;
+					this.m.move([r1]);
+					equals(this.m.x, -5, 'm.x === -5');
+					equals(this.m.y, -5, 'm.y === -5');
+				});
+				
 				module('jumping', {
 					setup: function() {
 						this.m = new Mob({
