@@ -21,18 +21,16 @@
     };
     
     this.tick = function() {
-      console.log('tilefrag tick');
       // under the effect of gravity
       Mob.gravitytick.call(this);
       // disappears after a few seconds
       var current = new Date().getTime();
-      if (current - this.created > 2000) {
+      if (current - this.created > 3000) {
         this.killed = true;
       }
     };
     
     this.draw = function(drawthing) {
-      console.log('tilefrag draw');
       drawthing.sprite2.push(function(ctx) {
         ctx.fillStyle('rgb(192, 192, 192)');
         ctx.fillRect(me.x, me.y, me.size.x, me.size.y);
