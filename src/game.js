@@ -76,8 +76,10 @@
       var drawthings = drawthing[layer];
       $.each(drawthings, function(i, thing) {
         me.ctx.offset = {
-          x: me.playeroffset.x,
-          y: me.playeroffset.y
+          // x: me.playeroffset.x,
+          // y: me.playeroffset.y
+          x: -(me.player.x - me.playeroffset.x),
+          y: -(me.player.y - me.playeroffset.y)
         };
         thing(me.ctx);
       });
@@ -112,6 +114,10 @@
     });
     
     this.clearbackground = function(ctx) {
+      ctx.offset = {
+        x: 0,
+        y: 0
+      };
 			ctx.fillStyle('rgb(255, 255, 255)');
 			ctx.fillRect(0, 0, this.width, this.height);
     };

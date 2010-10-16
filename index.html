@@ -29,8 +29,9 @@
 	<p>shift+wasd to dig</p>
 	<p>have fun!</p>
 	<script type="text/javascript">
+		var game = new Game('#drawme');
 		$(document).ready(function() {
-			var game = new Game('#drawme');
+			// add an object to check the painting code
 			game.start();
 		});
 	</script>
