@@ -111,6 +111,21 @@
 					equals(this.g.others.length, 1, 'g.others.length is 1');
 				});
 				
+				test('add with caching', function() {
+					var thing1 = {
+						tick: function() {},
+						move: function() {},
+						draw: function() {}
+					};
+					var thing2 = function() {};
+					this.g.add(thing1);
+					this.g.add(thing2);
+					same(this.g.tickables[0].thing, thing1, 'saved what thing tick came from');
+					same(this.g.movables[0].thing, thing1, 'saved what thing move came from');
+					same(this.g.drawables[0].thing, thing1, 'saved what thing draw came from');
+					same(this.g.others[0].thing, thing2, 'saved what thing other came from');
+				});
+				
 				test('update', function() {
 					ok(typeof(this.g.update) === 'function', 'update exists');
 					equals(this.g.updater.processes.length, 2, 'there is an update and a draw process');

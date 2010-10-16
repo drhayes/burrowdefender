@@ -41,19 +41,29 @@
     // can draw itself, add to drawables. If it ticks, add it there. Etc...
     this.add = function(thing) {
       if (typeof(thing.tick) === 'function') {
-        this.tickables.push(function() {
+        var tick = function() {
           thing.tick();
-        });
+        };
+        tick.thing = thing;
+        this.tickables.push(tick);
       };
       if (typeof(thing.move) === 'function') {
-        this.movables.push(function() {
+        var move = function() {
           thing.move(me.spatialhash.get(thing, thing.vel.x, thing.vel.y));
-        });
+        };
+        move.thing = thing;
+        this.movables.push(move);
       };
       if (typeof(thing.draw) === 'function') {
-        this.drawables.push(thing.draw);
+        var draw = function(drawthing) {
+          thing.draw(drawthing);
+        }
+        draw.thing = thing;
+        this.drawables.push(draw);
       };
       if (typeof(thing) === 'function') {
+        // this statement is awesome!
+        thing.thing = thing;
         this.others.push(thing);
       };
     };
