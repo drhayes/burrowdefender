@@ -37,6 +37,16 @@
     this.kill = function(x, y) {
       this.game.tilemap.set(x, y, new Tile.Dug());
       this.game.spatialhash.remove(Tile.getrect(x, y));
+      // find the center point of this tile
+      var cx = (x * Tile.tilesize) + (Tile.tilesize / 2);
+      var cy = (y * Tile.tilesize) + (Tile.tilesize / 2);
+      // add some fragments
+      for (var i = 0; i < 10; i++) {
+        var frag = new TileFrag(this.game);
+        frag.x = cx;
+        frag.y = cy;
+        this.game.add(frag);
+      }
     };
   };
   
