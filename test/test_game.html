@@ -126,6 +126,30 @@
 					same(this.g.others[0].thing, thing2, 'saved what thing other came from');
 				});
 				
+				test('remove', function() {
+					equals(typeof(this.g.remove), 'function', 'remove exists');
+					var thing1 = {
+						tick: function() {},
+						move: function() {},
+						draw: function() {}
+					};
+					var thing2 = function() {};
+					this.g.add(thing1);
+					this.g.add(thing2);
+					// grab the update list lengths
+					var ticklength = this.g.tickables.length;
+					var movelength = this.g.movables.length;
+					var drawlength = this.g.drawables.length;
+					var otherlength = this.g.others.length;
+					// remove the things
+					this.g.remove(thing1);
+					this.g.remove(thing2);
+					equals(this.g.tickables.length, ticklength - 1, 'removed a tick function');
+					equals(this.g.movables.length, movelength - 1, 'removed a move function');
+					equals(this.g.drawables.length, drawlength - 1, 'removed a draw function');
+					equals(this.g.others.length, otherlength - 1, 'removed a other function');
+				});
+				
 				test('update', function() {
 					ok(typeof(this.g.update) === 'function', 'update exists');
 					equals(this.g.updater.processes.length, 2, 'there is an update and a draw process');

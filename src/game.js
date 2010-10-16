@@ -68,6 +68,36 @@
       };
     };
     
+    // removes the given thing from all the update lists.
+    this.remove = function(thing) {
+      var indextoremove = function(list) {
+        var index = -1;
+        $.each(list, function(i, t) {
+          if (t.thing === thing) {
+            index = i;
+            return false;
+          }
+        });
+        return index;
+      };
+      var index = indextoremove(this.tickables);
+      if (index !== -1) {
+        this.tickables.splice(index, 1);
+      };
+      index = indextoremove(this.movables);
+      if (index !== -1) {
+        this.movables.splice(index, 1);
+      };
+      index = indextoremove(this.drawables);
+      if (index !== -1) {
+        this.drawables.splice(index, 1);
+      };
+      index = indextoremove(this.others);
+      if (index !== -1) {
+        this.others.splice(index, 1);
+      };
+    };
+    
     this.update = function() {
       // update the tilemap
       this.tilemap.tick();
