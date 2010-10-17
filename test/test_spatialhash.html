@@ -109,6 +109,21 @@
 					equals(x[0], r1, 'r1');
 					equals(x[1], r2, 'r2');
 				});
+				
+				test('get and set preserve other properties', function() {
+					var r1 = {
+						x1: 0, y1: 0, x2: 10, y2: 10,
+						solid: false,
+						collide: function() {}
+					};
+					this.sh.set(r1);
+					var list = this.sh.get({x1: 5, y1: 5, x2: 8, y2: 8});
+					ok(list, 'list came back');
+					equals(list.length, 1, 'list has a thing in it');
+					var r2 = list[0];
+					ok(r2.hasOwnProperty('solid'), 'solid exists on the returned object');
+					ok(r2.hasOwnProperty('collide'), 'collide exists on the returned object');
+				});
 			});
 		</script>
 	</head>
