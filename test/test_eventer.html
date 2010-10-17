@@ -10,27 +10,29 @@
 			$(document).ready(function() {
 				module('eventer');
 				
-				test('namespaces', function() {
-					ok(typeof(window.Eventer) !== 'undefined', 'eventer');
+				test('ctor', function() {
+					ok(typeof(window.eventer) !== 'undefined', 'eventer');
+					var e = eventer();
+					ok(typeof(e.subscribe) === 'function', 'subscribe is a function');
+					ok(typeof(e.fire) === 'function', 'fire is a function');
 				});
 				
-				test('ctor', function() {
-					var eventer1 = new Eventer();
-					ok(typeof(eventer1.subscribe) === 'function', 'subscribe is a function');
-					ok(typeof(eventer1.fire) === 'function', 'fire is a function');
-				});
+				module('usage', {
+					setup: function() {
+						this.e = eventer();
+					}
+				})
 				
 				test('subscribe validation', function() {
-					var eventer1 = new Eventer();
 					try {
-						eventer1.subscribe(null, function() {});
+						this.e.subscribe(null, function() {});
 						ok(false, 'null event name');
 					}
 					catch (error) {
 						ok(true, 'null event name');
 					}
 					try {
-						eventer1.subscribe('blah', null);
+						this.e.subscribe('blah', null);
 						ok(false, 'null callback');
 					}
 					catch (error) {
@@ -39,9 +41,8 @@
 				});
 				
 				test('fire validation', function() {
-					var eventer1 = new Eventer();
 					try {
-						eventer1.fire(null);
+						this.e.fire(null);
 						ok(false, 'null event name');
 					}
 					catch (error) {
@@ -50,7 +51,6 @@
 				});
 				
 				test('subscribe and fire one', function() {
-					var eventer1 = new Eventer();
 					var func1Called = false;
 					var func1 = function() {
 						func1Called = true;
@@ -59,34 +59,34 @@
 					var func2 = function() {
 						func2Called = true;
 					}
-					eventer1.subscribe('one', func1);
-					eventer1.subscribe('two', func1);
-					eventer1.subscribe('two', func2);
+					this.e.subscribe('one', func1);
+					this.e.subscribe('two', func1);
+					this.e.subscribe('two', func2);
 					
 					ok(!func1Called, 'func1 not called');
 					ok(!func2Called, 'func2 not called');
-					eventer1.fire('one');
+					this.e.fire('one');
 					ok(func1Called, 'func1 called');
 					ok(!func2Called, 'func2 not called');
 					
 					func1Called = false;
 					ok(!func1Called, 'func1 not called');
 					ok(!func2Called, 'func2 not called');
-					eventer1.fire('two');
+					this.e.fire('two');
 					ok(func1Called, 'func1 called');
 					ok(func2Called, 'func2 called');
 					
-					eventer1.fire('blah');
+					this.e.fire('blah');
 				});
 				
 				test('fire with args', function() {
-					var e = new Eventer();
-					e.subscribe('one', function(args) {
+					expect(3);
+					this.e.subscribe('one', function(args) {
 						ok(args.a === 'a', 'first arg');
 						ok(args.b === 'b', 'second arg');
 						ok(args.c === 'c', 'third arg');
 					})
-					e.fire('one', {
+					this.e.fire('one', {
 						a: 'a',
 						b: 'b',
 						c: 'c'

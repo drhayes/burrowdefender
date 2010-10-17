@@ -4,10 +4,11 @@
 
 (function(global, $) {
 
-  var Eventer = function() {
+  var eventer = function() {
+      var that = {};
       var subscribers = {};
 
-      this.subscribe = function(eventName, callback) {
+      that.subscribe = function(eventName, callback) {
           if (eventName === null) {
               throw new Error('eventName required');
           }
@@ -22,7 +23,7 @@
           subscribers[eventName] = callbacks;
       }
 
-      this.fire = function(eventName, eventArg) {
+      that.fire = function(eventName, eventArg) {
           if (eventName === null) {
               throw new Error('eventName required');
           }
@@ -34,11 +35,13 @@
           if (callbacks !== null) {
               $.each(callbacks, function(index, callback) {
                   callback(eventArg);
-              })
-          }
-      }
+              });
+          };
+      };
+      
+      return that;
   }
 
-  global.Eventer = Eventer;
+  global.eventer = eventer;
   
 })(window, jQuery)
