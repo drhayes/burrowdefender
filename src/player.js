@@ -29,7 +29,7 @@
     
     this.draw = function(drawthing) {
       drawthing.sprite1.push(function(ctx) {
-        ctx.fillStyle('rgb(0, 0, 0)');
+        ctx.fillStyle('rgb(64, 64, 64)');
         // draw a little bigger than player size so player is standing on ground
         ctx.fillRect(me.x, me.y, me.size.x + 1, me.size.y + 1);        
       });
