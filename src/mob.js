@@ -71,6 +71,9 @@
       var firstcollides = [];
       var secondcollides = [];
       $.each(collides, function(i, r) {
+        if (r === me) {
+          return;
+        }
         var oiy = utils.intersect(mob.y, mob.y + mob.size.y, r.y1, r.y2);
         var oix = utils.intersect(mob.x, mob.x + mob.size.x, r.x1, r.x2);
         if (oiy || oix) {
@@ -101,10 +104,10 @@
         }
         // okay, we're doing this
         // does what we're colliding with have a collide function?
-        if (r.hasOwnProperty('collide') && typeof(r.collide) === 'function') {
+        if (typeof(r.collide) === 'function') {
           r.collide(me);
         }
-        if (r.hasOwnProperty('solid') && !r.solid) {
+        if (typeof(r.solid) !== 'undefined' && !r.solid) {
           return;
         }
         // check our old intersections to prevent teleporting
@@ -115,7 +118,7 @@
           }
           else if (vely > 0) {
             vely -= npy2 - r.y1 + 1;
-            if (Math.abs(vely) < 0.1) {
+            if (Math.abs(vely) < 0.01) {
               mob.movestate.jumping = false;
               mob.movestate.standing = true;
             }
@@ -135,10 +138,10 @@
           }          
         }
       });
-      if (Math.abs(vely) < 0.1) {
+      if (Math.abs(vely) < 0.01) {
         vely = 0;
       }
-      if (Math.abs(velx) < 0.1) {
+      if (Math.abs(velx) < 0.01) {
         velx = 0;
       }
       if (vely !== 0) {

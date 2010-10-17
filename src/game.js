@@ -65,7 +65,7 @@
             thing.draw(drawthing);
           });
         };
-        if (!thing.hasOwnProperty('killed') || !thing.killed) {
+        if (typeof(thing.killed) !== 'undefined' || !thing.killed) {
           newthings.push(thing);
         }
       });

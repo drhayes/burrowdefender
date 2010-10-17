@@ -62,7 +62,7 @@
     // any visible tile that has a tick method will get it called.
     this.tick = function() {
       iterateviewabletiles(function(tile, tilex, tiley) {
-        if (tile.hasOwnProperty('tick')) {
+        if (typeof(tile.tick) !== 'undefined') {
           tile.tick();
         };
       });
