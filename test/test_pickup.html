@@ -14,10 +14,9 @@
 				module('basics');
 				
 				test('ctor', function() {
-					equals(typeof(Pickup), 'function', 'Pickup exists');
+					equals(typeof pickup, 'function', 'pickup exists');
 					var fakegame = new FakeGame();
-					var p = new Pickup(fakegame);
-					same(p.game, fakegame, 'same game as passed in for ctor');
+					var p = pickup({game: fakegame});
 					equals(p.size.x, 16, 'p.size.x is 16');
 					equals(p.size.y, 16, 'p.size.y is 16');
 				});
@@ -25,7 +24,7 @@
 				module('collisions', {
 					setup: function() {
 						this.fakegame = new FakeGame();
-						this.p = new Pickup(this.fakegame);
+						this.p = pickup({game: this.fakegame});
 						this.p.x = 0;
 						this.p.y = 0;
 					}
@@ -33,7 +32,7 @@
 				
 				test('with a thing', function() {
 					equals(typeof(this.p.collide), 'function', 'collide exists');
-					var m2 = new Mob({
+					var m2 = mob({
 						x: 18,
 						y: 0,
 						vel: {
@@ -44,7 +43,7 @@
 					// m2 has no inventory, and nothing blows up
 					m2.move([this.p]);
 					// do something real...
-					var m = new Mob({
+					var m = mob({
 						x: 18,
 						y: 0,
 						vel: {

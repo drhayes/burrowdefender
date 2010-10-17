@@ -6,40 +6,40 @@
 // Depends: mob.js
 
 (function(global, $) {
-  var Pickup = function(game) {
-    this.game = game;
-    var me = this;
+  var pickup = function(args) {
+    var that = mob(args);
     
-    this.collide = function(collider) {
+    that.collide = function(collider) {
       if (!collider.inventory) {
         return;
       };
       collider.inventory.add(this);
-      this.killed = true;
+      that.killed = true;
       // have to get the rect to remove from spatial hash
-      this.updaterect();
-      this.game.spatialhash.remove(this);
+      that.updaterect();
+      args.game.spatialhash.remove(this);
     };
     
-    this.tick = Mob.gravitytick;
+    that.tick = that.gravitytick;
     
+    return that;    
   };
-  Pickup.prototype = new Mob();
-  global.Pickup = Pickup;
+  global.pickup = pickup;
   
   // let's define some pickups...
   
-  var DirtPickup = function() {
-    var me = this;
+  var dirtpickup = function(args) {
+    var that = pickup(args);
 
-    this.draw = function(drawthing) {
+    that.draw = function(drawthing) {
       drawthing.sprite1.push(function(ctx) {
         ctx.fillStyle('rgb(255, 255, 255)');
-        ctx.fillRect(me.x, me.y, me.size.x, me.size.y);
+        ctx.fillRect(that.x, that.y, that.size.x, that.size.y);
       });
     };
+    
+    return that;
   };
-  DirtPickup.prototype = new Pickup();
-  global.DirtPickup = DirtPickup;
+  global.dirtpickup = dirtpickup;
 
 })(window, jQuery)
