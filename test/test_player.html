@@ -17,8 +17,11 @@
 				module('basics');
 				
 				test('ctor', function() {
-					ok(typeof(window.Player) !== 'undefined', 'player exists');
-					var p = new Player();
+					equals(typeof player, 'function', 'player exists');
+					var args = {
+						game: new FakeGame()
+					};
+					var p = player(args);
 					equals(p.x, 0, 'initial x pos');
 					equals(p.y, 0, 'initial y pos');
 					equals(p.size.x, 16, 'initial x size');
@@ -32,22 +35,11 @@
 				
 				module('usage', {
 					setup: function() {
-						this.fakegame = {
-							playeroffset: {
-								x: 16,
-								y: 16
-							},
-							keyboardmanager: {
-								keymap: {
-									'w': false,
-									'a': false,
-									's': false,
-									'd': false,
-									'shift': false
-								}
-							}
+						this.fakegame = new FakeGame();
+						var args = {
+							game: this.fakegame
 						};
-						this.p = new Player(this.fakegame);
+						this.p = player(args);
 					}
 				});
 				

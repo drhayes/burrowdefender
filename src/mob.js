@@ -27,7 +27,9 @@
       standing: false
     },
     velocities: {
-      jump: -6
+      jump: -6,
+      walkleft: -2,
+      walkright: 2
     }
   };
 
@@ -51,7 +53,9 @@
       standing: options.movestate.standing
     };
     that.velocities = {
-      jump: options.velocities.jump
+      jump: options.velocities.jump,
+      walkleft: options.velocities.walkleft,
+      walkright: options.velocities.walkright
     }
     
     that.updaterect = function() {

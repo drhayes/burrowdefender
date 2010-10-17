@@ -14,124 +14,116 @@
     UP: 3
   };
   
-  var Player = function(game) {
-    var me = this;
-    
-    this.game = game;
+  var player = function(args) {
+    // player derives from mob
+    var that = mob(args);
+    // set player defaults
+    that.size = {
+      x: 16,
+      y: 20
+    };
     
     // special player movestates
-    this.movestate.mining = false;
-    this.movestate.wantstojump = false;
-    this.movestate.walking = walking.STANDING;
+    that.movestate.mining = false;
+    that.movestate.wantstojump = false;
+    that.movestate.walking = walking.STANDING;
     
     // mining damage
-    this.minedamage = 1;
+    that.minedamage = 1;
     
-    this.draw = function(drawthing) {
+    that.draw = function(drawthing) {
       drawthing.sprite1.push(function(ctx) {
         ctx.fillStyle('rgb(64, 64, 64)');
         // draw a little bigger than player size so player is standing on ground
-        ctx.fillRect(me.x, me.y, me.size.x + 1, me.size.y + 1);        
+        ctx.fillRect(that.x, that.y, that.size.x + 1, that.size.y + 1);        
       });
     };
     
-    this.readkeyboard = function() {
-      if (this.game.keyboardmanager.keymap['shift']) {
-        this.movestate.mining = true;
+    that.readkeyboard = function() {
+      if (args.game.keyboardmanager.keymap['shift']) {
+        that.movestate.mining = true;
       }
       else {
-        this.movestate.mining = false;
+        that.movestate.mining = false;
       };
-      if (this.game.keyboardmanager.keymap['space']) {
-        this.movestate.wantstojump = true;
+      if (args.game.keyboardmanager.keymap['space']) {
+        that.movestate.wantstojump = true;
       }
       else {
-        this.movestate.wantstojump = false;
+        that.movestate.wantstojump = false;
       };
       // this order is probably pretty important.
       // don't want down to be the one that wins out.
-      if (this.game.keyboardmanager.keymap['s']) {
-        this.movestate.walking = walking.DOWN;
+      if (args.game.keyboardmanager.keymap['s']) {
+        that.movestate.walking = walking.DOWN;
       }
-      else if (this.game.keyboardmanager.keymap['a']) {
-        this.movestate.walking = walking.LEFT;
+      else if (args.game.keyboardmanager.keymap['a']) {
+        that.movestate.walking = walking.LEFT;
       }
-      else if (this.game.keyboardmanager.keymap['d']) {
-        this.movestate.walking = walking.RIGHT;
+      else if (args.game.keyboardmanager.keymap['d']) {
+        that.movestate.walking = walking.RIGHT;
       }
-      else if (this.game.keyboardmanager.keymap['w']) {
-        this.movestate.walking = walking.UP;
+      else if (args.game.keyboardmanager.keymap['w']) {
+        that.movestate.walking = walking.UP;
       }
       else {
-        this.movestate.walking = walking.STANDING;
+        that.movestate.walking = walking.STANDING;
       }
     };
 		
-		this.mine = function() {
-			if (this.movestate.mining) {
+		that.mine = function() {
+			if (that.movestate.mining) {
 				// convert player's current position to tile
 				// respect player's center of mass
-				var tilepos = Tile.totilepos(this.x + this.size.x / 2, this.y + this.size.y / 2);
-				if (this.movestate.walking === walking.LEFT) {
+				var tilepos = Tile.totilepos(that.x + that.size.x / 2, that.y + that.size.y / 2);
+				if (that.movestate.walking === walking.LEFT) {
 					tilepos.x -= 1;
 				}
-				else if (this.movestate.walking === walking.RIGHT) {
+				else if (that.movestate.walking === walking.RIGHT) {
 					tilepos.x += 1;
 				}
-				else if (this.movestate.walking === walking.UP) {
+				else if (that.movestate.walking === walking.UP) {
 					tilepos.y -= 1;
 				}
-				else if (this.movestate.walking === walking.DOWN) {
+				else if (that.movestate.walking === walking.DOWN) {
 					tilepos.y += 1;
 				}
 				// is it a diggable tile?
-				var digtile = this.game.tilemap.get(tilepos.x, tilepos.y);
+				var digtile = args.game.tilemap.get(tilepos.x, tilepos.y);
 				digtile.mine(this, tilepos.x, tilepos.y);
 			}
 		};
 		
-		this.walk = function() {
-			if (this.movestate.walking === walking.LEFT) {
-				this.vel.x = -2;
+		that.walk = function() {
+			if (that.movestate.walking === walking.LEFT) {
+				that.vel.x = that.velocities.walkleft;
 			}
-			else if (this.movestate.walking === walking.RIGHT) {
-				this.vel.x = 2;
+			else if (that.movestate.walking === walking.RIGHT) {
+				that.vel.x = that.velocities.walkright;
 			}
 			else {
-				this.vel.x = 0;
+				that.vel.x = 0;
 			}
-			if (this.movestate.wantstojump) {
-				this.jump();
+			if (that.movestate.wantstojump) {
+				that.jump();
 			}
 		};
 
 		// update the player every tick
-		this.tick = function() {
+		that.tick = function() {
 		// gravity has to have some effect here...
-			Mob.gravitytick.call(this);
+			mob.gravitytick.call(this);
 			// read the state of the keyboard
-			this.readkeyboard();
+			that.readkeyboard();
 			// are we mining?
-			this.mine();
+			that.mine();
 			// walk somewhere
-			this.walk();
-		}
+			that.walk();
+		};
+		
+		return that;
   };
-  
-  Player.prototype = new Mob({
-		x: 0,
-		y: 0,
-		size: {
-			x: 16,
-			y: 20
-		},
-		vel: {
-			x: 0,
-			y: 0,
-		}
-	});
-  Player.constructor = Player;
-  
-  global.Player = Player;
+    
+  global.player = player;
   
 })(window, jQuery)

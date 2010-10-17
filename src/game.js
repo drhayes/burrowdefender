@@ -144,9 +144,10 @@
     that.add(backgrounddraw);
     
     // last but not least, add the player
-    that.player = new Player(that);
-    that.player.x = 0;
-    that.player.y = -200;
+    that.player = player({
+      y: -200,
+      game: that
+    });
     that.add(that.player);
     
     return that;
