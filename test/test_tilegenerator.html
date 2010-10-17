@@ -13,28 +13,28 @@
 				module('basics');
 				
 				test('ctor', function() {
-					ok(typeof(window.TileGenerator) !== 'undefined', 'TileGenerator defined');
+					equals(typeof tilegenerator, 'function', 'tilgenerator exists');
 					var fakegame = {
 						tilemap: {},
 						spatialhash: {}
 					};
-					var tg = new TileGenerator(fakegame);
+					var tg = tilegenerator(fakegame);
 					same(tg.tilemap, fakegame.tilemap, 'tg.tilemap');
 					same(tg.spatialhash, fakegame.spatialhash, 'tg.spatialhash');
 					ok(tg.generated, 'tg.generated');
 				});
 				
 				test('makekey', function() {
-					ok(typeof(TileGenerator.makekey) === 'function', 'makekey defined');
-					equals(TileGenerator.makekey(0, 0), '0:0', 'key for (0,0)');
-					equals(TileGenerator.makekey(-1, 0), '-1:0', 'key for (-1, 0)');
-					equals(TileGenerator.makekey(Tile.tilesize * 31, 0), '1:0', 'key for (tilesize*11, 0)');
-					equals(TileGenerator.makekey(Tile.tilesize * 61, 0), '2:0', 'key for (tilesize*21, 0)');
+					equals(typeof tilegenerator.makekey, 'function', 'makekey exists');
+					equals(tilegenerator.makekey(0, 0), '0:0', 'key for (0,0)');
+					equals(tilegenerator.makekey(-1, 0), '-1:0', 'key for (-1, 0)');
+					equals(tilegenerator.makekey(Tile.tilesize * 31, 0), '1:0', 'key for (tilesize*11, 0)');
+					equals(tilegenerator.makekey(Tile.tilesize * 61, 0), '2:0', 'key for (tilesize*21, 0)');
 				});
 				
 				test('gensurface', function() {
-					ok(typeof(TileGenerator.gensurface) === 'function', 'gensurface defined');
-					var y = TileGenerator.gensurface(0);
+					ok(typeof(tilegenerator.gensurface) === 'function', 'gensurface defined');
+					var y = tilegenerator.gensurface(0);
 					ok(typeof(y) === 'number', 'y is a number');
 				});
 				
@@ -56,7 +56,7 @@
 							tilemap: this.faketilemap,
 							spatialhash: this.fakespatialhash
 						}
-						this.tg = new TileGenerator(this.fakegame);
+						this.tg = tilegenerator(this.fakegame);
 					}
 				});
 				
@@ -64,7 +64,7 @@
 					ok(typeof(this.tg.generate) === 'function', 'tg.generate is function');
 					var testoffset = 31;
 					this.tg.generate(Tile.tilesize * testoffset, 0);
-					var key = TileGenerator.makekey(Tile.tilesize * testoffset, 0);
+					var key = tilegenerator.makekey(Tile.tilesize * testoffset, 0);
 					ok(this.tg.generated.hasOwnProperty(key), 'key defined in generated');
 					var expectedslices = testoffset - 1;
 					equals(this.faketilemap.setArgs.length, expectedslices * 20, 'equals CHUNK_SCALAR');
@@ -72,7 +72,7 @@
 				});
 
 				test('generate noops if already generated', function() {
-					var key = TileGenerator.makekey(0, 0);
+					var key = tilegenerator.makekey(0, 0);
 					this.tg.generated[key] = true;
 					this.tg.generate(0, 0);
 					equals(this.faketilemap.setArgs.length, 0, 'set not called on tilemap');

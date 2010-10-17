@@ -14,7 +14,7 @@
     that.height = that.canvas.height;
     that.tilemap = tilemap(that.width, that.height);
     that.spatialhash = spatialhash();
-    that.tilegenerator = new TileGenerator(that);
+    that.tilegenerator = tilegenerator(that);
     that.keyboardmanager = keyboardmanager();
     that.playeroffset = {
       x: that.width / 2,
