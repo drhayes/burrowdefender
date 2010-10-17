@@ -12,7 +12,7 @@
     that.ctx = drawcontext(that.canvas.getContext('2d'));
     that.width = that.canvas.width;
     that.height = that.canvas.height;
-    that.tilemap = new TileMap(that.width, that.height);
+    that.tilemap = tilemap(that.width, that.height);
     that.spatialhash = new SpatialHash();
     that.tilegenerator = new TileGenerator(that);
     that.keyboardmanager = keyboardmanager();

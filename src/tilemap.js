@@ -9,35 +9,32 @@
   
   var theAir = new Tile.Air();
   
-  var TileMap = function(width, height) {
-    this.width = width;
-    this.height = height;
-    this.tilemap = {};
+  var tilemap = function(width, height) {
+    var that = {};
+    that.tilemap = {};
     
-    var me = this;
-    
-    this.get = function(x, y) {
-      var key = TileMap.makekey(x, y);
+    that.get = function(x, y) {
+      var key = tilemap.makekey(x, y);
       // TODO: figure out why commenting out the following three lines
       // makes the CPU usage drop 15%
-      if (this.tilemap.hasOwnProperty(key)) {
-        return this.tilemap[key];
+      if (that.tilemap.hasOwnProperty(key)) {
+        return that.tilemap[key];
       }
       return theAir;
     };
     
-    this.set = function(x, y, tile) {
-      this.tilemap[TileMap.makekey(x, y)] = tile;
+    that.set = function(x, y, tile) {
+      that.tilemap[tilemap.makekey(x, y)] = tile;
     };
     
     var iterateviewabletiles = function(tilefunc) {
-      var startx = Math.floor(me.offsetx / Tile.tilesize);
-      var starty = Math.floor(me.offsety / Tile.tilesize);
-      var endx = Math.floor((me.offsetx + me.width) / Tile.tilesize) + 1;
-      var endy = Math.floor((me.offsety + me.height) / Tile.tilesize) + 1;
+      var startx = Math.floor(that.offsetx / Tile.tilesize);
+      var starty = Math.floor(that.offsety / Tile.tilesize);
+      var endx = Math.floor((that.offsetx + width) / Tile.tilesize) + 1;
+      var endy = Math.floor((that.offsety + height) / Tile.tilesize) + 1;
       for (var x = startx; x < endx; x++) {
         for (var y = starty; y < endy; y++) {
-          var tile = me.get(x, y);
+          var tile = that.get(x, y);
           var tilex = x * Tile.tilesize;
           var tiley = y * Tile.tilesize;
           tilefunc(tile, tilex, tiley);
@@ -47,33 +44,35 @@
     
     // given the 2d context thing that comes with a canvas.
     // the offsets are given in pixels and are optional.
-    this.draw = function(ctx, offsetx, offsety) {
-      this.offsetx = offsetx || 0;
-      this.offsety = offsety || 0;
+    that.draw = function(ctx, offsetx, offsety) {
+      that.offsetx = offsetx || 0;
+      that.offsety = offsety || 0;
       iterateviewabletiles(function(tile, tilex, tiley) {
         ctx.offset = {
-          x: tilex - me.offsetx,
-          y: tiley - me.offsety
+          x: tilex - that.offsetx,
+          y: tiley - that.offsety
         };
         tile.draw(ctx);
       });
     };
     
     // any visible tile that has a tick method will get it called.
-    this.tick = function() {
+    that.tick = function() {
       iterateviewabletiles(function(tile, tilex, tiley) {
         if (typeof(tile.tick) !== 'undefined') {
           tile.tick();
         };
       });
     };
+    
+    return that;
   };
   
-  TileMap.makekey = function(x, y) {
+  tilemap.makekey = function(x, y) {
     return x + ':' + y;
   };
   
-  TileMap.parsekey = function(key) {
+  tilemap.parsekey = function(key) {
     var nums = key.split(':');
     return {
       x: nums[0],
@@ -81,6 +80,6 @@
     };
   }
 
-  global.TileMap = TileMap;
+  global.tilemap = tilemap;
   
 })(window, jQuery)
