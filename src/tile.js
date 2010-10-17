@@ -1,6 +1,8 @@
 // tile.js
 //
 // The thing a player and mobs walk on top of. Tend not to move.
+//
+// Depends: pickup.js
 
 (function(global, $) {
   
@@ -40,6 +42,11 @@
       // find the center point of this tile
       var cx = (x * Tile.tilesize) + (Tile.tilesize / 2);
       var cy = (y * Tile.tilesize) + (Tile.tilesize / 2);
+      // make the drop
+      var dirtpickup = new DirtPickup();
+      dirtpickup.x = cx - (dirtpickup.size.x / 2);
+      dirtpickup.y = cy - (dirtpickup.size.y / 2);
+      this.game.add(dirtpickup);
     };
   };
   

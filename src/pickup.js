@@ -8,6 +8,7 @@
 (function(global, $) {
   var Pickup = function(game) {
     this.game = game;
+    var me = this;
     
     this.collide = function(collider) {
       if (!collider.inventory) {
@@ -20,6 +21,8 @@
       this.game.spatialhash.remove(this);
     };
     
+    this.tick = Mob.gravitytick;
+    
   };
   Pickup.prototype = new Mob();
   global.Pickup = Pickup;
@@ -27,10 +30,12 @@
   // let's define some pickups...
   
   var DirtPickup = function() {
+    var me = this;
+
     this.draw = function(drawthing) {
-      drawthing.sprite2.push(function(ctx) {
-        ctx.fillStyle('rgb(192, 192, 192)');
-        ctx.fillRect(0, 0, this.size.x, this.size.y);
+      drawthing.sprite1.push(function(ctx) {
+        ctx.fillStyle('rgb(255, 255, 255)');
+        ctx.fillRect(me.x, me.y, me.size.x, me.size.y);
       });
     };
   };

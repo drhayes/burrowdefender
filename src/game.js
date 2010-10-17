@@ -72,7 +72,9 @@
       // swap the list if anything was killed and add anything that was added
       // during the update cycle.
       this.things = newthings;
-      this.things = newthings.concat(this.addthings);
+      if (this.addthings.length > 0) {
+        this.things = newthings.concat(this.addthings);
+      }
       this.addthings = [];
     };
     
