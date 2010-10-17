@@ -6,26 +6,28 @@
 
 (function(global, $) {
   
-  var DrawContext = function(ctx) {
-    this.ctx = ctx;
-    this.offset = {
+  var drawcontext = function(ctx) {
+    var that = {};
+    that.offset = {
       x: 0,
       y: 0
     };
     
-    this.fillStyle = function(fill) {
-      this.ctx.fillStyle = fill;
+    that.fillStyle = function(fill) {
+      ctx.fillStyle = fill;
     };
     
-    this.fillRect = function(x, y, w, h) {
-      this.ctx.fillRect(x + this.offset.x, y + this.offset.y, w, h);
+    that.fillRect = function(x, y, w, h) {
+      ctx.fillRect(x + that.offset.x, y + that.offset.y, w, h);
     };
     
-    this.drawImage = function(img, x, y) {
-      this.ctx.drawImage(img, x + this.offset.x, y + this.offset.y);
+    that.drawImage = function(img, x, y) {
+      ctx.drawImage(img, x + that.offset.x, y + that.offset.y);
     };
+    
+    return that;
   };
   
-  global.DrawContext = DrawContext;
+  global.drawcontext = drawcontext;
   
 })(window, jQuery)

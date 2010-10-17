@@ -12,8 +12,8 @@
 				module('basics');
 				
 				test('ctor', function() {
-					equals(typeof(window.DrawContext), 'function', 'DrawContext exists');
-					var dc = new DrawContext();
+					equals(typeof(window.drawcontext), 'function', 'DrawContext exists');
+					var dc = drawcontext();
 					equals(typeof(dc.fillStyle), 'function', 'fillStyle function');
 					equals(typeof(dc.fillRect), 'function', 'fillRect function');
 					equals(typeof(dc.drawImage), 'function', 'drawImage function');
@@ -22,7 +22,7 @@
 				module('basic usage', {
 					setup: function() {
 						this.fakectx = new FakeCtx();
-						this.dc = new DrawContext(this.fakectx);
+						this.dc = drawcontext(this.fakectx);
 					}
 				});
 				
