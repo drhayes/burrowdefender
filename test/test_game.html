@@ -40,9 +40,8 @@
 					ok(g.player, 'g.player');
 					equals(g.player.x, 0, 'g.player.x');
 					equals(g.player.y, -200, 'g.player.y');
-					equals(g.drawables.length, 2, 'background and player');
-					equals(g.tickables.length, 1, 'player');
-					equals(g.movables.length, 1, 'player');
+					equals(g.things.length, 0, 'things has nothing in it');
+					equals(g.addthings.length, 2, 'background and player will be added first tick');
 				});
 				
 				module('usage', {
@@ -66,88 +65,37 @@
 				
 				test('add', function() {
 					ok(typeof(this.g.add) === 'function', 'g.add');
-					var drawable = {
-						draw: function() {}
-					};
-					var tickable = {
-						tick: function() {}
-					};
-					var movable = {
-						move: function() {}
-					};
-					var both = {
-						tick: function() {},
-						draw: function() {}
-					};
-					var other = function() {};
-					equals(this.g.drawables.length, 0, 'g.drawables.length is 0');
-					equals(this.g.tickables.length, 0, 'g.tickable.length is 0');
-					equals(this.g.movables.length, 0, 'g.movable.length is 0');
-					equals(this.g.others.length, 0, 'g.others.length is 0');
-					this.g.add(drawable);
-					equals(this.g.drawables.length, 1, 'drawables gets added');
-					equals(this.g.tickables.length, 0, 'tickables is not added');
-					equals(this.g.movables.length, 0, 'movables is not added');
-					equals(this.g.others.length, 0, 'g.others.length is 0');
-					this.g.add(tickable);
-					equals(this.g.drawables.length, 1, 'drawables is not added');
-					equals(this.g.tickables.length, 1, 'tickables gets added');
-					equals(this.g.movables.length, 0, 'movables is not added');
-					equals(this.g.others.length, 0, 'g.others.length is 0');
-					this.g.add(movable);
-					equals(this.g.drawables.length, 1, 'drawables is not added');
-					equals(this.g.tickables.length, 1, 'tickables is not added');
-					equals(this.g.movables.length, 1, 'movables gets added');
-					equals(this.g.others.length, 0, 'g.others.length is 0');
-					this.g.add(both);
-					equals(this.g.drawables.length, 2, 'drawables is not added');
-					equals(this.g.tickables.length, 2, 'tickables is not added');
-					equals(this.g.movables.length, 1, 'movables is not added');
-					equals(this.g.others.length, 0, 'g.others.length is 0');
-					this.g.add(other);
-					equals(this.g.drawables.length, 2, 'drawables is not added');
-					equals(this.g.tickables.length, 2, 'tickables is not added');
-					equals(this.g.movables.length, 1, 'movables is not added');
-					equals(this.g.others.length, 1, 'g.others.length is 1');
+					var thing = {};
+					var addthingslength = this.g.addthings.length;
+					this.g.add(thing);
+					equals(this.g.addthings.length, addthingslength + 1, 'added a thing');
+					this.g.update();
+					equals(this.g.addthings.length, 0, 'after tick, nothing to add');
+					equals(this.g.things.length, addthingslength + 1, 'after tick, have a thing');
 				});
-				
-				test('add with caching', function() {
+
+				test('remove via killed', function() {
 					var thing1 = {
 						tick: function() {},
 						move: function() {},
-						draw: function() {}
+						draw: function() {},
+						vel: {
+							x: 0,
+							y: 0
+						}
 					};
 					var thing2 = function() {};
 					this.g.add(thing1);
 					this.g.add(thing2);
-					same(this.g.tickables[0].thing, thing1, 'saved what thing tick came from');
-					same(this.g.movables[0].thing, thing1, 'saved what thing move came from');
-					same(this.g.drawables[0].thing, thing1, 'saved what thing draw came from');
-					same(this.g.others[0].thing, thing2, 'saved what thing other came from');
-				});
-				
-				test('remove', function() {
-					equals(typeof(this.g.remove), 'function', 'remove exists');
-					var thing1 = {
-						tick: function() {},
-						move: function() {},
-						draw: function() {}
-					};
-					var thing2 = function() {};
-					this.g.add(thing1);
-					this.g.add(thing2);
-					// grab the update list lengths
-					var ticklength = this.g.tickables.length;
-					var movelength = this.g.movables.length;
-					var drawlength = this.g.drawables.length;
-					var otherlength = this.g.others.length;
-					// remove the things
-					this.g.remove(thing1);
-					this.g.remove(thing2);
-					equals(this.g.tickables.length, ticklength - 1, 'removed a tick function');
-					equals(this.g.movables.length, movelength - 1, 'removed a move function');
-					equals(this.g.drawables.length, drawlength - 1, 'removed a draw function');
-					equals(this.g.others.length, otherlength - 1, 'removed a other function');
+					// update to get them in the things list
+					this.g.update();
+					var thingslength = this.g.things.length;
+					// set these things killed
+					thing1.killed = true;
+					thing2.killed = true;
+					// update to remove them
+					this.g.update();
+					equals(this.g.things.length, thingslength - 2, 'removed the two things');
 				});
 				
 				test('update', function() {
@@ -166,6 +114,9 @@
 						}
 					};
 					this.g.add(thing);
+					// update to get it in the things list
+					this.g.update();
+					// update again to run the functions
 					this.g.update();
 					ok(thing.ticked, 'ticked');
 					ok(thing.moved, 'moved');
