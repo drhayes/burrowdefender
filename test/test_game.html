@@ -23,8 +23,8 @@
 				module('basics');
 				
 				test('game', function() {
-					ok(typeof(Game) !== 'undefined', 'game defined');
-					var g = new Game('#testcanvas');
+					ok(typeof(window.game) !== 'undefined', 'game defined');
+					var g = game('#testcanvas');
 					ok(g.canvas, 'g.canvas');
 					ok(g.ctx, 'g.ctx');
 					equals(g.width, 250, 'canvas width');
@@ -46,12 +46,10 @@
 				
 				module('usage', {
 					setup: function() {
-						this.g = new Game('#testcanvas');
+						this.g = game('#testcanvas');
 						// get rid of the game's built-in tasks for these tests
-						this.g.drawables = [];
-						this.g.tickables = [];
-						this.g.movables = [];
-						this.g.others = [];
+						this.things = [];
+						this.addthings = [];
 						this.fakectx = new FakeCtx();
 					}
 				});
@@ -152,7 +150,7 @@
 				
 				module('layered drawing', {
 					setup: function() {
-						this.g = new Game('#testcanvas');
+						this.g = game('#testcanvas');
 						// get rid of the game's built-in tasks for these tests
 						this.g.drawables = [];
 						this.g.tickables = [];
