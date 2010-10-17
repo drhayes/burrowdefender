@@ -33,6 +33,10 @@ var FakeCtx = function() {
 };
 
 var FakeGame = function() {
+  this.added = [];
+  this.add = function(thing) {
+    this.added.push(thing);
+  }
 	this.playeroffset = {
 		x: 16,
 		y: 16
@@ -54,6 +58,9 @@ var FakeGame = function() {
 		}
 	};
 	this.spatialhash = {
+	  set: function(r) {
+	    this.sr = r;
+	  },
 		remove: function(r) {
 			this.rr = r;
 		}

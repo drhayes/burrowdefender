@@ -5,6 +5,8 @@
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
+		<script type="text/javascript" src="../src/mob.js"></script>
+		<script type="text/javascript" src="../src/pickup.js"></script>
 		<script type="text/javascript" src="../src/tile.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
@@ -17,76 +19,62 @@
 				module('basics');
 				
 				test('ctor', function() {
-					checkexists(Tile, 'Tile ctor exists');
-					var tile = new Tile()
-					ok(tile, 'should have got something back');
-					ok(typeof(tile.draw) == 'function', 'draw exists');
+					equals(typeof tile, 'function', 'tile exists');
+					var t = tile();
+					equals(typeof t.draw, 'function', 'draw exists');
 				});
 				
 				module('statics');
 				
 				test('tilesize', function() {
-					checkexists(Tile.tilesize, 'Tile.tilesize exists');
+					checkexists(tile.tilesize, 'tile.tilesize exists');
 				});
 				
 				test('totilepos', function() {
-					checkexists(Tile.totilepos, 'Tile.convertpos exists');
-					var pos = Tile.totilepos(0, 0);
+					checkexists(tile.totilepos, 'tile.convertpos exists');
+					var pos = tile.totilepos(0, 0);
 					equals(pos.x, 0, 'converted (0,0) x position correctly');
 					equals(pos.y, 0, 'converted (0,0) y position correctly');
-					pos = Tile.totilepos(32, 0);
+					pos = tile.totilepos(32, 0);
 					equals(pos.x, 1, 'converted (32,0) x position correctly');
 					equals(pos.y, 0, 'converted (32,0) y position correctly');
-					pos = Tile.totilepos(32, 1);
+					pos = tile.totilepos(32, 1);
 					equals(pos.x, 1, 'converted (32,1) x position correctly');
 					equals(pos.y, 0, 'converted (32,1) y position correctly');
-					pos = Tile.totilepos(-1, -1);
+					pos = tile.totilepos(-1, -1);
 					equals(pos.x, -1, 'converted (-1, -1) x position correctly');
 					equals(pos.y, -1, 'converted (-1, -1) y position correctly');
 				});
 				
 				test('getrect', function() {
-					ok(typeof(Tile.getrect) === 'function', 'getrect is a function');
-					var rect = Tile.getrect(0, 0);
+					ok(typeof(tile.getrect) === 'function', 'getrect is a function');
+					var rect = tile.getrect(0, 0);
 					equals(rect.x1, 0, 'x1');
 					equals(rect.y1, 0, 'y1');
-					equals(rect.x2, Tile.tilesize - 1, 'x2');
-					equals(rect.y2, Tile.tilesize - 1, 'y2');
-					rect = Tile.getrect(1, 1);
-					equals(rect.x1, Tile.tilesize, 'x1');
-					equals(rect.y1, Tile.tilesize, 'y1');
-					equals(rect.x2, Tile.tilesize * 2 - 1, 'x2');
-					equals(rect.y2, Tile.tilesize * 2 - 1, 'y2');
+					equals(rect.x2, tile.tilesize - 1, 'x2');
+					equals(rect.y2, tile.tilesize - 1, 'y2');
+					rect = tile.getrect(1, 1);
+					equals(rect.x1, tile.tilesize, 'x1');
+					equals(rect.y1, tile.tilesize, 'y1');
+					equals(rect.x2, tile.tilesize * 2 - 1, 'x2');
+					equals(rect.y2, tile.tilesize * 2 - 1, 'y2');
 				});
 				
 				module('tiles', {
 					setup: function() {
-						this.fakegame = {
-							tilemap: {
-								set: function(x, y, tile) {
-									this.sx = x;
-									this.sy = y;
-									this.stile = tile;
-								}
-							},
-							spatialhash: {
-								remove: function(r) {
-									this.rr = r;
-								}
-							},
-						};
+						this.fakegame = new FakeGame();
 						this.fakectx =  new FakeCtx();
 					}
 				});
 				
 				test('Air', function() {
-					checkexists(Tile.Air, 'Air exists');
-					ok(!Tile.Air.diggable, 'Air is not diggable');
+					checkexists(tile.air, 'Air exists');
+					ok(!tile.air.diggable, 'Air is not diggable');
 				});
 
 				test('Dirt', function() {
-					checkexists(Tile.Dirt, 'Dirt exists');
-					var dirt = new Tile.Dirt();
+					checkexists(tile.dirt, 'Dirt exists');
+					var dirt = tile.dirt();
 					ok(typeof(dirt.draw) == 'function', 'dirt draw exists');
 					ok(dirt.diggable, 'dirt is diggable');
 					dirt.draw(this.fakectx);
@@ -98,13 +86,13 @@
 					args = this.fakectx.fillRectArgs[0];
 					equals(args.frx, 0, 'fillRect x');
 					equals(args.fry, 30, 'fillRect y');
-					equals(args.frw, Tile.tilesize, 'fillRect width');
+					equals(args.frw, tile.tilesize, 'fillRect width');
 					equals(args.frh, 3, 'fillRect height');
 				});
 				
 				test('DirtWithGrass', function() {
-					checkexists(Tile.DirtWithGrass, 'DirtWithGrass exists');
-					var dirt = new Tile.DirtWithGrass();
+					checkexists(tile.dirtwithgrass, 'DirtWithGrass exists');
+					var dirt = tile.dirtwithgrass({game: this.fakegame});
 					ok(typeof(dirt.draw) === 'function', 'draw exists');
 					ok(dirt.diggable, 'DirtWithGrass is diggable');
 					dirt.draw(this.fakectx);
@@ -112,27 +100,27 @@
 				});
 
 				test('drawdamage', function() {
-					equals(typeof(Tile.drawdamage), 'function', 'drawdamage exists');
-					Tile.drawdamage(this.fakectx, 1);
+					equals(typeof(tile.drawdamage), 'function', 'drawdamage exists');
+					tile.drawdamage(this.fakectx, 1);
 					equals(this.fakectx.drawImageArgs.length, 0, 'drawImage not called');
-					Tile.drawdamage(this.fakectx, 0.9);
+					tile.drawdamage(this.fakectx, 0.9);
 					equals(this.fakectx.drawImageArgs.length, 1, 'drawImage called');
 					var args = this.fakectx.drawImageArgs[0];
 					equals(args.drx, 0, 'x is 0');
 					equals(args.dry, 0, 'y is 0');
 					equals(args.img.src.substr(-11), 'cracks1.png', 'cracks1');
-					Tile.drawdamage(this.fakectx, 0.6);
+					tile.drawdamage(this.fakectx, 0.6);
 					equals(this.fakectx.drawImageArgs.length, 2, 'drawImage called');
 					var args = this.fakectx.drawImageArgs[1];
 					equals(args.img.src.substr(-11), 'cracks2.png', 'cracks2');
-					Tile.drawdamage(this.fakectx, 0.3);
+					tile.drawdamage(this.fakectx, 0.3);
 					equals(this.fakectx.drawImageArgs.length, 3, 'drawImage called');
 					var args = this.fakectx.drawImageArgs[2];
 					equals(args.img.src.substr(-11), 'cracks3.png', 'cracks3');
 				});
 				
 				test('tile tick', function() {
-					var d = new Tile.Dirt();
+					var d = tile.dirt();
 					equals(d.health / d.maxhealth, 1, 'percentage healed is 1');
 					d.health -= 3;
 					var tilehealth = d.health;
@@ -150,9 +138,8 @@
 				});
 				
 				test('mine', function() {
-					expect(6);
-					var d = new Tile.Dirt(this.fakegame);
-					equals(d.game, this.fakegame, 'game is set in ctor');
+					expect(5);
+					var d = new tile.dirt({game: this.fakegame});
 					equals(typeof(d.mine), 'function', 'mine exists');
 					var currenthealth = d.health;
 					var digger = {
@@ -174,13 +161,13 @@
 				});
 				
 				test('dirt kill', function() {
-					var d = new Tile.Dirt(this.fakegame);
+					var d = tile.dirt({game: this.fakegame});
 					equals(typeof(d.kill), 'function', 'kill exists');
 					d.kill(0, 0);
 					equals(this.fakegame.tilemap.sx, 0, 'tilemap set x is 0');
 					equals(this.fakegame.tilemap.sy, 0, 'tilemap set y is 0');
 					var rr = this.fakegame.spatialhash.rr;
-					var er = Tile.getrect(0, 0);
+					var er = tile.getrect(0, 0);
 					equals(rr.x1, er.x1, 'x1');
 					equals(rr.y1, er.y1, 'y1');
 					equals(rr.x2, er.x2, 'x2');
