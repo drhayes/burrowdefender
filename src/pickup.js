@@ -22,7 +22,19 @@
     
   };
   Pickup.prototype = new Mob();
-  
   global.Pickup = Pickup;
+  
+  // let's define some pickups...
+  
+  var DirtPickup = function() {
+    this.draw = function(drawthing) {
+      drawthing.sprite2.push(function(ctx) {
+        ctx.fillStyle('rgb(192, 192, 192)');
+        ctx.fillRect(0, 0, this.size.x, this.size.y);
+      });
+    };
+  };
+  DirtPickup.prototype = new Pickup();
+  global.DirtPickup = DirtPickup;
 
 })(window, jQuery)
