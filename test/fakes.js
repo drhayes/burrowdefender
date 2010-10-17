@@ -31,3 +31,31 @@ var FakeCtx = function() {
     y: 0
   };
 };
+
+var FakeGame = function() {
+	this.playeroffset = {
+		x: 16,
+		y: 16
+	};
+	this.keyboardmanager = {
+		keymap: {
+			'w': false,
+			'a': false,
+			's': false,
+			'd': false,
+			'shift': false
+		}
+	};
+	this.tilemap = {
+		set: function(x, y, tile) {
+			this.sx = x;
+			this.sy = y;
+			this.stile = tile;
+		}
+	};
+	this.spatialhash = {
+		remove: function(r) {
+			this.rr = r;
+		}
+	};
+};

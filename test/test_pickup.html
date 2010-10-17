@@ -6,6 +6,7 @@
 		<script type="text/javascript" src="../src/utils.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
 		<script type="text/javascript" src="../src/pickup.js"></script>
+		<script type="text/javascript" src="fakes.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
@@ -14,6 +15,60 @@
 				
 				test('ctor', function() {
 					equals(typeof(Pickup), 'function', 'Pickup exists');
+					var fakegame = new FakeGame();
+					var p = new Pickup(fakegame);
+					same(p.game, fakegame, 'same game as passed in for ctor');
+					equals(p.size.x, 16, 'p.size.x is 16');
+					equals(p.size.y, 16, 'p.size.y is 16');
+				});
+				
+				module('collisions', {
+					setup: function() {
+						this.fakegame = new FakeGame();
+						this.p = new Pickup(this.fakegame);
+						this.p.x = 0;
+						this.p.y = 0;
+					}
+				});
+				
+				test('with a thing', function() {
+					equals(typeof(this.p.collide), 'function', 'collide exists');
+					var m2 = new Mob({
+						x: 18,
+						y: 0,
+						vel: {
+							x: -5,
+							y: 0
+						}
+					});
+					// m2 has no inventory, and nothing blows up
+					m2.move([this.p]);
+					// do something real...
+					var m = new Mob({
+						x: 18,
+						y: 0,
+						vel: {
+							x: -5,
+							y: 0
+						}
+					});
+					m.inventory = {
+						add: function(p) {
+							this.stuff.push(p);
+						},
+						stuff: []
+					}
+					equals(this.fakegame.spatialhash.rr, undefined, 'removed rect is null');
+					m.move([this.p]);
+					equals(m.inventory.stuff.length, 1, 'inventory contains something now');
+					ok(this.p.killed, 'p has been killed');
+					// check that the rect was removed from spatial hash
+					var rect = this.fakegame.spatialhash.rr;
+					ok(rect != null, 'rect is not null');
+					equals(rect.x1, this.p.x1, 'rect.x1');
+					equals(rect.y1, this.p.y1, 'rect.y1');
+					equals(rect.x2, this.p.x2, 'rect.x2');
+					equals(rect.y2, this.p.y2, 'rect.y2');					
 				});
 			});
 		</script>
