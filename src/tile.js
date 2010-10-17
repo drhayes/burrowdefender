@@ -46,6 +46,8 @@
       var dirtpickup = new DirtPickup();
       dirtpickup.x = cx - (dirtpickup.size.x / 2);
       dirtpickup.y = cy - (dirtpickup.size.y / 2);
+      dirtpickup.updaterect();
+      this.game.spatialhash.set(dirtpickup);
       this.game.add(dirtpickup);
     };
   };

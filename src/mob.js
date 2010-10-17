@@ -8,7 +8,7 @@
 
 (function(global, $) {
   
-  var FORCE_OF_GRAVITY = 0.1;
+  var FORCE_OF_GRAVITY = 0.25;
   var MAX_OF_GRAVITY = 12;
 
   var defaults = {
@@ -27,7 +27,7 @@
       standing: false
     },
     velocities: {
-      jump: -3
+      jump: -6
     }
   };
 
