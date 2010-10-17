@@ -23,17 +23,18 @@
     return makerawkey(keyscalar(x), keyscalar(y));
   };
   
-  var SpatialHash = function() {
-    this.spacemap = {};
+  var spatialhash = function() {
+    var that = {};
+    that.spacemap = {};
     
     var innerget = function(key) {
-      if (this.spacemap.hasOwnProperty(key)) {
-        return this.spacemap[key];
+      if (that.spacemap.hasOwnProperty(key)) {
+        return that.spacemap[key];
       }
       return [];
     }
 
-    this.iterate = function(r, func) {
+    that.iterate = function(r, func) {
       var kx1 = keyscalar(r.x1);
       var ky1 = keyscalar(r.y1);
       var kx2 = keyscalar(r.x2);
@@ -47,14 +48,14 @@
     };
 
     // Given in world coordinates.
-    this.get = function(r, vx, vy) {
+    that.get = function(r, vx, vy) {
       var things = [];
       var seenkeys = {};
       var addemup = function(key, r) {
         seenkeys[key] = true;
         things = things.concat(innerget.apply(this, [key]));
       };
-      this.iterate(r, function(key, r) {
+      that.iterate(r, function(key, r) {
         addemup.apply(this, [key, r]);
       });
       // we must account for velocity
@@ -64,7 +65,7 @@
         x2: r.x2 + vx,
         y2: r.y2 + vy
       };
-      this.iterate(rv, function(key, r) {
+      that.iterate(rv, function(key, r) {
         // dedupe on velocity check
         if (seenkeys.hasOwnProperty(key)) {
           return;
@@ -76,21 +77,21 @@
     
     // Given a {x1,y1,x2,y2} rect, put it in the right place in the
     // spatial hash. If it's a big rect, let it span buckets in the hash.
-    this.set = function(r) {
-      this.iterate(r, function(key, r) {
-        if (this.spacemap.hasOwnProperty(key)) {
-          this.spacemap[key].push(r);
+    that.set = function(r) {
+      that.iterate(r, function(key, r) {
+        if (that.spacemap.hasOwnProperty(key)) {
+          that.spacemap[key].push(r);
         }
         else {
-          this.spacemap[key] = [r];
+          that.spacemap[key] = [r];
         }
       });
     };
     
-    this.remove = function(r) {
-      this.iterate(r, function(key, r) {
-        if (this.spacemap.hasOwnProperty(key)) {
-          var l = this.spacemap[key];
+    that.remove = function(r) {
+      that.iterate(r, function(key, r) {
+        if (that.spacemap.hasOwnProperty(key)) {
+          var l = that.spacemap[key];
           var index = -1;
           for (var i = 0; i < l.length; i++) {
             var checkrect = l[i];
@@ -101,13 +102,15 @@
             }
           }
           if (index !== -1) {
-            this.spacemap[key].splice(index, 1);
+            that.spacemap[key].splice(index, 1);
           }
         }
       });
     };
+    
+    return that;
   };
 
-  global.SpatialHash = SpatialHash;
+  global.spatialhash = spatialhash;
 
 })(window, jQuery)

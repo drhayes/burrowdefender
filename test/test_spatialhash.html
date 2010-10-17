@@ -12,14 +12,14 @@
 				module('basics');
 				
 				test('ctor', function() {
-					ok(typeof(SpatialHash) !== 'undefined', 'SpatialHash ctor exists');
-					var sh = new SpatialHash();
+					equals(typeof spatialhash, 'function', 'spatialhash exists');
+					var sh = spatialhash();
 					ok(sh.spacemap, 'The spacemap exists');
 				});
 				
 				module('usage', {
 					setup: function() {
-						this.sh = new SpatialHash();
+						this.sh = spatialhash();
 					}
 				});
 				
