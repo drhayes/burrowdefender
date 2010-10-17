@@ -5,7 +5,9 @@
 
 (function(global, $) {
 
-  var KeyboardManager = function() {
+  var keyboardmanager = function() {
+      var that = {};
+    
       // This object maps keyCode values to key names for common nonprinting
       // function keys. IE and Firefox use mostly compatible keycodes for these.
       // Note, however that these keycodes may be device-dependent and different
@@ -33,31 +35,29 @@
           87:"w", 88:"x", 89:"y", 90:"z", 107:"+", 109:"-", 110:".", 188:",",
           190:".", 191:"/", 192:"`", 219:"[", 220:"\\", 221:"]", 222:"\""
       };
-      
-      var me = this;
 
       var dispatchCallback = function(event) {
-          me.dispatch(event);
+          that.dispatch(event);
       }
 
-      this.keymap = {};
+      that.keymap = {};
 
       // latch onto keydown and keyup events of the body element
-      this.latch = function() {
+      that.latch = function() {
           $('body').keydown(dispatchCallback);
           $('body').keyup(dispatchCallback);
       }
 
       // we are latched on construction
-      this.latch();
+      that.latch();
 
-      this.unlatch = function() {
+      that.unlatch = function() {
           $('body').unbind('keydown', dispatchCallback);
           $('body').unbind('keyup', dispatchCallback);
       }
 
       // function called when receiving a keyboard event
-      this.dispatch = function(event) {
+      that.dispatch = function(event) {
           var keyname = '';
           var code = event.keyCode;
           // retrieve keyname from our mapping
@@ -73,12 +73,14 @@
           // now that we've determined key name, fire
           // the handler function (if present)
           if (keyname) {
-            this.keymap[keyname] = val;
+            that.keymap[keyname] = val;
           }
       }
+      
+      return that;
   }
   
-  global.KeyboardManager = KeyboardManager;
+  global.keyboardmanager = keyboardmanager;
   
 })(window, jQuery)
 

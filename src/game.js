@@ -9,13 +9,13 @@
   var game = function(canvasid) {
     var that = {};
     that.canvas = $(canvasid)[0];
-    that.ctx = new DrawContext(that.canvas.getContext('2d'));
+    that.ctx = drawcontext(that.canvas.getContext('2d'));
     that.width = that.canvas.width;
     that.height = that.canvas.height;
     that.tilemap = new TileMap(that.width, that.height);
     that.spatialhash = new SpatialHash();
     that.tilegenerator = new TileGenerator(that);
-    that.keyboardmanager = new KeyboardManager();
+    that.keyboardmanager = keyboardmanager();
     that.playeroffset = {
       x: that.width / 2,
       y: that.height / 2

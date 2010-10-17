@@ -10,51 +10,49 @@
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
 				
-				module('keyboard manager');
+				module('basics');
 				
 				test('ctor', function() {
-					var keyman = new KeyboardManager();
+					var keyman = keyboardmanager();
 					keyman.unlatch();
 				});
 				
+				module('usage', {
+					setup: function() {
+						this.keyman = keyboardmanager();
+					},
+					teardown: function() {
+						this.keyman.unlatch();
+					}
+				});
+				
 				test('subscribe to body for keypress', function() {
-					var keyMan = new KeyboardManager();
 					// replace dispatch function to prove event is firing
 					var dispatchCalled = false;
-					keyMan.dispatch = function() {
+					this.keyman.dispatch = function() {
 						dispatchCalled = true;
 					}
 					// no event propogation... best we can do!
 					$('body').keydown();
 					ok(dispatchCalled, 'dispatch was called');
-					keyMan.unlatch();
+					this.keyman.unlatch();
 				});
 				
 				test('latch and unlatch', function() {
-					var keyMan = new KeyboardManager();
 					// replace dispatch function to prove event is not firing when unlatched
 					var dispatchCalled = false;
-					keyMan.dispatch = function() {
+					this.keyman.dispatch = function() {
 						dispatchCalled = true;
 					}
-					keyMan.unlatch();
+					this.keyman.unlatch();
 					// no event propogation... best we can do!
 					$('body').keydown();
 					ok(!dispatchCalled, 'dispatch was not called when we were unlatched');
-					keyMan.latch();
+					this.keyman.latch();
 					$('body').keydown();
 					ok(dispatchCalled, 'dispatch was called after latching');
-					keyMan.unlatch();
+					this.keyman.unlatch();
 				});
-				
-				module('usage', {
-					setup: function() {
-						this.keyman = new KeyboardManager();
-					},
-					teardown: function() {
-						this.keyman.unlatch();
-					}
-				})
 
 				test('bind', function() {
 					ok(typeof(this.keyman.keymap) !== 'undefined', 'keymap exists on keyboard manager');
