@@ -31,47 +31,47 @@
     }
   };
 
-  var Mob = function(options) {
-    var me = this;
+  var mob = function(options) {
+    var that = {};
     options = $.extend({}, defaults, options);
-    this.x = options.x;
-    this.y = options.y;
-    this.size = {
+    that.x = options.x;
+    that.y = options.y;
+    that.size = {
       x: options.size.x,
       y: options.size.y
     };
-    this.vel = {
+    that.vel = {
       x: options.vel.x,
       y: options.vel.y
     };
-    this.movestate = {
+    that.movestate = {
       // jumping is defined as having jumped but not having become standing yet
       jumping: options.movestate.jumping,
       // standing is having 0 effective y velocity
       standing: options.movestate.standing
     };
-    this.velocities = {
+    that.velocities = {
       jump: options.velocities.jump
     }
     
-    this.updaterect = function() {
-      this.x1 = this.x;
-      this.y1 = this.y;
-      this.x2 = this.x + this.size.x;
-      this.y2 = this.y + this.size.y;
+    that.updaterect = function() {
+      that.x1 = that.x;
+      that.y1 = that.y;
+      that.x2 = that.x + that.size.x;
+      that.y2 = that.y + that.size.y;
     }
     
     // Given a list of rects, don't let the mob move into any of them.
-    this.move = function(collides) {
+    that.move = function(collides) {
       collides = collides || [];
       var mob = this;
-      var velx = this.vel.x;
-      var vely = this.vel.y;
+      var velx = that.vel.x;
+      var vely = that.vel.y;
       // sort the collides so any that current intersecting come first
       var firstcollides = [];
       var secondcollides = [];
       $.each(collides, function(i, r) {
-        if (r === me) {
+        if (r === that) {
           return;
         }
         var oiy = utils.intersect(mob.y, mob.y + mob.size.y, r.y1, r.y2);
@@ -105,7 +105,7 @@
         // okay, we're doing this
         // does what we're colliding with have a collide function?
         if (typeof(r.collide) === 'function') {
-          r.collide(me);
+          r.collide(that);
         }
         if (typeof(r.solid) !== 'undefined' && !r.solid) {
           return;
@@ -145,28 +145,30 @@
         velx = 0;
       }
       if (vely !== 0) {
-        this.movestate.standing = false;
+        that.movestate.standing = false;
       }
-      this.x += velx;
-      this.y += vely;
-      this.updaterect();
+      that.x += velx;
+      that.y += vely;
+      that.updaterect();
     };
     
-    this.tick = function() {
+    that.tick = function() {
     };
     
-    this.jump = function() {
-      if (this.movestate.jumping || !this.movestate.standing) {
+    that.jump = function() {
+      if (that.movestate.jumping || !that.movestate.standing) {
         return;
       }
-      this.vel.y = this.velocities.jump;
-      this.movestate.jumping = true;
-      this.movestate.standing = false;
+      that.vel.y = that.velocities.jump;
+      that.movestate.jumping = true;
+      that.movestate.standing = false;
     };
+    
+    return that;
   };
   
   // meant to be bound to a mob's tick function, or .call-ed from within it
-  Mob.gravitytick = function() {
+  mob.gravitytick = function() {
     if (this.movestate.standing) {
       this.vel.y = 1;
       return;
@@ -176,6 +178,6 @@
 		}
   };
   
-  global.Mob = Mob;
+  global.mob = mob;
 
 })(window, jQuery)

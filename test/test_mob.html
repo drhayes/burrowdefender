@@ -12,34 +12,34 @@
 				module('basics');
 				
 				test('ctor', function() {
-					ok(typeof(Mob) !== 'undefined', 'mob ctor exists');
-					var mob = new Mob();
-					equals(mob.x, 0, 'initial x pos');
-					equals(mob.y, 0, 'initial y pos');
-					equals(mob.size.x, 16, 'initial x size');
-					equals(mob.size.y, 16, 'initial y size');
-					equals(mob.vel.x, 0, 'initial x velocity');
-					equals(mob.vel.y, 0, 'initial y velocity');
-					ok(mob.movestate, 'movestate');
-					ok(mob.velocities, 'velocities');
+					equals(typeof mob, 'function', 'mob exists');
+					var m = mob();
+					equals(m.x, 0, 'initial x pos');
+					equals(m.y, 0, 'initial y pos');
+					equals(m.size.x, 16, 'initial x size');
+					equals(m.size.y, 16, 'initial y size');
+					equals(m.vel.x, 0, 'initial x velocity');
+					equals(m.vel.y, 0, 'initial y velocity');
+					ok(m.movestate, 'movestate');
+					ok(m.velocities, 'velocities');
 				});
 				
 				test('ctor with options', function() {
-					var mob = new Mob({
+					var m = new mob({
 						x: 30,
 						vel: {
 							x: -3,
 							y: 5
 						}
 					});
-					equals(mob.x, 30, 'mob.x === 30');
-					equals(mob.vel.x, -3, 'mob.vel.x === -3');
-					equals(mob.vel.y, 5, 'mob.vel.y === 5');
+					equals(m.x, 30, 'mob.x === 30');
+					equals(m.vel.x, -3, 'mob.vel.x === -3');
+					equals(m.vel.y, 5, 'mob.vel.y === 5');
 				});
 				
 				module('usage', {
 					setup: function() {
-						this.m = new Mob({
+						this.m = mob({
 							x: 5,
 							y: 5,
 							size: {
@@ -64,19 +64,19 @@
 				});
 				
 				test('gravitytick', function() {
-					ok(typeof(Mob.gravitytick) === 'function', 'gravity tick is a function');
+					ok(typeof(mob.gravitytick) === 'function', 'gravity tick is a function');
 					this.m.movestate.standing = true;
 					for (var i = 0; i < 10; i++) {
-						Mob.gravitytick.call(this.m);
+						mob.gravitytick.call(this.m);
 					};
 					equals(this.m.vel.y, 1, 'y velocity set to 1 when standing');
 					this.m.movestate.standing = false;
 					for (var i = 0; i < 10; i++) {
-						Mob.gravitytick.call(this.m);
+						mob.gravitytick.call(this.m);
 					};
 					ok(this.m.vel.y > 0, 'gravity is taking effect');
 					this.m.movestate.standing = true;
-					Mob.gravitytick.call(this.m);
+					mob.gravitytick.call(this.m);
 					ok(this.m.vel.y === 1, 'y velocity is 1 when standing');
 				});
 
@@ -94,13 +94,13 @@
 				});
 				
 				test('might as well be zero', function() {
-					this.m.vel.x = 0.05;
-					this.m.vel.y = 0.05;
+					this.m.vel.x = 0.005;
+					this.m.vel.y = 0.005;
 					this.m.move();
 					equals(this.m.x, 5, 'x velocity corrected to 0 from 0.05');
 					equals(this.m.y, 5, 'y velocity corrected to 0 from 0.05');
-					this.m.vel.x = -0.05;
-					this.m.vel.y = -0.05;
+					this.m.vel.x = -0.005;
+					this.m.vel.y = -0.005;
 					this.m.move();
 					equals(this.m.x, 5, 'x velocity corrected to 0 from -0.05');
 					equals(this.m.y, 5, 'y velocity corrected to 0 from -0.05');
@@ -252,7 +252,7 @@
 				
 				module('jumping', {
 					setup: function() {
-						this.m = new Mob({
+						this.m = mob({
 							x: 0,
 							y: 0,
 							size: {
