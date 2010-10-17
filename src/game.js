@@ -20,7 +20,7 @@
       x: that.width / 2,
       y: that.height / 2
     };
-    that.updater = new Updater();
+    that.updater = updater();
     that.things = [];
     that.addthings = [];
     

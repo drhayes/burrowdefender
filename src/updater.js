@@ -4,54 +4,55 @@
 
 (function(global, $) {
 
-  var Updater = function() {
-      this.processes = [];
-      this.currentFrame = 0;
+  var updater = function() {
+      var that = {};
+      that.processes = [];
+      that.currentFrame = 0;
 
-      this.add = function(updateMe) {
+      that.add = function(updateMe) {
         if (typeof(updateMe) !== 'function') {
           throw new Error('must pass in function');
         }
         if (!updateMe.hasOwnProperty('frequency')) {
           updateMe.frequency = 1;
         }
-        this.processes.push(updateMe);
+        that.processes.push(updateMe);
       }
 
-      this.remove = function(removeMe) {
-        this.processes = $.grep(this.processes, function(process) {
+      that.remove = function(removeMe) {
+        that.processes = $.grep(that.processes, function(process) {
           return process !== removeMe;
         })
       }
 
-      this.update = function() {
-        var me = this;
-        $.each(this.processes, function(index, process) {
-          if ((me.currentFrame % process.frequency) === 0) {
+      that.update = function() {
+        $.each(that.processes, function(index, process) {
+          if ((that.currentFrame % process.frequency) === 0) {
             process();
           }
         });
-        this.currentFrame++;
+        that.currentFrame++;
       }
 
-      this.start = function() {
-        if (!this.timer) {
-          var me = this;
-          this.timer = setInterval(function() {
-              me.update();
+      that.start = function() {
+        if (!that.timer) {
+          that.timer = setInterval(function() {
+              that.update();
             }, 20);
         }
       }
 
-      this.stop = function() {
-        if (this.timer) {
-          clearTimeout(this.timer);
-          delete(this.timer);
+      that.stop = function() {
+        if (that.timer) {
+          clearTimeout(that.timer);
+          delete(that.timer);
         }
-      }
+      };
+      
+      return that;
     };
 
-  global.Updater = Updater;
+  global.updater = updater;
   
 })(window, jQuery)
 
