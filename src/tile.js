@@ -123,6 +123,9 @@
 
   // The other really common tile.
   tile.dirt = function(args) {
+    if (typeof(args.game) === 'undefined') {
+      alert('args.game!')
+    }
     var that = tile(args);
     that.health = 20;
     that.maxhealth = 20;
@@ -141,6 +144,9 @@
   
   // The common tile, but on the surface with grass
   tile.dirtwithgrass = function(args) {
+    if (typeof(args.game) === 'undefined') {
+      alert('args.game!')
+    }
     var that = tile.dirt(args);
     that.health = 20;
     that.maxhealth = 20;

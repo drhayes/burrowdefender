@@ -7,7 +7,7 @@
 
 (function(global, $) {
   
-  var theAir = new Tile.Air();
+  var theAir = tile.air();
   
   var tilemap = function(width, height) {
     var that = {};
@@ -28,16 +28,16 @@
     };
     
     var iterateviewabletiles = function(tilefunc) {
-      var startx = Math.floor(that.offsetx / Tile.tilesize);
-      var starty = Math.floor(that.offsety / Tile.tilesize);
-      var endx = Math.floor((that.offsetx + width) / Tile.tilesize) + 1;
-      var endy = Math.floor((that.offsety + height) / Tile.tilesize) + 1;
+      var startx = Math.floor(that.offsetx / tile.tilesize);
+      var starty = Math.floor(that.offsety / tile.tilesize);
+      var endx = Math.floor((that.offsetx + width) / tile.tilesize) + 1;
+      var endy = Math.floor((that.offsety + height) / tile.tilesize) + 1;
       for (var x = startx; x < endx; x++) {
         for (var y = starty; y < endy; y++) {
-          var tile = that.get(x, y);
-          var tilex = x * Tile.tilesize;
-          var tiley = y * Tile.tilesize;
-          tilefunc(tile, tilex, tiley);
+          var sometile = that.get(x, y);
+          var tilex = x * tile.tilesize;
+          var tiley = y * tile.tilesize;
+          tilefunc(sometile, tilex, tiley);
         }
       }
     };
@@ -47,12 +47,12 @@
     that.draw = function(ctx, offsetx, offsety) {
       that.offsetx = offsetx || 0;
       that.offsety = offsety || 0;
-      iterateviewabletiles(function(tile, tilex, tiley) {
+      iterateviewabletiles(function(sometile, tilex, tiley) {
         ctx.offset = {
           x: tilex - that.offsetx,
           y: tiley - that.offsety
         };
-        tile.draw(ctx);
+        sometile.draw(ctx);
       });
     };
     
