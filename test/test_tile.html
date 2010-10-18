@@ -74,7 +74,7 @@
 
 				test('Dirt', function() {
 					checkexists(tile.dirt, 'Dirt exists');
-					var dirt = tile.dirt();
+					var dirt = tile.dirt({game: this.fakegame});
 					ok(typeof(dirt.draw) == 'function', 'dirt draw exists');
 					ok(dirt.diggable, 'dirt is diggable');
 					dirt.draw(this.fakectx);
@@ -120,7 +120,7 @@
 				});
 				
 				test('tile tick', function() {
-					var d = tile.dirt();
+					var d = tile.dirt({game: this.fakegame});
 					equals(d.health / d.maxhealth, 1, 'percentage healed is 1');
 					d.health -= 3;
 					var tilehealth = d.health;
