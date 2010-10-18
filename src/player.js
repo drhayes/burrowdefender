@@ -31,6 +31,12 @@
     // mining damage
     that.minedamage = 1;
     
+    // temporary inventory thing
+    that.inventory = {
+      add: function(thing) {
+      }
+    };
+    
     that.draw = function(drawthing) {
       drawthing.sprite1.push(function(ctx) {
         ctx.fillStyle('rgb(64, 64, 64)');
