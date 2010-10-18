@@ -25,9 +25,9 @@
     that.addthings = [];
     
     // temporary tile generation
-		that.tilegenerator.generate(31 * Tile.tilesize, 0);
+		that.tilegenerator.generate(31 * tile.tilesize, 0);
 		that.tilegenerator.generate(0, 0);
-		that.tilegenerator.generate(-10 * Tile.tilesize, 0);
+		that.tilegenerator.generate(-10 * tile.tilesize, 0);
     
     // methods
     that.start = function() {

@@ -9,7 +9,7 @@
 
 (function(global, $) {
 
-  var cellsize = Tile.tilesize * 2;
+  var cellsize = tile.tilesize * 2;
 
   var keyscalar = function(x) {
     return Math.floor(x / cellsize);

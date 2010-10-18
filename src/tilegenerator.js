@@ -9,7 +9,7 @@
 (function(global, $) {
 
   var CHUNK_SCALAR = 30;
-  var CHUNK_SIZE = Tile.tilesize * CHUNK_SCALAR;
+  var CHUNK_SIZE = tile.tilesize * CHUNK_SCALAR;
   
   var genscalar = function(s) {
     return Math.floor(s / CHUNK_SIZE);
@@ -33,21 +33,21 @@
       // generate some stuff!
       that.generated[key] = true;
       // what tile x are we starting from?
-      var x1 = Tile.totilepos(genscalar(x) * CHUNK_SIZE, 0).x
+      var x1 = tile.totilepos(genscalar(x) * CHUNK_SIZE, 0).x
       var x2 = x1 + CHUNK_SCALAR;
       var y = 0;
-      var tile = null;
+      var gentile = null;
       for (var i = x1; i < x2; i++) {
         y = tilegenerator.gensurface(i);
         for (var j = 0; j < 20; j++) {
           if (j === 0) {
-            tile = new Tile.DirtWithGrass(that.game);
+            gentile = tile.dirtwithgrass({game: that.game});
           }
           else {
-            tile = new Tile.Dirt(that.game);
+            gentile = tile.dirt({game: that.game});
           }
-          that.tilemap.set(i, y + j, tile);
-          that.spatialhash.set(Tile.getrect(i, y + j));
+          that.tilemap.set(i, y + j, gentile);
+          that.spatialhash.set(tile.getrect(i, y + j));
         }
       }
     };
