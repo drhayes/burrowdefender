@@ -4,6 +4,8 @@
 		<title>Spatial Hash</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/utils.js"></script>
+		<script type="text/javascript" src="../src/mob.js"></script>
 		<script type="text/javascript" src="../src/tile.js"></script>
 		<script type="text/javascript" src="../src/spatialhash.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
@@ -24,14 +26,19 @@
 				});
 				
 				test('get and set', function() {
-					ok(this.sh.get, 'get method');
-					ok(this.sh.set, 'set method');
+					equals(typeof this.sh.get, 'function', 'get method');
+					equals(typeof this.sh.set, 'function', 'set method');
 					var r1 = {x1: 0, y1: 0, x2: 32, y2: 32};
 					ok(this.sh.get(r1).length == 0, 'get from empty returns empty list');
 					this.sh.set(r1);
 					var x = this.sh.get(r1);
 					ok(x.length === 1, 'get with one object returns it in list');
-					equals(x[0], r1, 'it is the o object');
+					console.log(x);
+					var got = x[0];
+					equals(got.x1, r1.x1, 'x1');
+					equals(got.y1, r1.y1, 'y1');
+					equals(got.x2, r1.x2, 'x2');
+					equals(got.y2, r1.y2, 'y2');
 				});
 				
 				test('set and remove', function() {
@@ -89,8 +96,7 @@
 					equals(x.length, 1, 'get 64, 64');
 					equals(x[0], r1, 'it is the rect we set');
 					// now remove an equivalent one
-					var r1again = {x1: r1.x1, y1: r1.y1, x2: r1.x2, y2: r1.y2};
-					this.sh.remove(r1again);
+					this.sh.remove(r1);
 					equals(this.sh.get(r2).length, 0, 'removed from 0,0');
 					equals(this.sh.get(r3).length, 0, 'removed from 64, 64');
 				});

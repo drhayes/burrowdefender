@@ -23,13 +23,22 @@
     return makerawkey(keyscalar(x), keyscalar(y));
   };
   
+  var makeid = function() {
+    return Math.random() + ':' + Math.random() + ':' + Math.random();
+  };
+  
   var spatialhash = function() {
     var that = {};
     that.spacemap = {};
     
     var innerget = function(key) {
       if (that.spacemap.hasOwnProperty(key)) {
-        return that.spacemap[key];
+        var l = [];
+        var cell = that.spacemap[key];
+        for (thing in cell) {
+          l.push(cell[thing]);
+        }
+        return l;
       }
       return [];
     }
@@ -78,13 +87,12 @@
     // Given a {x1,y1,x2,y2} rect, put it in the right place in the
     // spatial hash. If it's a big rect, let it span buckets in the hash.
     that.set = function(r) {
+      r.shid = makeid();
       that.iterate(r, function(key, r) {
-        if (that.spacemap.hasOwnProperty(key)) {
-          that.spacemap[key].push(r);
+        if (!that.spacemap.hasOwnProperty(key)) {
+          that.spacemap[key] = {};
         }
-        else {
-          that.spacemap[key] = [r];
-        }
+        that.spacemap[key][r.shid] = r;
       });
     };
     
@@ -92,20 +100,13 @@
       that.iterate(r, function(key, r) {
         if (that.spacemap.hasOwnProperty(key)) {
           var l = that.spacemap[key];
-          var index = -1;
-          for (var i = 0; i < l.length; i++) {
-            var checkrect = l[i];
-            if (checkrect.x1 === r.x1 && checkrect.y1 === r.y1 &&
-                checkrect.x2 === r.x2 && checkrect.y2 === r.y2) {
-              index = i;
-              break;
-            }
-          }
-          if (index !== -1) {
-            that.spacemap[key].splice(index, 1);
-          }
+          delete l[r.shid];
         }
       });
+    };
+    
+    that.move = function() {
+      
     };
     
     return that;
