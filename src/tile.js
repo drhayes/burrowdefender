@@ -148,14 +148,11 @@
       alert('args.game!')
     }
     var that = tile.dirt(args);
-    that.health = 20;
-    that.maxhealth = 20;
-    
-    // grab the parent draw...
-    superdraw = that.draw;
     
     that.draw = function(ctx) {
-      superdraw.call(that, ctx);
+      ctx.fillStyle('rgb(102,51,0)');
+      ctx.fillRect(0, tile.tilesize - 2, tile.tilesize, 3);
+      ctx.drawImage(dirtimage, 0, 0);
       ctx.drawImage(grassimage, 0, 0);
       tile.drawdamage(ctx, that.health / that.maxhealth);
     };

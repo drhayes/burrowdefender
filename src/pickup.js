@@ -8,6 +8,7 @@
 (function(global, $) {
   var pickup = function(args) {
     var that = mob(args);
+    that.vel.y = -4;
     that.solid = false;
     
     that.collide = function(collider) {
@@ -33,7 +34,6 @@
   
   var dirtpickup = function(args) {
     var that = pickup(args);
-    that.vel.y = -8;
 
     that.draw = function(drawthing) {
       drawthing.sprite1.push(function(ctx) {
