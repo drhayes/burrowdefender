@@ -65,7 +65,6 @@
           });
         };
         if (typeof(thing.killed) === 'undefined' || !thing.killed) {
-          console.log('not killed');
           newthings.push(thing);
         }
       });
