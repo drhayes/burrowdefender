@@ -8,7 +8,7 @@
 (function(global, $) {
   var pickup = function(args) {
     var that = mob(args);
-    that.vel.y = -4;
+    that.vel.y = -2;
     that.solid = false;
     
     that.collide = function(collider) {

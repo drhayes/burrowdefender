@@ -20,55 +20,6 @@
 					equals(p.size.x, 16, 'p.size.x is 16');
 					equals(p.size.y, 16, 'p.size.y is 16');
 				});
-				
-				module('collisions', {
-					setup: function() {
-						this.fakegame = new FakeGame();
-						this.p = pickup({game: this.fakegame});
-						this.p.x = 0;
-						this.p.y = 0;
-					}
-				});
-				
-				test('with a thing', function() {
-					equals(typeof(this.p.collide), 'function', 'collide exists');
-					var m2 = mob({
-						x: 18,
-						y: 0,
-						vel: {
-							x: -5,
-							y: 0
-						}
-					});
-					// m2 has no inventory, and nothing blows up
-					m2.move([this.p]);
-					// do something real...
-					var m = mob({
-						x: 18,
-						y: 0,
-						vel: {
-							x: -5,
-							y: 0
-						}
-					});
-					m.inventory = {
-						add: function(p) {
-							this.stuff.push(p);
-						},
-						stuff: []
-					}
-					equals(this.fakegame.spatialhash.rr, undefined, 'removed rect is null');
-					m.move([this.p]);
-					equals(m.inventory.stuff.length, 1, 'inventory contains something now');
-					ok(this.p.killed, 'p has been killed');
-					// check that the rect was removed from spatial hash
-					var rect = this.fakegame.spatialhash.rr;
-					ok(rect != null, 'rect is not null');
-					equals(rect.x1, this.p.x1, 'rect.x1');
-					equals(rect.y1, this.p.y1, 'rect.y1');
-					equals(rect.x2, this.p.x2, 'rect.x2');
-					equals(rect.y2, this.p.y2, 'rect.y2');					
-				});
 			});
 		</script>
 	</head>
