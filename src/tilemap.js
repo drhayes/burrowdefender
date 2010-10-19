@@ -7,7 +7,11 @@
 
 (function(global, $) {
   
-  var theAir = tile.air();
+  var theAir = tile.air({
+    game: {},
+    x: 0,
+    y: 0
+  });
   
   var tilemap = function(width, height) {
     var that = {};

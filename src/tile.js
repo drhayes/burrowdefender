@@ -43,7 +43,7 @@
     // and replace in tilemap with dug tile
     that.kill = function(x, y) {
       args.game.tilemap.set(x, y, tile.dug(args));
-      args.game.spatialhash.remove(tile.getrect(x, y));
+      args.game.spatialhash.remove(that);
       // find the center point of this tile
       var cx = (x * tile.tilesize) + (tile.tilesize / 2);
       var cy = (y * tile.tilesize) + (tile.tilesize / 2);

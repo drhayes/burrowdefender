@@ -67,6 +67,8 @@
     
     // Given a list of rects, don't let the mob move into any of them.
     that.move = function(collides) {
+      // remove from the spatial hash
+      options.game.spatialhash.remove(that);
       collides = collides || [];
       var mob = this;
       var velx = that.vel.x;
@@ -154,6 +156,7 @@
       that.x += velx;
       that.y += vely;
       that.updaterect();
+      options.game.spatialhash.set(that);
     };
     
     that.tick = function() {

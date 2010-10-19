@@ -40,14 +40,19 @@
       for (var i = x1; i < x2; i++) {
         y = tilegenerator.gensurface(i);
         for (var j = 0; j < 20; j++) {
+          var args = {
+            game: that.game,
+            x: i * tile.tilesize,
+            y: (y + j) * tile.tilesize
+          };
           if (j === 0) {
-            gentile = tile.dirtwithgrass({game: that.game});
+            gentile = tile.dirtwithgrass(args);
           }
           else {
-            gentile = tile.dirt({game: that.game});
+            gentile = tile.dirt(args);
           }
           that.tilemap.set(i, y + j, gentile);
-          that.spatialhash.set(tile.getrect(i, y + j));
+          that.spatialhash.set(gentile);
         }
       }
     };
