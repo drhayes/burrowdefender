@@ -58,11 +58,11 @@ var FakeGame = function() {
 		}
 	};
 	this.spatialhash = {
-	  set: function(r) {
-	    this.sr = r;
+	  set: function(t) {
+	    this.st = t;
 	  },
-		remove: function(r) {
-			this.rr = r;
+		remove: function(t) {
+			this.rt = t;
 		}
 	};
 };
