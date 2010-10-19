@@ -55,20 +55,6 @@
 					equals(pos.y, -1, 'converted (-1, -1) y position correctly');
 				});
 				
-				test('getrect', function() {
-					ok(typeof(tile.getrect) === 'function', 'getrect is a function');
-					var rect = tile.getrect(0, 0);
-					equals(rect.x1, 0, 'x1');
-					equals(rect.y1, 0, 'y1');
-					equals(rect.x2, tile.tilesize - 1, 'x2');
-					equals(rect.y2, tile.tilesize - 1, 'y2');
-					rect = tile.getrect(1, 1);
-					equals(rect.x1, tile.tilesize, 'x1');
-					equals(rect.y1, tile.tilesize, 'y1');
-					equals(rect.x2, tile.tilesize * 2 - 1, 'x2');
-					equals(rect.y2, tile.tilesize * 2 - 1, 'y2');
-				});
-				
 				module('tiles', {
 					setup: function() {
 						this.fakegame = new FakeGame();
@@ -170,17 +156,20 @@
 				});
 				
 				test('dirt kill', function() {
-					var d = tile.dirt({game: this.fakegame});
+					var d = tile.dirt({
+						game: this.fakegame,
+						x: 0,
+						y: 0
+					});
 					equals(typeof(d.kill), 'function', 'kill exists');
 					d.kill(0, 0);
 					equals(this.fakegame.tilemap.sx, 0, 'tilemap set x is 0');
 					equals(this.fakegame.tilemap.sy, 0, 'tilemap set y is 0');
-					var rr = this.fakegame.spatialhash.rr;
-					var er = tile.getrect(0, 0);
-					equals(rr.x1, er.x1, 'x1');
-					equals(rr.y1, er.y1, 'y1');
-					equals(rr.x2, er.x2, 'x2');
-					equals(rr.y2, er.y2, 'y2');
+					var rt = this.fakegame.spatialhash.rt;
+					equals(rt.x1, d.x1, 'x1');
+					equals(rt.y1, d.y1, 'y1');
+					equals(rt.x2, d.x2, 'x2');
+					equals(rt.y2, d.y2, 'y2');
 				});
 			});
 		</script>

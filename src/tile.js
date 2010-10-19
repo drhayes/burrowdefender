@@ -101,16 +101,6 @@
     };
   };
   
-  // given a position in tilespace, return the rect in world space
-  tile.getrect = function(x, y) {
-    return {
-      x1: x * tile.tilesize,
-      y1: y * tile.tilesize,
-      x2: (x + 1) * tile.tilesize - 1,
-      y2: (y + 1) * tile.tilesize - 1
-    };
-  }
-  
   // Default tile (meant to be used by ref by everybody) that fills the
   // map at first.
   tile.air = function(args) {
