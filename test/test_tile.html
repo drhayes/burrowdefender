@@ -20,8 +20,17 @@
 				
 				test('ctor', function() {
 					equals(typeof tile, 'function', 'tile exists');
-					var t = tile();
+					var t = tile({
+						x: 10,
+						y: 20
+					});
 					equals(typeof t.draw, 'function', 'draw exists');
+					equals(t.x, 10, 't.x is 10');
+					equals(t.y, 20, 't.y is 20');
+					equals(t.x1, 10, 't.x1 is 10');
+					equals(t.y1, 20, 't.y1 is 20');
+					equals(t.x2, 10 + tile.tilesize, 't.x2');
+					equals(t.y2, 20 + tile.tilesize, 't.y2');
 				});
 				
 				module('statics');

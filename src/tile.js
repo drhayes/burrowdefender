@@ -20,6 +20,10 @@
   var tile = function(args) {
     var that = {};
     that.diggable = true;
+    that.x = that.x1 = args.x;
+    that.y = that.y1 = args.y;
+    that.x2 = tile.tilesize + that.x1;
+    that.y2 = tile.tilesize + that.y1;
     that.draw = function(x, y, ctx) {
       // this version doesn't do anything
     };
@@ -38,7 +42,7 @@
     // remove the tile from the tile map and the spatialhash
     // and replace in tilemap with dug tile
     that.kill = function(x, y) {
-      args.game.tilemap.set(x, y, tile.dug());
+      args.game.tilemap.set(x, y, tile.dug(args));
       args.game.spatialhash.remove(tile.getrect(x, y));
       // find the center point of this tile
       var cx = (x * tile.tilesize) + (tile.tilesize / 2);
@@ -109,8 +113,8 @@
   
   // Default tile (meant to be used by ref by everybody) that fills the
   // map at first.
-  tile.air = function() {
-    var that = tile();
+  tile.air = function(args) {
+    var that = tile(args);
     that.diggable = false;
     
     that.draw = function(ctx) {
@@ -163,8 +167,8 @@
   };
   
   // A dirt tile that has been dug
-  tile.dug = function() {
-    var that = tile();
+  tile.dug = function(args) {
+    var that = tile(args);
     that.diggable = false;
     
     that.draw = function(ctx) {
