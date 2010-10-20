@@ -120,26 +120,24 @@
           return
         };
         // do projection-based collision detection
-        var dx = Math.abs(that.halfx - r.halfx);
-        var dy = Math.abs(that.halfy - r.halfy);
+        var dx = that.halfx - r.halfx;
+        var dy = that.halfy - r.halfy;
         // combine 'em
-        var tx = Math.abs(that.halfwidth + r.halfwidth - dx + 1);
-        var ty = Math.abs(that.halfheight + r.halfheight - dy + 1);
-        // vectors
-        var vx = (that.vel.x / Math.abs(that.vel.x));
-        var vy = (that.vel.y / Math.abs(that.vel.y));
+        var tx = that.halfwidth + r.halfwidth - Math.abs(dx) + 1;
+        var ty = that.halfheight + r.halfheight - Math.abs(dy) + 1;
+        // get the vectors off the sign of the projection scalar...
+        var vx = -dx / Math.abs(dx);
+        var vy = -dy / Math.abs(dy);
+        tx = Math.abs(tx);
+        ty = Math.abs(ty);
         // the shorter one is the one we adjust by...
         if (tx < ty) {
           that.x -= tx * vx;
-          if (!isNaN(vx)) {
-            aftervel.x = -that.vel.x * that.bounce;
-          }
+          aftervel.x = -that.vel.x * that.bounce;
         }
         else {
           that.y -= ty * vy;
-          if (!isNaN(vy)) {
-            aftervel.y = -that.vel.y * that.bounce;
-          }
+          aftervel.y = -that.vel.y * that.bounce;
           // are we standing or jumping anymore?
           that.movestate.standing = (vy > 0);
           that.movestate.jumping = (vy <= 0);

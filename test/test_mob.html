@@ -100,14 +100,6 @@
 					equals(this.m.y2, this.m.y + this.m.size.y, 'm.y + m.size.y');
 				});
 				
-				/*
-				x: 5,
-				y: 5,
-				size: {
-					x: 30,
-					y: 30
-				},
-				*/
 				test('move with bounce', function() {
 					// full bounce
 					this.m.bounce = 1;
@@ -282,6 +274,25 @@
 					this.m.move([r1]);
 					equals(this.m.x, -5, 'm.x === -5');
 					equals(this.m.y, -5, 'm.y === -5');
+				});
+				
+				/*
+				x: 5,
+				y: 5,
+				size: {
+					x: 30,
+					y: 30
+				},
+				*/
+				
+				test('fast falling', function() {
+					this.m.vel.y = 12;
+					var r1 = makerect(33, 40, 65, 72);
+					var r2 = makerect(66, 40, 98, 72);
+					var r3 = makerect(99, 40, 131, 72);
+					this.m.move([r1, r2, r3]);
+					equals(this.m.x, 2, 'should be projected left');
+					equals(this.m.y, 17, 'should be allowed to fall down');
 				});
 				
 				module('jumping', {
