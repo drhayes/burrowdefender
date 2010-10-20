@@ -10,6 +10,7 @@
     var that = mob(args);
     that.vel.y = -2;
     that.solid = false;
+    that.bounce = 0.63;
     
     that.collide = function(collider) {
       if (!collider.inventory) {
