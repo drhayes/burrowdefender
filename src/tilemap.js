@@ -7,12 +7,6 @@
 
 (function(global, $) {
   
-  var theAir = tile.air({
-    game: {},
-    x: 0,
-    y: 0
-  });
-  
   var tilemap = function(width, height) {
     var that = {};
     that.tilemap = {};
@@ -24,6 +18,7 @@
       if (that.tilemap.hasOwnProperty(key)) {
         return that.tilemap[key];
       }
+      return null;
       return theAir;
     };
     
@@ -39,6 +34,9 @@
       for (var x = startx; x < endx; x++) {
         for (var y = starty; y < endy; y++) {
           var sometile = that.get(x, y);
+          if (!sometile) {
+            continue;
+          }
           var tilex = x * tile.tilesize;
           var tiley = y * tile.tilesize;
           tilefunc(sometile, tilex, tiley);

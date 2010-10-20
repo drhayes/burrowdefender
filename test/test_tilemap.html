@@ -56,10 +56,9 @@
 					ok(typeof(this.tm.get) == 'function', 'get is a function');
 					ok(typeof(this.tm.set) == 'function', 'set is a function');
 					var t = this.tm.get(0, 0);
-					ok(!t.diggable, '0,0 has an non-diggable tile');
+					equals(t, null, 't is null');
 					var t2 = this.tm.get(3, -2);
-					ok(!t2.diggable, 'gee, looks like it is all non-diggable');
-					equals(t, t2, 'since they are the same, I bet they are air tiles');
+					equals(t2, null, 't2 is null also');
 					var dirt = tile.dirt({game: this.fakegame});
 					this.tm.set(0, 0, dirt);
 					var key = tilemap.makekey(0, 0);
@@ -90,17 +89,17 @@
 					this.tm.set(0, 3, tile.dirt({game: this.fakegame}));
 					this.tm.set(1, 3, tile.dirt({game: this.fakegame}));
 					this.tm.draw(this.fakectx);
-					equals(this.fakectx.fillRectArgs.length, 25, 'called twice');
+					equals(this.fakectx.fillRectArgs.length, 2, 'called twice');
 					var args = this.fakectx.fillRectArgs
 					equals(args[0].frx, 0, 'first frx');
-					equals(args[0].fry, 0, 'first fry');
+					equals(args[0].fry, 30, 'first fry');
 					equals(args[0].frw, tile.tilesize, 'first frw');
-					equals(args[0].frh, 33, 'first frh');
+					equals(args[0].frh, 3, 'first frh');
 					equals(args[1].frx, 0, 'second frx');
-					equals(args[1].fry, 0, 'second fry');
+					equals(args[1].fry, 30, 'second fry');
 					equals(args[1].frw, tile.tilesize, 'second frw');
-					equals(args[1].frh, 33, 'second frh');
-					equals(args[1].offy, 32, 'offset.y');
+					equals(args[1].frh, 3, 'second frh');
+					equals(args[1].offy, 96, 'offset.y');
 				});
 				
 				test('draw with two tiles scroll tilesize aligned', function() {
@@ -109,16 +108,16 @@
 					}
 					// first test the easy tilesize-aligned version
 					this.tm.draw(this.fakectx, 32, 0);
-					equals(this.fakectx.fillRectArgs.length, 9, 'called 9 times');
+					equals(this.fakectx.fillRectArgs.length, 3, 'called 3 times');
 					var args = this.fakectx.fillRectArgs;
 					equals(args[0].frx, 0, 'first frx');
 					equals(args[0].fry, 30, 'first fry');
 					equals(args[1].frx, 0, 'second frx');
-					equals(args[1].fry, 0, 'second fry');
-					equals(args[1].offy, 32, 'offset.y');
+					equals(args[1].fry, 30, 'second fry');
+					equals(args[1].offy, 0, 'offset.y');
 					equals(args[2].frx, 0, 'third frx');
-					equals(args[2].fry, 0, 'third fry');
-					equals(args[2].offy, 64, 'offset.y');
+					equals(args[2].fry, 30, 'third fry');
+					equals(args[2].offy, 0, 'offset.y');
 				});
 				
 				test('draw with three tiles not tilesize aligned', function() {
@@ -127,14 +126,14 @@
 					}
 					// non tilesize aligned
 					this.tm.draw(this.fakectx, 20, 0);
-					equals(this.fakectx.fillRectArgs.length, 9, 'called 9 times');
+					equals(this.fakectx.fillRectArgs.length, 3, 'called 3 times');
 					var args = this.fakectx.fillRectArgs;
 					equals(args[0].frx, 0, 'first frx');
 					equals(args[0].offx, -20, 'offset.y');
 					equals(args[1].frx, 0, 'second frx');
-					equals(args[1].offx, -20, 'offset.y');
+					equals(args[1].offx, 12, 'offset.y');
 					equals(args[2].frx, 0, 'third frx');
-					equals(args[2].offx, -20, 'offset.y');
+					equals(args[2].offx, 44, 'offset.y');
 				});				
 			});
 		</script>
