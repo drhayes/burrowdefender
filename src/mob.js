@@ -56,106 +56,82 @@
       jump: options.velocities.jump,
       walkleft: options.velocities.walkleft,
       walkright: options.velocities.walkright
-    }
+    };
     
     that.updaterect = function() {
       that.x1 = that.x;
       that.y1 = that.y;
       that.x2 = that.x + that.size.x;
       that.y2 = that.y + that.size.y;
-    }
+      that.halfwidth = (that.x2 - that.x1) / 2;
+      that.halfheight = (that.y2 - that.y1) / 2;
+      that.halfx = that.halfwidth + that.x1;
+      that.halfy = that.halfheight + that.y1;
+    };
     
-    // Given a list of rects, don't let the mob move into any of them.
+    that.runcollides = function(r) {
+      if (typeof r.collide === 'function') {
+        r.collide(that);
+      };
+      // other way around, too...
+      if (typeof that.collide === 'function') {
+        that.collide(r);
+      };
+    };
+    
     that.move = function(collides) {
       // remove from the spatial hash
       options.game.spatialhash.remove(that);
+      // if velocity is tiny, make it zero
+      if (Math.abs(that.vel.x) < 0.1) {
+        that.vel.x = 0;
+      };
+      if (Math.abs(that.vel.y) < 0.1) {
+        that.vel.y = 0;
+      }
+      // adjust for velocity
+      that.x += that.vel.x;
+      that.y += that.vel.y;
+      that.updaterect();
       collides = collides || [];
-      var mob = this;
-      var velx = that.vel.x;
-      var vely = that.vel.y;
-      // sort the collides so any that current intersecting come first
-      var firstcollides = [];
-      var secondcollides = [];
+      that.movestate.standing = false;
+      // sort the collides by things I'm already intersecting with
       $.each(collides, function(i, r) {
+        // am I colliding with myself?
         if (r === that) {
           return;
-        }
-        var oiy = utils.intersect(mob.y, mob.y + mob.size.y, r.y1, r.y2);
-        var oix = utils.intersect(mob.x, mob.x + mob.size.x, r.x1, r.x2);
-        if (oiy || oix) {
-          firstcollides.push(r);
+        };
+        // are we actually colliding?
+        if (!utils.collide(that, r)) {
+          return;
+        };
+        // does what we're colliding with have a collide function?
+        that.runcollides(r);
+        // is this thing solid?
+        if (typeof r.solid !== 'undefined' && !r.solid) {
+          return
+        };
+        // do projection-based collision detection
+        var dx = Math.abs(that.halfx - r.halfx);
+        var dy = Math.abs(that.halfy - r.halfy);
+        // combine 'em
+        var tx = Math.abs(that.halfwidth + r.halfwidth - dx + 1);
+        var ty = Math.abs(that.halfheight + r.halfheight - dy + 1);
+        // vectors
+        var vx = (that.vel.x / Math.abs(that.vel.x));
+        var vy = (that.vel.y / Math.abs(that.vel.y));
+        // the shorter one is the one we adjust by...
+        if (tx < ty) {
+          that.x -= tx * vx;
         }
         else {
-          secondcollides.push(r);
+          that.y -= ty * vy;
+          that.movestate.standing = (vy > 0);
+          that.movestate.jumping = (vy <= 0);
         }
+        that.updaterect();
       });
-      var newcollides = [].concat(firstcollides, secondcollides);
-      $.each(newcollides, function(i, r) {
-        // collide at all?
-        var npx1 = mob.x + velx;
-        var npy1 = mob.y + vely;
-        var npx2 = mob.x + mob.size.x + velx;
-        var npy2 = mob.y + mob.size.y + vely;
-        if (npy2 < r.y1) {
-          return;
-        }
-        if (npy1 > r.y2) {
-          return;
-        }
-        if (npx2 < r.x1) {
-          return;
-        }
-        if (npx1 > r.x2) {
-          return;
-        }
-        // okay, we're doing this
-        // does what we're colliding with have a collide function?
-        if (typeof(r.collide) === 'function') {
-          r.collide(that);
-        }
-        if (typeof(r.solid) !== 'undefined' && !r.solid) {
-          return;
-        }
-        // check our old intersections to prevent teleporting
-        var oiy = utils.intersect(mob.y, mob.y + mob.size.y, r.y1, r.y2);
-        if (!oiy) {
-          if (vely < 0) {
-            vely += r.y2 - npy1 + 1;
-          }
-          else if (vely > 0) {
-            vely -= npy2 - r.y1 + 1;
-            if (Math.abs(vely) < 0.01) {
-              mob.movestate.jumping = false;
-              mob.movestate.standing = true;
-            }
-          }          
-        }
-        var oix = utils.intersect(mob.x, mob.x + mob.size.x, r.x1, r.x2)
-        // since we're maybe not conflicting on y anymore, check again
-        npy1 = mob.y + vely;
-        npy2 = mob.y + mob.size.y + vely;
-        oiy = utils.intersect(npy1, npy2, r.y1, r.y2);
-        if (oiy && !oix) {
-          if (velx < 0) {
-            velx += r.x2 - npx1 + 1;
-          }
-          else if (velx > 0) {
-            velx -= npx2 - r.x1 + 1;
-          }          
-        }
-      });
-      if (Math.abs(vely) < 0.01) {
-        vely = 0;
-      }
-      if (Math.abs(velx) < 0.01) {
-        velx = 0;
-      }
-      if (vely !== 0) {
-        that.movestate.standing = false;
-      }
-      that.x += velx;
-      that.y += vely;
-      that.updaterect();
+      // put it back after moving
       options.game.spatialhash.set(that);
     };
     

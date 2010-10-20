@@ -24,6 +24,10 @@
     that.y = that.y1 = args.y;
     that.x2 = tile.tilesize + that.x1;
     that.y2 = tile.tilesize + that.y1;
+    that.halfwidth = (that.x2 - that.x1) / 2;
+    that.halfheight = (that.y2 - that.y1) / 2;
+    that.halfx = that.halfwidth + that.x1;
+    that.halfy = that.halfheight + that.y1;
     that.draw = function(x, y, ctx) {
       // this version doesn't do anything
     };
