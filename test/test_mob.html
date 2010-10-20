@@ -6,6 +6,7 @@
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
+		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
 			$(document).ready(function() {
@@ -39,7 +40,9 @@
 				
 				module('usage', {
 					setup: function() {
+						this.fakegame = new FakeGame();
 						this.m = mob({
+							game: this.fakegame,
 							x: 5,
 							y: 5,
 							size: {
@@ -252,7 +255,9 @@
 				
 				module('jumping', {
 					setup: function() {
+						this.fakegame = new FakeGame();
 						this.m = mob({
+							game: this.fakegame,
 							x: 0,
 							y: 0,
 							size: {
