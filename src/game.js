@@ -121,7 +121,7 @@
         x: 0,
         y: 0
       };
-			ctx.fillStyle('rgb(255, 255, 255)');
+      ctx.fillStyle('hsl(230, 100%, 60%)');
 			ctx.fillRect(0, 0, that.width, that.height);
     };
     
