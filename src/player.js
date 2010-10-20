@@ -22,6 +22,7 @@
       x: 16,
       y: 20
     };
+    that.solid = false;
     
     // special player movestates
     that.movestate.mining = false;
@@ -96,7 +97,9 @@
 				}
 				// is it a diggable tile?
 				var digtile = args.game.tilemap.get(tilepos.x, tilepos.y);
-				digtile.mine(this, tilepos.x, tilepos.y);
+				if (digtile) {
+				  digtile.mine(this, tilepos.x, tilepos.y);
+				}
 			}
 		};
 		

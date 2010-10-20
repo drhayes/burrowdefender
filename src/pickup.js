@@ -11,8 +11,9 @@
     that.vel.y = -2;
     that.solid = false;
     that.bounce = 0.63;
+    that.created = new Date().getTime();
     
-    that.collide = function(collider) {
+    var pickupcollide = function(collider) {
       if (!collider.inventory) {
         return;
       };
@@ -25,6 +26,10 @@
     
     that.tick = function() {
       mob.gravitytick.call(that);
+      // are we pickupable yet?
+      if (new Date().getTime() - that.created > 300) {
+        that.collide = pickupcollide;
+      }
     }
     
     return that;    

@@ -31,6 +31,9 @@
 					ok(p.movestate, 'movestate');
 					ok(p.velocities, 'velocities');
 					equals(p.minedamage, 1, 'minedamage');
+					equals(p.bounce, 0, 'players do not bounce');
+					equals(p.friction, 1, 'players have max friction');
+					equals(p.solid, false, 'players are not solid, otherwise they push stuff around');
 				});
 				
 				module('usage', {
