@@ -69,20 +69,11 @@
 				module('drawing', {
 					setup: function() {
 						// for the purposes of these tests, Air doesn't have a draw method
-						this.oldair = tile.air;
-						tile.air = function() {
-							var that = {};
-							that.draw = function() {};
-							return that;
-						}
 						this.tm = new tilemap(64, 64);
 						this.fakectx = new FakeCtx();
 						this.fakegame = new FakeGame();
-					},
-					teardown: function() {
-						tile.air = this.oldair;
 					}
-				})
+				});
 				
 				test('draw with two tiles noscroll', function() {
 					this.tm = tilemap(tile.tilesize * 4, tile.tilesize * 4);

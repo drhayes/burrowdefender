@@ -62,11 +62,6 @@
 					}
 				});
 				
-				test('Air', function() {
-					checkexists(tile.air, 'Air exists');
-					ok(!tile.air.diggable, 'Air is not diggable');
-				});
-
 				test('Dirt', function() {
 					checkexists(tile.dirt, 'Dirt exists');
 					var dirt = tile.dirt({game: this.fakegame});

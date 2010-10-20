@@ -105,20 +105,6 @@
     };
   };
   
-  // Default tile (meant to be used by ref by everybody) that fills the
-  // map at first.
-  tile.air = function(args) {
-    var that = tile(args);
-    that.diggable = false;
-    
-    that.draw = function(ctx) {
-      ctx.fillStyle('rgb(0, 128, 255)');
-      ctx.fillRect(0, 0, tile.tilesize, tile.tilesize + 1);
-    };
-    
-    return that;
-  };
-
   // The other really common tile.
   tile.dirt = function(args) {
     if (typeof(args.game) === 'undefined') {
