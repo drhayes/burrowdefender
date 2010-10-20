@@ -21,6 +21,8 @@
 					equals(m.size.y, 16, 'initial y size');
 					equals(m.vel.x, 0, 'initial x velocity');
 					equals(m.vel.y, 0, 'initial y velocity');
+					equals(m.bounce, 0, 'initial bounce');
+					equals(m.friction, 1, 'initil friction');
 					ok(m.movestate, 'movestate');
 					ok(m.velocities, 'velocities');
 				});
@@ -52,7 +54,9 @@
 							vel: {
 								x: 0,
 								y: 0
-							}
+							},
+							bounce: 0,
+							friction: 1
 						});
 					}
 				});
@@ -96,6 +100,31 @@
 					equals(this.m.y2, this.m.y + this.m.size.y, 'm.y + m.size.y');
 				});
 				
+				/*
+				x: 5,
+				y: 5,
+				size: {
+					x: 30,
+					y: 30
+				},
+				*/
+				test('move with bounce', function() {
+					// full bounce
+					this.m.bounce = 1;
+					this.m.vel.y = 10;
+					var r1 = makerect(-10, 41, 40, 60);
+					this.m.move([r1]);
+					equals(this.m.x, 5, 'x does not change');
+					equals(this.m.y, 10, 'y has collided downward');
+					equals(this.m.vel.x, 0, 'vel x is still 0');
+					equals(this.m.vel.y, -10, 'vel y is completely reversed');
+					// half bounce
+					this.m.bounce = 0.5;
+					this.m.vel.y = 10;
+					this.m.move([r1]);
+					equals(this.m.vel.y, -5, 'vel y is half reversed');
+				});
+				
 				test('might as well be zero', function() {
 					this.m.vel.x = 0.005;
 					this.m.vel.y = 0.005;
@@ -130,7 +159,6 @@
 					this.m.move([r1]);
 					equals(this.m.x, 5, 'did not collide in the x');
 					equals(this.m.y, 1, 'collided in the y');
-					equals(this.m.vel.y, -10, 'velocity did not change');
 				});
 
 				test('move with collisions down with one', function() {
@@ -141,7 +169,6 @@
 					this.m.move([r1]);
 					equals(this.m.x, 5, 'did not collide in the x');
 					equals(this.m.y, 9, 'collided in the y');
-					equals(this.m.vel.y, 10, 'velocity did not change');
 				});
 				
 				test('move with collisions left with one', function() {
@@ -152,7 +179,6 @@
 					this.m.move([r1]);
 					equals(this.m.x, 1, 'collided in the x');
 					equals(this.m.y, 5, 'did not collide in the y');
-					equals(this.m.vel.x, -10, 'velocity did not change');
 				});
 				
 				test('move with collisions right with one', function() {
@@ -163,7 +189,6 @@
 					this.m.move([r1]);
 					equals(this.m.x, 9, 'collided in the x');
 					equals(this.m.y, 5, 'did not collide in the y');
-					equals(this.m.vel.x, 10, 'velocity did not change');
 				});
 				
 				test('move with collisions up with two', function() {
@@ -175,7 +200,6 @@
 					this.m.move([r1, r2]);
 					equals(this.m.x, 5, 'did not collide in the x');
 					equals(this.m.y, 5, 'collided in the y');
-					equals(this.m.vel.y, -10, 'velocity did not change');
 				});
 				
 				test('move with collisions up and to the left', function() {

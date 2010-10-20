@@ -30,7 +30,9 @@
       jump: -6,
       walkleft: -2,
       walkright: 2
-    }
+    },
+    friction: 1,
+    bounce: 0
   };
 
   var mob = function(options) {
@@ -46,6 +48,8 @@
       x: options.vel.x,
       y: options.vel.y
     };
+    that.friction = options.friction;
+    that.bounce = options.bounce;
     that.movestate = {
       // jumping is defined as having jumped but not having become standing yet
       jumping: options.movestate.jumping,
@@ -95,7 +99,11 @@
       that.updaterect();
       collides = collides || [];
       that.movestate.standing = false;
-      // sort the collides by things I'm already intersecting with
+      // check for bounce and friction afterwards
+      var aftervel = {
+        x: 0,
+        y: 0
+      };
       $.each(collides, function(i, r) {
         // am I colliding with myself?
         if (r === that) {
@@ -123,15 +131,28 @@
         // the shorter one is the one we adjust by...
         if (tx < ty) {
           that.x -= tx * vx;
+          if (!isNaN(vx)) {
+            aftervel.x = -that.vel.x * that.bounce;
+          }
         }
         else {
           that.y -= ty * vy;
+          if (!isNaN(vy)) {
+            aftervel.y = -that.vel.y * that.bounce;
+          }
+          // are we standing or jumping anymore?
           that.movestate.standing = (vy > 0);
           that.movestate.jumping = (vy <= 0);
         }
         that.updaterect();
       });
-      // put it back after moving
+      if (Math.abs(aftervel.y) > 1) {
+        that.vel.y = aftervel.y;
+        this.movestate.standing = false;
+      }
+      if (Math.abs(aftervel.x) > 1) {
+        that.vel.x = aftervel.x;
+      }
       options.game.spatialhash.set(that);
     };
     
