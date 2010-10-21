@@ -35,13 +35,31 @@
 				
 				test('add one type of thing', function() {
 					this.inv.add(THING1);
-					var stuff = this.inv.things['0'];
-					ok(stuff, 'got stuff back from place 0');
+					var stuff = this.inv.things['1'];
+					ok(stuff, 'got stuff back from place 1');
 					equals(stuff.type, THING1, 'type of stuff is THING1');
 					equals(stuff.count, 1, 'count of stuff is 1');
 					this.inv.add(THING1)
-					stuff = this.inv.things['0'];
-					ok(stuff, 'got stuff back from place 0 for 2 things');
+					stuff = this.inv.things['1'];
+					ok(stuff, 'got stuff back from place 1 for 2 things');
+					equals(stuff.type, THING1, 'type of stuff is THING1');
+					equals(stuff.count, 2, 'count of stuff is 2');
+				});
+				
+				test('add two types of things', function() {
+					this.inv.add(THING1);
+					this.inv.add(THING2);
+					var stuff = this.inv.things['1'];
+					ok(stuff, 'got stuff back from place 1');
+					equals(stuff.type, THING1, 'type of stuff is THING1');
+					equals(stuff.count, 1, 'count of stuff is 1');
+					stuff = this.inv.things['2'];
+					ok(stuff, 'got stuff back from place 2');
+					equals(stuff.type, THING2, 'type of stuff is THING2');
+					equals(stuff.count, 1, 'count of stuff is 1');
+					this.inv.add(THING1);
+					stuff = this.inv.things['1'];
+					ok(stuff, 'got stuff back from place 1');
 					equals(stuff.type, THING1, 'type of stuff is THING1');
 					equals(stuff.count, 2, 'count of stuff is 2');
 				});
