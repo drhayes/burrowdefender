@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Inventory</title>
+		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/inventory.js"></script>
+		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<script>
+			$(document).ready(function() {
+				module('basics');
+				
+				test('ctor', function() {
+					equals(typeof inventory, 'function', 'inventory exists');
+					var i = inventory();
+					equals(typeof i.things, 'object', 'i.things');
+					// verify that things is empty for the mo'...
+					var count = 0;
+					$.each(i.things, function(i, thing) {
+						count++;
+					});
+					equals(count, 0, 'i.things is empty');
+					equals(typeof i.add, 'function', 'i.add');
+				});
+				
+				module('usage', {
+					setup: function() {
+						this.inv = inventory();
+					}
+				});
+				
+				var THING1 = 1;
+				var THING2 = 2;
+				var THING3 = 3;
+				
+				test('add one type of thing', function() {
+					this.inv.add(THING1);
+					var stuff = this.inv.things['0'];
+					ok(stuff, 'got stuff back from place 0');
+					equals(stuff.type, THING1, 'type of stuff is THING1');
+					equals(stuff.count, 1, 'count of stuff is 1');
+					this.inv.add(THING1)
+					stuff = this.inv.things['0'];
+					ok(stuff, 'got stuff back from place 0 for 2 things');
+					equals(stuff.type, THING1, 'type of stuff is THING1');
+					equals(stuff.count, 2, 'count of stuff is 2');
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1 id="qunit-header">Inventory Test</h1>
+		<h2 id="qunit-banner"></h2>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">test markup, will be hidden</div>
+	</body>
+</html>
