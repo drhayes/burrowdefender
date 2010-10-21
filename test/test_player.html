@@ -9,6 +9,7 @@
 		<script type="text/javascript" src="../src/keyboardmanager.js"></script>
 		<script type="text/javascript" src="../src/tile.js"></script>
 		<script type="text/javascript" src="../src/tilemap.js"></script>
+		<script type="text/javascript" src="../src/inventory.js"></script>
 		<script type="text/javascript" src="../src/player.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
@@ -50,7 +51,8 @@
 					var fakectx = new FakeCtx();
 					ok(typeof(this.p.draw) === 'function', 'draw function exists');
 					var drawthing = {
-						sprite1: []
+						sprite1: [],
+						hud: []
 					};
 					this.p.draw(drawthing);
 					drawthing.sprite1[0](fakectx);

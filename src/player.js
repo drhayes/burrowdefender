@@ -2,7 +2,7 @@
 //
 // The player. Y'know, of the game.
 //
-// Depends: Mob, KeyboardManager, Tile
+// Depends: Mob, KeyboardManager, Tile, Inventory
 
 (function(global, $) {
   
@@ -32,18 +32,15 @@
     // mining damage
     that.minedamage = 1;
     
-    // temporary inventory thing
-    that.inventory = {
-      add: function(thing) {
-      }
-    };
+    that.inventory = inventory();
     
     that.draw = function(drawthing) {
       drawthing.sprite1.push(function(ctx) {
-        ctx.fillStyle('rgb(64, 64, 64)');
+        ctx.fillStyle('hsl(0, 0%, 90%)');
         // draw a little bigger than player size so player is standing on ground
         ctx.fillRect(that.x, that.y, that.size.x + 1, that.size.y + 1);        
       });
+      that.inventory.draw(drawthing);
     };
     
     that.readkeyboard = function() {

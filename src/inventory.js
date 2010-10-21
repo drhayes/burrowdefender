@@ -35,6 +35,13 @@
       that.things[spot].count += 1;
     };
     
+    that.draw = function(drawthing) {
+      drawthing.hud.push(function(ctx) {
+        ctx.fillStyle('hsla(120, 0%, 0%, 0.5)');
+        ctx.fillRect(50, 0, 500, 100);
+      });
+    };
+    
     return that;
   };
   
