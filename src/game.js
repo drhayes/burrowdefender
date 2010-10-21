@@ -80,9 +80,16 @@
     var drawiterate = function(drawthing, layer) {
       var drawthings = drawthing[layer];
       $.each(drawthings, function(i, thing) {
+        var offsetx = -(that.player.x - that.playeroffset.x);
+        var offsety = -(that.player.y - that.playeroffset.y);
+        // hud does not get drawn with offset
+        if (layer === 'hud') {
+          offsetx = 0;
+          offsety = 0;
+        }
         that.ctx.offset = {
-          x: -(that.player.x - that.playeroffset.x),
-          y: -(that.player.y - that.playeroffset.y)
+          x: offsetx,
+          y: offsety
         };
         thing(that.ctx);
       });
