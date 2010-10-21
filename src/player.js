@@ -44,13 +44,14 @@
     };
     
     that.readkeyboard = function() {
-      if (args.game.keyboardmanager.keymap['shift']) {
+      var keyman = args.game.keyboardmanager;
+      if (keyman.keymap['shift']) {
         that.movestate.mining = true;
       }
       else {
         that.movestate.mining = false;
       };
-      if (args.game.keyboardmanager.keymap['space']) {
+      if (keyman.keymap['space']) {
         that.movestate.wantstojump = true;
       }
       else {
@@ -58,16 +59,16 @@
       };
       // this order is probably pretty important.
       // don't want down to be the one that wins out.
-      if (args.game.keyboardmanager.keymap['s']) {
+      if (keyman.keymap['s'] || keyman.keymap['down']) {
         that.movestate.walking = walking.DOWN;
       }
-      else if (args.game.keyboardmanager.keymap['a']) {
+      else if (keyman.keymap['a'] || keyman.keymap['left']) {
         that.movestate.walking = walking.LEFT;
       }
-      else if (args.game.keyboardmanager.keymap['d']) {
+      else if (keyman.keymap['d'] || keyman.keymap['right']) {
         that.movestate.walking = walking.RIGHT;
       }
-      else if (args.game.keyboardmanager.keymap['w']) {
+      else if (keyman.keymap['w'] || keyman.keymap['up']) {
         that.movestate.walking = walking.UP;
       }
       else {
