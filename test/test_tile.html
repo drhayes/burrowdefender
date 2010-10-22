@@ -5,6 +5,7 @@
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
+		<script type="text/javascript" src="../src/item.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
 		<script type="text/javascript" src="../src/pickup.js"></script>
 		<script type="text/javascript" src="../src/tile.js"></script>
@@ -165,6 +166,22 @@
 					equals(rt.y1, d.y1, 'y1');
 					equals(rt.x2, d.x2, 'x2');
 					equals(rt.y2, d.y2, 'y2');
+				});
+				
+				test('dirt item stuff', function() {
+					var d = tile.dirt({
+						game: this.fakegame,
+						x: 0,
+						y: 0
+					});
+					equals(typeof d.makeitem, 'function', 'makeitem exists');
+					var i = d.makeitem();
+					equals(i.type, item.types.DIRT, 'type of item is DIRT');
+					// now test the kill stuff
+					d.kill(0, 0);
+					equals(this.fakegame.added.length, 1, 'something got added');
+					var added = this.fakegame.added[0];
+					// the added thing is the pickup
 				});
 			});
 		</script>

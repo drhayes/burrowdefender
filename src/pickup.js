@@ -39,6 +39,7 @@
   // let's define some pickups...
   
   var dirtpickup = function(args) {
+    args.item = item.dirtitem();
     var that = pickup(args);
 
     that.draw = function(drawthing) {

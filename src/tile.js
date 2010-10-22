@@ -121,6 +121,10 @@
       tile.drawdamage(ctx, that.health / that.maxhealth);
     };
     
+    that.makeitem = function() {
+      return item.dirtitem();
+    };
+    
     that.tick = that.healtick;
     
     return that;
