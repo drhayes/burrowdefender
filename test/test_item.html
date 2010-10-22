@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Item</title>
+		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/item.js"></script>
+		<script type="text/javascript" src="fakes.js"></script>
+		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<script>
+			$(document).ready(function() {
+				module('basics');
+				
+				test('ctor', function() {
+					equals(typeof item, 'function', 'item exists');
+					var i = item({
+						type: item.types.DIRT
+					});
+					equals(i.type, item.types.DIRT, 'set for the DIRT type');
+				});
+				
+				test('types', function() {
+					equals(typeof item.types, 'object', 'item.types');
+					equals(item.types.DIRT, '1', 'the type of dirt');
+				});
+				
+				module('usage', {
+					setup: function() {
+						this.fakectx = new FakeCtx();
+						this.i = item({
+							type: item.types.DIRT
+						});
+					}
+				});
+				
+				test('drawimage', function() {
+					equals(typeof this.i.drawimage, 'function', 'drawimage exists');
+				});
+				
+				module('dirt item', {
+					setup: function() {
+						this.fakectx = new FakeCtx();
+						this.di = item.dirtitem();
+					}
+				});
+				
+				test('drawImage', function() {
+					this.di.drawimage(this.fakectx);
+					equals(this.fakectx.drawImageArgs.length, 1, 'drawImage called');
+					var args = this.fakectx.drawImageArgs[0];
+					equals(args.drx, 0, 'drawImage x');
+					equals(args.dry, 0, 'drawImage y');
+				});
+				
+				test('drawImage', function() {
+					
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1 id="qunit-header">Item Test</h1>
+		<h2 id="qunit-banner"></h2>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">test markup, will be hidden</div>
+	</body>
+</html>
