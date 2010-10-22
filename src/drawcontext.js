@@ -17,9 +17,21 @@
       ctx.fillStyle = fill;
     };
     
+    that.strokeStyle = function(stroke) {
+      ctx.strokeStyle = stroke;
+    }
+    
+    that.lineWidth = function(width) {
+      ctx.lineWidth = width;
+    }
+    
     that.fillRect = function(x, y, w, h) {
       ctx.fillRect(Math.round(x + that.offset.x), Math.round(y + that.offset.y), Math.round(w), Math.round(h));
     };
+    
+    that.strokeRect = function(x, y, w, h) {
+      ctx.strokeRect(Math.round(x + that.offset.x), Math.round(y + that.offset.y), Math.round(w), Math.round(h));
+    }
     
     that.drawImage = function(img, x, y) {
       ctx.drawImage(img, Math.round(x + that.offset.x), Math.round(y + that.offset.y));
