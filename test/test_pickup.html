@@ -4,6 +4,7 @@
 		<title>Pickup</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
+		<script type="text/javascript" src="../src/item.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
 		<script type="text/javascript" src="../src/pickup.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
@@ -19,6 +20,30 @@
 					var p = pickup({game: fakegame});
 					equals(p.size.x, 16, 'p.size.x is 16');
 					equals(p.size.y, 16, 'p.size.y is 16');
+				});
+				
+				test('pickup items', function() {
+					var fakegame = new FakeGame();
+					var i = item.dirtitem();
+					var p = pickup({
+						game: fakegame,
+						item: i
+					});
+					// have to advance tick so we can pick up the pickup
+					p.created -= 5000;
+					p.tick();
+					var player = {
+						inventory: {
+							add: function(i) {
+								this.is.push(i);
+							},
+							is: []
+						}
+					};
+					p.collide(player);
+					// check that the item is added to the inventory
+					equals(player.inventory.is.length, 1, 'length of items');
+					same(i, player.inventory.is[0], 'item was added to inventory');
 				});
 			});
 		</script>

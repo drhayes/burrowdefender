@@ -3,7 +3,7 @@
 // Anything that can be picked up. Can only be picked up by things that have
 // an inventory to be added to.
 //
-// Depends: mob.js
+// Depends: mob.js, item.js
 
 (function(global, $) {
   var pickup = function(args) {
@@ -17,7 +17,7 @@
       if (!collider.inventory) {
         return;
       };
-      collider.inventory.add(this);
+      collider.inventory.add(args.item);
       that.killed = true;
       // have to get the rect to remove from spatial hash
       that.updaterect();
