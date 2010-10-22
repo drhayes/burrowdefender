@@ -75,6 +75,12 @@
       }
       else {
         that.movestate.walking = walking.STANDING;
+      };
+      // set the currently selected thing in inventory
+      for (var i = 1; i <= 8; i++) {
+        if (keyman.keymap['' + i]) {
+          that.inventory.sel = i;
+        }
       }
     };
 		
