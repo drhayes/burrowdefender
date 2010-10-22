@@ -20,6 +20,11 @@
 						count++;
 					});
 					equals(count, 0, 'i.things is empty');
+					ok(i.x1, 'x1');
+					ok(i.y1, 'y1');
+					ok(i.x2, 'x2');
+					ok(i.y2, 'y2');
+					equals(i.sel, 1, '1 is selected at first');
 					equals(typeof i.add, 'function', 'i.add');
 					equals(typeof i.draw, 'function', 'i.draw');
 				});
@@ -63,6 +68,19 @@
 					ok(stuff, 'got stuff back from place 1');
 					equals(stuff.type, THING1, 'type of stuff is THING1');
 					equals(stuff.count, 2, 'count of stuff is 2');
+				});
+				
+				test('itemrect', function() {
+					equals(typeof(this.inv.itemrect), 'function', 'itemrect exists');
+					var r = this.inv.itemrect(1);
+					// x1: 10, y1: 450, x2: 590, y2: 490
+					equals(r.x1, 15, 'x1 for 1');
+					equals(r.y1, 450, 'y1 for 1');
+					equals(r.x2, 77.5, 'x2 for 1');
+					equals(r.y2, 490, 'y2 for 1');
+					r = this.inv.itemrect(2);
+					equals(r.x1, 87.5, 'x1 for 2');
+					equals(r.x2, 150, 'x2 for 2');
 				});
 			});
 		</script>
