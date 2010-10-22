@@ -14,6 +14,8 @@
     UP: 3
   };
   
+  var STOPFORCE = 0.2;
+  
   var player = function(args) {
     // player derives from mob
     var that = mob(args);
@@ -103,13 +105,18 @@
 		
 		that.walk = function() {
 			if (that.movestate.walking === walking.LEFT) {
-				that.vel.x = that.velocities.walkleft;
+			  that.vel.x = that.velocities.walkleft;
 			}
 			else if (that.movestate.walking === walking.RIGHT) {
-				that.vel.x = that.velocities.walkright;
+			  that.vel.x = that.velocities.walkright;
 			}
 			else {
-				that.vel.x = 0;
+			  if (that.vel.x < 0) {
+			    that.vel.x = Math.min(0, that.vel.x + STOPFORCE);
+			  }
+			  else {
+			    that.vel.x = Math.max(0, that.vel.x - STOPFORCE);
+			  }
 			}
 			if (that.movestate.wantstojump) {
 				that.jump();
