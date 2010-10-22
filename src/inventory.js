@@ -54,6 +54,8 @@
         // draw the itemrects...
         ctx.strokeStyle();
         ctx.lineWidth(2);
+        ctx.fillStyle('hsla(120, 100%, 100%, 0.6)');
+        ctx.font('12pt Futura');
         var unselstyle = 'hsla(120, 10%, 50%, 0.6)';
         var selstyle = 'hsla(120, 80%, 50%, 0.6)';
         for (var i = 1; i <= 8; i++) {
@@ -63,12 +65,15 @@
           // now draw the icon, if we have one...
           if (that.things.hasOwnProperty(i)) {
             var oldoffset = ctx.offset;
-            var drawimage = that.things[i].type.drawimage;
+            var invitem = that.things[i];
+            var drawimage = invitem.type.drawimage;
             ctx.offset = {
               x: ctx.offset.x + r.x1 + (r.width / 2) - 8,
               y: ctx.offset.y + r.y1 + (r.height / 2) - 8,
             }
             drawimage(ctx);
+            // how many do we have?
+            ctx.fillText(invitem.count, 2, 2);
             ctx.offset = oldoffset;
           }
         }

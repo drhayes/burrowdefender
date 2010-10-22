@@ -25,6 +25,10 @@
       ctx.lineWidth = width;
     }
     
+    that.font = function(f) {
+      ctx.font = f;
+    }
+    
     that.fillRect = function(x, y, w, h) {
       ctx.fillRect(Math.round(x + that.offset.x), Math.round(y + that.offset.y), Math.round(w), Math.round(h));
     };
@@ -36,6 +40,10 @@
     that.drawImage = function(img, x, y) {
       ctx.drawImage(img, Math.round(x + that.offset.x), Math.round(y + that.offset.y));
     };
+    
+    that.fillText = function(t, x, y, w) {
+      ctx.fillText(t, Math.round(x + that.offset.x), Math.round(y + that.offset.y), Math.round(w));
+    }
     
     return that;
   };
