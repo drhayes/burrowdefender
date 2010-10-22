@@ -22,6 +22,7 @@
       // have to get the rect to remove from spatial hash
       that.updaterect();
       args.game.spatialhash.remove(this);
+      that.collide = function() {};
     };
     
     that.tick = function() {

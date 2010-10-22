@@ -43,6 +43,9 @@
 					equals(player.inventory.is.length, 1, 'length of items');
 					var i = player.inventory.is[0];
 					equals(i.type, item.types.DIRT, 'item type is DIRT');
+					// collide again to prove it can't actually happen
+					p.collide(player);
+					equals(player.inventory.is.length, 1, 'length of items');
 				});
 			});
 		</script>
