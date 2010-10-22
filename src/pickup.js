@@ -31,7 +31,15 @@
       if (new Date().getTime() - that.created > 300) {
         that.collide = pickupcollide;
       }
-    }
+    };
+    
+    that.draw = function(drawthing) {
+      drawthing.sprite1.push(function(ctx) {
+        ctx.offset.x += that.x;
+        ctx.offset.y += that.y;
+        args.item.drawimage(ctx);
+      });
+    };
     
     return that;    
   };
@@ -42,13 +50,6 @@
   var dirtpickup = function(args) {
     args.item = item.dirtitem();
     var that = pickup(args);
-
-    that.draw = function(drawthing) {
-      drawthing.sprite1.push(function(ctx) {
-        ctx.fillStyle('rgb(255, 255, 255)');
-        ctx.fillRect(that.x, that.y, that.size.x, that.size.y);
-      });
-    };
     
     return that;
   };
