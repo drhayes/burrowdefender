@@ -60,6 +60,17 @@
           ctx.strokeStyle(i === that.sel ? selstyle : unselstyle);
           var r = that.itemrect(i);
           ctx.strokeRect(r.x1, r.y1, r.x2 - r.x1, r.y2 - r.y1);
+          // now draw the icon, if we have one...
+          if (that.things.hasOwnProperty(i)) {
+            var oldoffset = ctx.offset;
+            var drawimage = that.things[i].type.drawimage;
+            ctx.offset = {
+              x: ctx.offset.x + r.x1 + (r.width / 2) - 8,
+              y: ctx.offset.y + r.y1 + (r.height / 2) - 8,
+            }
+            drawimage(ctx);
+            ctx.offset = oldoffset;
+          }
         }
       });
     };
@@ -71,12 +82,15 @@
       i = i - 1;
       var peritemwidth = (WIDTH - PADDING * 2) / MAXITEMS;
       var startx = that.x1 + PADDING + peritemwidth * i;
-      return {
+      var rect = {
         x1: startx + PADDING,
         y1: that.y1 + PADDING,
         x2: startx + peritemwidth - PADDING,
-        y2: that.y2 - PADDING
+        y2: that.y2 - PADDING,
       };
+      rect.width = rect.x2 - rect.x1;
+      rect.height = rect.y2 - rect.y1;
+      return rect;
     };
     
     return that;
