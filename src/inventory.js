@@ -26,9 +26,6 @@
     var thingtospotmap = {};
     var nextindex = 1;
     
-    // thing is a constant representing something that can be picked up in
-    // the game world. add will find the first available inventory slot
-    // for this type of thing and will add it to the count found there.
     that.add = function(thing) {
       // find the index for this thing
       if (!thingtospotmap.hasOwnProperty(thing)) {
@@ -45,6 +42,15 @@
       };
       that.things[spot].count += 1;
     };
+    
+    that.dropsel = function() {
+      var t = that.things[that.sel];
+      if (t.count === 0) {
+        return;
+      };
+      t.count--;
+      return t.type;
+    }
     
     that.draw = function(drawthing) {
       drawthing.hud.push(function(ctx) {

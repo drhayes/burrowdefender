@@ -82,6 +82,22 @@
 					equals(r.x1, 87.5, 'x1 for 2');
 					equals(r.x2, 150, 'x2 for 2');
 				});
+				
+				test('dropsel', function() {
+					equals(typeof this.inv.dropsel, 'function', 'dropsel exists');
+					// add something to drop
+					this.inv.add(THING1);
+					this.inv.add(THING2);
+					this.inv.add(THING2);
+					var t = this.inv.dropsel();
+					equals(t, THING1, 'dropped a THING1');
+					var t2 = this.inv.dropsel();
+					equals(t2, null, 'nothing to drop anymore');
+					this.inv.sel = 2;
+					var t3 = this.inv.dropsel();
+					equals(t3, THING2, 'dropped a THING2');
+					equals(this.inv.things['2'].count, 1, 'count of THING2');
+				});
 			});
 		</script>
 	</head>
