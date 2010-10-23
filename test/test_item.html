@@ -58,13 +58,34 @@
 				});
 				
 				test('place with no other tile in the way', function() {
+					// give tilemap a fake get method
+					this.fakegame.tilemap.get = function() {
+						return {solid: false}
+					};
 					this.di.place(-33, 0);
 					equals(this.fakegame.tilemap.sx, -2, 'placed a tile at -1');
 					equals(this.fakegame.tilemap.sy, 0, 'placed a tile at 0');
 					ok(this.fakegame.tilemap.stile, 'placed a tile of some kind');
+					var t = this.fakegame.tilemap.stile;
+					equals(t.x, -64, 'tile.x is -64');
+					equals(t.y, 0, 'tile.y is 0');
 					var st = this.fakegame.spatialhash.st;
 					ok(st, 'placed something in the spatialhash');
 					equals(this.fakegame.tilemap.stile, st, 'same object in both');
+				});
+				
+				test('place with solid tile in the way', function() {
+					expect(5);
+					this.fakegame.tilemap.get = function(x, y) {
+						equals(x, -2, 'tilemap get x');
+						equals(y, 0, 'tilemap get y');
+						return {solid: true};
+					};
+					this.di.place(-33, 0);
+					// nothing was set...
+					equals(typeof this.fakegame.tilemap.sx, 'undefined', 'tilemap sx is undefined');
+					equals(typeof this.fakegame.tilemap.sy, 'undefined', 'tilemap sy is undefined');
+					equals(typeof this.fakegame.spatialhash.st, 'undefined', 'spatialhash st is undefined');
 				});
 			});
 		</script>

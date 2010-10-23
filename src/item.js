@@ -36,8 +36,17 @@
     };
     
     that.place = function(x, y) {
-      var gentile = tile.dirt(options);
       var tilepos = tile.totilepos(x, y);
+      // are we trying to place in a solid tile?
+      var existingtile = options.game.tilemap.get(tilepos.x, tilepos.y);
+      if (existingtile.solid) {
+        return;
+      }
+      var gentile = tile.dirt({
+        game: options.game,
+        x: tilepos.x * tile.tilesize,
+        y: tilepos.y * tile.tilesize
+      });
       options.game.tilemap.set(tilepos.x, tilepos.y, gentile);
       options.game.spatialhash.set(gentile);
     };
