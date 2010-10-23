@@ -43,6 +43,14 @@
       that.things[spot].count += 1;
     };
     
+    that.getsel = function() {
+      var t = that.things[that.sel];
+      if (!t || t.count === 0) {
+        return null;
+      }
+      return t.type;
+    }
+    
     that.dropsel = function() {
       var t = that.things[that.sel];
       if (t.count === 0) {

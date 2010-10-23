@@ -83,6 +83,19 @@
 					equals(r.x2, 150, 'x2 for 2');
 				});
 				
+				test('getsel', function() {
+					equals(typeof this.inv.getsel, 'function', 'getsel exists');
+					// add something to get
+					this.inv.add(THING1);
+					this.inv.add(THING2);
+					this.inv.add(THING2);
+					ok(this.inv.getsel(), 'something to get at sel 1');
+					this.inv.sel = 2;
+					ok(this.inv.getsel(), 'something to get at sel 2');
+					this.inv.sel = 3;
+					ok(!this.inv.getsel(), 'nothing to get at sel 3');
+				});
+				
 				test('dropsel', function() {
 					equals(typeof this.inv.dropsel, 'function', 'dropsel exists');
 					// add something to drop
