@@ -122,7 +122,7 @@
     };
     
     that.makeitem = function() {
-      return item.dirtitem();
+      return item.dirtitem(args);
     };
     
     that.tick = that.healtick;
