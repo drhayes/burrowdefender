@@ -12,17 +12,21 @@
     that.solid = false;
     that.bounce = 0.63;
     that.created = new Date().getTime();
+    that.taken = false;
     
     var pickupcollide = function(collider) {
       if (!collider.inventory) {
         return;
       };
+      if (that.taken) {
+        return;
+      }
+      that.taken = true;
       collider.inventory.add(args.item);
       that.killed = true;
       // have to get the rect to remove from spatial hash
       that.updaterect();
       args.game.spatialhash.remove(this);
-      that.collide = function() {};
     };
     
     that.tick = function() {

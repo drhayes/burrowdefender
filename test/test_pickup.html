@@ -20,6 +20,7 @@
 					var p = pickup({game: fakegame});
 					equals(p.size.x, 16, 'p.size.x is 16');
 					equals(p.size.y, 16, 'p.size.y is 16');
+					equals(p.taken, false, 'not taken yet');
 				});
 				
 				test('pickup items', function() {
