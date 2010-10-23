@@ -52,7 +52,7 @@
   // let's define some pickups...
   
   var dirtpickup = function(args) {
-    args.item = item.dirtitem();
+    args.item = item.dirtitem(args.game);
     var that = pickup(args);
     
     return that;
