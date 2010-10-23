@@ -35,12 +35,13 @@
       ctx.drawImage(dirtitemimage, 0, 0);
     };
     
+    // x,y given in world coordinates. returns true if something was placed.
     that.place = function(x, y) {
       var tilepos = tile.totilepos(x, y);
       // are we trying to place in a solid tile?
       var existingtile = options.game.tilemap.get(tilepos.x, tilepos.y);
       if (existingtile !== null && existingtile.solid) {
-        return;
+        return false;
       }
       var gentile = tile.dirt({
         game: options.game,
@@ -49,6 +50,7 @@
       });
       options.game.tilemap.set(tilepos.x, tilepos.y, gentile);
       options.game.spatialhash.set(gentile);
+      return true;
     };
     
     return that;

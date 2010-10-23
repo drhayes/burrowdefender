@@ -62,7 +62,8 @@
 					this.fakegame.tilemap.get = function() {
 						return null;
 					};
-					this.di.place(-33, 0);
+					var result = this.di.place(-33, 0);
+					ok(result, 'placed something');
 					equals(this.fakegame.tilemap.sx, -2, 'placed a tile at -1');
 					equals(this.fakegame.tilemap.sy, 0, 'placed a tile at 0');
 					ok(this.fakegame.tilemap.stile, 'placed a tile of some kind');
@@ -79,7 +80,8 @@
 					this.fakegame.tilemap.get = function() {
 						return {solid: false}
 					};
-					this.di.place(-33, 0);
+					var result = this.di.place(-33, 0);
+					ok(result, 'placed something');
 					equals(this.fakegame.tilemap.sx, -2, 'placed a tile at -1');
 					equals(this.fakegame.tilemap.sy, 0, 'placed a tile at 0');
 					ok(this.fakegame.tilemap.stile, 'placed a tile of some kind');
@@ -92,13 +94,14 @@
 				});
 				
 				test('place with solid tile in the way', function() {
-					expect(5);
+					expect(6);
 					this.fakegame.tilemap.get = function(x, y) {
 						equals(x, -2, 'tilemap get x');
 						equals(y, 0, 'tilemap get y');
 						return {solid: true};
 					};
-					this.di.place(-33, 0);
+					var result = this.di.place(-33, 0);
+					ok(!result, 'did not place anything');
 					// nothing was set...
 					equals(typeof this.fakegame.tilemap.sx, 'undefined', 'tilemap sx is undefined');
 					equals(typeof this.fakegame.tilemap.sy, 'undefined', 'tilemap sy is undefined');
