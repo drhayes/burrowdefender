@@ -139,7 +139,7 @@
 				});
 				
 				test('walk', function() {
-					expect(6)
+					expect(8)
 					ok(typeof(this.p.walk) === 'function', 'walk exists');
 					equals(this.p.vel.x, 0, 'vel.x === 0');
 					this.p.movestate.walking = -1;
@@ -158,6 +158,17 @@
 						ok(true, 'jump was called');
 					}
 					this.p.walk();
+					// don't walk when placing
+					this.p.vel.x = 0;
+					this.p.movestate.placing = true;
+					this.p.movestate.walking = -1;
+					this.p.movestate.wantstojump = false;
+					this.p.walk();
+					equals(this.p.vel.x, 0, 'vel.x === 0 when placing');
+					// if we were walking, we want to slow down the same way we were, though...
+					this.p.vel.x = -2;
+					this.p.walk();
+					equals(this.p.vel.x, -1.8, 'still slowing down');
 				});
 			});
 		</script>

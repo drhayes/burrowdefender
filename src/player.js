@@ -60,6 +60,12 @@
       else {
         that.movestate.wantstojump = false;
       };
+      if (keyman.keymap['z']) {
+        that.movestate.placing = true;
+      }
+      else {
+        that.movestate.placing = false;
+      }
       // this order is probably pretty important.
       // don't want down to be the one that wins out.
       if (keyman.keymap['s'] || keyman.keymap['down']) {
@@ -111,10 +117,10 @@
 		};
 		
 		that.walk = function() {
-			if (that.movestate.walking === walking.LEFT) {
+			if (that.movestate.walking === walking.LEFT && !that.movestate.placing) {
 			  that.vel.x = that.velocities.walkleft;
 			}
-			else if (that.movestate.walking === walking.RIGHT) {
+			else if (that.movestate.walking === walking.RIGHT && !that.movestate.placing) {
 			  that.vel.x = that.velocities.walkright;
 			}
 			else {
