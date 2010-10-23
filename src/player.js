@@ -90,24 +90,29 @@
         }
       }
     };
+    
+    var tileposindirection = function() {
+			// respect player's center of mass
+			var tilepos = tile.totilepos(that.x + that.size.x / 2, that.y + that.size.y / 2);
+			if (that.movestate.walking === walking.LEFT) {
+				tilepos.x -= 1;
+			}
+			else if (that.movestate.walking === walking.RIGHT) {
+				tilepos.x += 1;
+			}
+			else if (that.movestate.walking === walking.UP) {
+				tilepos.y -= 1;
+			}
+			else if (that.movestate.walking === walking.DOWN) {
+				tilepos.y += 1;
+			}
+			return tilepos;
+    }
 		
 		that.mine = function() {
 			if (that.movestate.mining) {
 				// convert player's current position to tile
-				// respect player's center of mass
-				var tilepos = tile.totilepos(that.x + that.size.x / 2, that.y + that.size.y / 2);
-				if (that.movestate.walking === walking.LEFT) {
-					tilepos.x -= 1;
-				}
-				else if (that.movestate.walking === walking.RIGHT) {
-					tilepos.x += 1;
-				}
-				else if (that.movestate.walking === walking.UP) {
-					tilepos.y -= 1;
-				}
-				else if (that.movestate.walking === walking.DOWN) {
-					tilepos.y += 1;
-				}
+				var tilepos = tileposindirection();
 				// is it a diggable tile?
 				var digtile = args.game.tilemap.get(tilepos.x, tilepos.y);
 				if (digtile) {
