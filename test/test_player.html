@@ -68,7 +68,20 @@
 				});
 				
 				test('tick', function() {
+					expect(5);
 					ok(typeof(this.p.tick) === 'function', 'tick exists');
+					this.p.readkeyboard = function() {
+						ok(true, 'readkeyboard');
+					};
+					this.p.mine = function() {
+						ok(true, 'mine');
+					}
+					this.p.walk = function() {
+						ok(true, 'walk');
+					}
+					this.p.place = function() {
+						ok(true, 'place');
+					}
 					this.p.tick();
 				});
 				

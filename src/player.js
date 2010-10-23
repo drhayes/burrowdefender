@@ -166,6 +166,8 @@
 			that.mine();
 			// walk somewhere
 			that.walk();
+			// placing anything?
+			that.place();
 		};
 		
 		return that;
