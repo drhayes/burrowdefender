@@ -111,7 +111,7 @@
 		
 		that.mine = function() {
 			if (that.movestate.mining) {
-				// convert player's current position to tile
+				// convert player's current walking direction to tile
 				var tilepos = tileposindirection();
 				// is it a diggable tile?
 				var digtile = args.game.tilemap.get(tilepos.x, tilepos.y);
@@ -140,6 +140,21 @@
 				that.jump();
 			}
 		};
+		
+		that.place = function() {
+		  if (!that.movestate.placing || that.movestate.walking === walking.STANDING) {
+		    return;
+		  }
+		  var i = that.inventory.dropsel();
+		  // do we have anything to drop?
+		  if (i === null) {
+		    return;
+		  };
+		  // we have something to drop... place it
+			// convert player's current walking direction to tile
+			var tilepos = tileposindirection();
+		  i.place(tilepos.x * tile.tilesize, tilepos.y * tile.tilesize);
+		}
 
 		// update the player every tick
 		that.tick = function() {

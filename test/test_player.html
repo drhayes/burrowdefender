@@ -170,6 +170,56 @@
 					this.p.walk();
 					equals(this.p.vel.x, -1.8, 'still slowing down');
 				});
+				
+				test('place but not placing', function() {
+					equals(typeof this.p.place, 'function', 'place exists');
+					this.p.movestate.placing = false;
+					var dropselcalled = false;
+					this.p.inventory.dropsel = function() {
+						dropselcalled = true;
+					}
+					this.p.place();
+					ok(!dropselcalled, 'inventory.dropsel not called');
+				});
+				
+				test('place with no direction', function() {
+					this.p.movestate.walking = 0;
+					this.p.movestate.placing = true;
+					var dropselcalled = false;
+					this.p.inventory.dropsel = function() {
+						dropselcalled = true;
+					}
+					this.p.place();
+					ok(!dropselcalled, 'inventory.dropsel was not called');
+				});
+				
+				test('place with no inventory', function() {
+					this.p.movestate.walking = -1;
+					this.p.movestate.placing = true;
+					var dropselcalled = false;
+					this.p.inventory.dropsel = function() {
+						dropselcalled = true;
+						return null;
+					};
+					this.p.place();
+					ok(dropselcalled, 'dropselcalled but returns null');
+				});
+				
+				test('place with left direction and with inventory', function() {
+					expect(2)
+					this.p.movestate.walking = -1;
+					this.p.movestate.placing = true;
+					var fakeitem = {
+						place: function(x, y) {
+							equals(x, -32, 'place x');
+							equals(y, 0, 'place y');
+						}
+					}
+					this.p.inventory.dropsel = function() {
+						return fakeitem;
+					};
+					this.p.place();
+				});
 			});
 		</script>
 	</head>
