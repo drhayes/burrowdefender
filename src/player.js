@@ -30,6 +30,7 @@
     that.movestate.mining = false;
     that.movestate.wantstojump = false;
     that.movestate.walking = walking.STANDING;
+    that.movestate.placing = false;
     
     // mining damage
     that.minedamage = 1;

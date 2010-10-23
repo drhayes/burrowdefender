@@ -30,6 +30,9 @@
 					equals(p.vel.x, 0, 'initial x velocity');
 					equals(p.vel.y, 0, 'initial y velocity');
 					ok(p.movestate, 'movestate');
+					ok(!p.movestate.mining, 'not mining by default');
+					ok(!p.movestate.wantstojump, 'not wantstojump by default');
+					ok(!p.movestate.placing, 'not placing by default');
 					ok(p.velocities, 'velocities');
 					equals(p.minedamage, 1, 'minedamage');
 					equals(p.bounce, 0, 'players do not bounce');
@@ -56,7 +59,6 @@
 					};
 					this.p.draw(drawthing);
 					drawthing.sprite1[0](fakectx);
-					equals(fakectx.fillStyleArgs[0], 'rgb(64, 64, 64)', 'fill style set correctly');
 					equals(fakectx.fillRectArgs.length, 1, 'fillRect was called once');
 					var args = fakectx.fillRectArgs[0];
 					equals(args.frx, 0, 'fillRect x');
@@ -145,7 +147,8 @@
 					equals(this.p.vel.x, -2, 'vel.x === -2');
 					this.p.movestate.walking = 0;
 					this.p.walk();
-					equals(this.p.vel.x, 0, 'vel.x === 0');
+					// this is due to the not walking anymore slowdown...
+					equals(this.p.vel.x, -1.8, 'vel.x === -1.8');
 					this.p.movestate.walking = 1;
 					this.p.walk();
 					equals(this.p.vel.x, 2, 'vel.x === 2');
