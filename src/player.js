@@ -145,7 +145,7 @@
 		  if (!that.movestate.placing || that.movestate.walking === walking.STANDING) {
 		    return;
 		  }
-		  var i = that.inventory.dropsel();
+		  var i = that.inventory.getsel();
 		  // do we have anything to drop?
 		  if (i === null) {
 		    return;
@@ -153,7 +153,12 @@
 		  // we have something to drop... place it
 			// convert player's current walking direction to tile
 			var tilepos = tileposindirection();
-		  i.place(tilepos.x * tile.tilesize, tilepos.y * tile.tilesize);
+		  var result = i.place(tilepos.x * tile.tilesize, tilepos.y * tile.tilesize);
+		  // did it actually get placed?
+		  if (!result) {
+		    return;
+		  }
+		  that.inventory.dropsel();
 		}
 
 		// update the player every tick

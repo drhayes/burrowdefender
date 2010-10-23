@@ -187,50 +187,76 @@
 				test('place but not placing', function() {
 					equals(typeof this.p.place, 'function', 'place exists');
 					this.p.movestate.placing = false;
-					var dropselcalled = false;
-					this.p.inventory.dropsel = function() {
-						dropselcalled = true;
+					var getselcalled = false;
+					this.p.inventory.getsel = function() {
+						getselcalled = true;
 					}
 					this.p.place();
-					ok(!dropselcalled, 'inventory.dropsel not called');
+					ok(!getselcalled, 'inventory.getsel not called');
 				});
 				
 				test('place with no direction', function() {
 					this.p.movestate.walking = 0;
 					this.p.movestate.placing = true;
-					var dropselcalled = false;
-					this.p.inventory.dropsel = function() {
-						dropselcalled = true;
+					var getselcalled = false;
+					this.p.inventory.getsel = function() {
+						getselcalled = true;
 					}
 					this.p.place();
-					ok(!dropselcalled, 'inventory.dropsel was not called');
+					ok(!getselcalled, 'inventory.getsel was not called');
 				});
 				
 				test('place with no inventory', function() {
 					this.p.movestate.walking = -1;
 					this.p.movestate.placing = true;
-					var dropselcalled = false;
-					this.p.inventory.dropsel = function() {
-						dropselcalled = true;
+					var getselcalled = false;
+					this.p.inventory.getsel = function() {
+						getselcalled = true;
 						return null;
 					};
 					this.p.place();
-					ok(dropselcalled, 'dropselcalled but returns null');
+					ok(getselcalled, 'dropselcalled but returns null');
 				});
 				
-				test('place with left direction and with inventory', function() {
-					expect(2)
+				test('place with left direction and with inventory and unsuccessful place', function() {
+					expect(3)
 					this.p.movestate.walking = -1;
 					this.p.movestate.placing = true;
 					var fakeitem = {
 						place: function(x, y) {
 							equals(x, -32, 'place x');
 							equals(y, 0, 'place y');
+							return false;
 						}
 					}
-					this.p.inventory.dropsel = function() {
+					this.p.inventory.getsel = function() {
+						ok(true, 'inventory getsel called');
 						return fakeitem;
 					};
+					this.p.inventory.dropsel = function() {
+						ok(true, 'inventory dropsel called');
+					}
+					this.p.place();
+				});
+				
+				test('place with left direction and with inventory and successful place', function() {
+					expect(4)
+					this.p.movestate.walking = -1;
+					this.p.movestate.placing = true;
+					var fakeitem = {
+						place: function(x, y) {
+							equals(x, -32, 'place x');
+							equals(y, 0, 'place y');
+							return true;
+						}
+					}
+					this.p.inventory.getsel = function() {
+						ok(true, 'inventory getsel called');
+						return fakeitem;
+					};
+					this.p.inventory.dropsel = function() {
+						ok(true, 'inventory dropsel called');
+					}
 					this.p.place();
 				});
 			});
