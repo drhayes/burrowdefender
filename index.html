@@ -21,17 +21,38 @@
 	<script type="text/javascript" src="src/player.js"></script>
 	<script type="text/javascript" src="src/game.js"></script>
 	<style type="text/css">
+		body {
+			background-color: #000;
+			color: #fff;
+			font: 12pt sans-serif;
+		}
+		
+		#instructions {
+			float: right;
+		}
+		
+		#instructions p {
+			margin: 0;
+		}
+		
 		#drawme {
 			border: 1px solid #000;
+			margin-left: auto;
+			margin-right: auto;
+			display: block;
 		}
 	</style>
 </head>
 <body>
+	<div id="instructions">
+		<h3>Instructions</h3>
+		<p>arrows & wasd to move</p>
+		<p>space jumps</p>
+		<p>shift + direction to dig</p>
+		<p>1-8 selects inventory</p>
+		<p>have fun!</p>
+	</div>
 	<canvas id="drawme" width="600" height="500"></canvas>
-	<h3>Instructions</h3>
-	<p>wasd to move, space jumps</p>
-	<p>shift+wasd to dig</p>
-	<p>have fun!</p>
 	<script type="text/javascript">
 		var g = game('#drawme');
 		$(document).ready(function() {

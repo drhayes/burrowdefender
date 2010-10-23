@@ -45,6 +45,10 @@
       ctx.fillText(t, Math.round(x + that.offset.x), Math.round(y + that.offset.y), Math.round(w));
     }
     
+    that.measureText = function(text) {
+      return ctx.measureText(text);
+    }
+    
     return that;
   };
   

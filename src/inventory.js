@@ -54,8 +54,8 @@
         // draw the itemrects...
         ctx.strokeStyle();
         ctx.lineWidth(2);
-        ctx.fillStyle('hsla(120, 100%, 100%, 0.6)');
-        ctx.font('12pt Futura');
+        ctx.fillStyle('hsla(120, 100%, 100%, 1.0)');
+        ctx.font('15px Impact');
         var unselstyle = 'hsla(120, 10%, 50%, 0.6)';
         var selstyle = 'hsla(120, 80%, 50%, 0.6)';
         for (var i = 1; i <= 8; i++) {
@@ -69,11 +69,13 @@
             var drawimage = invitem.type.drawimage;
             ctx.offset = {
               x: ctx.offset.x + r.x1 + (r.width / 2) - 8,
-              y: ctx.offset.y + r.y1 + (r.height / 2) - 8,
+              y: ctx.offset.y + r.y1 + (r.height / 2) - 16,
             }
             drawimage(ctx);
-            // how many do we have?
-            ctx.fillText(invitem.count, 2, 2);
+            // how many do we have? and center that text
+            var countstr = '' + invitem.count;
+            var textwidth = ctx.measureText(countstr);
+            ctx.fillText(countstr, -(textwidth.width / 2) + 6, 32);
             ctx.offset = oldoffset;
           }
         }
