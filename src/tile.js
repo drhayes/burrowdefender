@@ -20,6 +20,7 @@
   var tile = function(args) {
     var that = {};
     that.diggable = true;
+    that.solid = true;
     that.x = that.x1 = args.x;
     that.y = that.y1 = args.y;
     that.x2 = tile.tilesize + that.x1;
@@ -154,6 +155,7 @@
   tile.dug = function(args) {
     var that = tile(args);
     that.diggable = false;
+    that.solid = false;
     
     that.draw = function(ctx) {
       ctx.fillStyle('rgb(40, 15, 0)');

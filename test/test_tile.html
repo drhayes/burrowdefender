@@ -89,6 +89,12 @@
 					dirt.draw(this.fakectx);
 					equals(this.fakectx.fillRectArgs.length, 1, 'fill called once');
 				});
+				
+				test('Dug', function() {
+					checkexists(tile.dug, 'dug exists')
+					var d = tile.dug({game: this.fakegame});
+					ok(!d.solid, 'dug is not solid');
+				});
 
 				test('drawdamage', function() {
 					equals(typeof(tile.drawdamage), 'function', 'drawdamage exists');
