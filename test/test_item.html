@@ -17,6 +17,7 @@
 						type: item.types.DIRT
 					});
 					equals(i.type, item.types.DIRT, 'set for the DIRT type');
+					equals(typeof i.place, 'function', 'i.place exists');
 				});
 				
 				test('types', function() {
@@ -52,7 +53,7 @@
 					equals(args.dry, 0, 'drawImage y');
 				});
 				
-				test('drawImage', function() {
+				test('place', function() {
 					
 				});
 			});

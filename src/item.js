@@ -14,6 +14,12 @@
     that.drawimage = function(ctx) {
       // this version does nothing...
     };
+    
+    // called when this item is placed back in the world... x,y is given
+    // in world coordinates
+    that.place = function(x, y) {
+      
+    };
 
     return that;
   };
@@ -29,6 +35,10 @@
     
     that.drawimage = function(ctx) {
       ctx.drawImage(dirtitemimage, 0, 0);
+    };
+    
+    that.place = function(x, y) {
+      
     };
     
     return that;
