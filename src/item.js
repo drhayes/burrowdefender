@@ -39,7 +39,7 @@
       var tilepos = tile.totilepos(x, y);
       // are we trying to place in a solid tile?
       var existingtile = options.game.tilemap.get(tilepos.x, tilepos.y);
-      if (existingtile.solid) {
+      if (existingtile !== null && existingtile.solid) {
         return;
       }
       var gentile = tile.dirt({
