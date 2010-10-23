@@ -75,7 +75,7 @@
             // how many do we have? and center that text
             var countstr = '' + invitem.count;
             var textwidth = ctx.measureText(countstr);
-            ctx.fillText(countstr, -(textwidth.width / 2) + 6, 32);
+            ctx.fillText(countstr, -(textwidth.width / 2) + 7, 32);
             ctx.offset = oldoffset;
           }
         }
