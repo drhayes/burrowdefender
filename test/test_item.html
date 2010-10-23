@@ -4,6 +4,7 @@
 		<title>Item</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/tile.js"></script>
 		<script type="text/javascript" src="../src/item.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
@@ -40,8 +41,11 @@
 				
 				module('dirt item', {
 					setup: function() {
+						this.fakegame = new FakeGame();
 						this.fakectx = new FakeCtx();
-						this.di = item.dirtitem();
+						this.di = item.dirtitem({
+							game: this.fakegame
+						});
 					}
 				});
 				
@@ -53,8 +57,14 @@
 					equals(args.dry, 0, 'drawImage y');
 				});
 				
-				test('place', function() {
-					
+				test('place with no other tile in the way', function() {
+					this.di.place(-33, 0);
+					equals(this.fakegame.tilemap.sx, -2, 'placed a tile at -1');
+					equals(this.fakegame.tilemap.sy, 0, 'placed a tile at 0');
+					ok(this.fakegame.tilemap.stile, 'placed a tile of some kind');
+					var st = this.fakegame.spatialhash.st;
+					ok(st, 'placed something in the spatialhash');
+					equals(this.fakegame.tilemap.stile, st, 'same object in both');
 				});
 			});
 		</script>
