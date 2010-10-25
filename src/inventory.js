@@ -53,10 +53,13 @@
     
     that.dropsel = function() {
       var t = that.things[that.sel];
-      if (t.count === 0) {
+      if (typeof t === 'undefined') {
         return;
       };
       t.count--;
+      if (t.count === 0) {
+        delete that.things[that.sel];
+      }
       return t.type;
     }
     

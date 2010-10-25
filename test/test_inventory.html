@@ -104,6 +104,7 @@
 					this.inv.add(THING2);
 					var t = this.inv.dropsel();
 					equals(t, THING1, 'dropped a THING1');
+					equals(typeof this.inv.things['1'], 'undefined', 'no more things in slot 1');
 					var t2 = this.inv.dropsel();
 					equals(t2, null, 'nothing to drop anymore');
 					this.inv.sel = 2;
