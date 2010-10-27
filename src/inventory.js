@@ -23,24 +23,22 @@
     that.things = {};
     that.sel = 1;
     
-    var thingtospotmap = {};
-    var nextindex = 1;
-    
     that.add = function(thing) {
       // find the index for this thing
-      if (!thingtospotmap.hasOwnProperty(thing)) {
-        // this must be a string
-        thingtospotmap[thing] = '' + nextindex;
-        nextindex++;
+      var index = 1;
+      for (var i = 1; i <= MAXITEMS; i++) {
+        if (!that.things.hasOwnProperty(i) || that.things[i].type === thing) {
+          index = i;
+          break;
+        }
       }
-      var spot = thingtospotmap[thing];
-      if (!that.things.hasOwnProperty(spot)) {
-        that.things[spot] = {
+      if (!that.things.hasOwnProperty(index)) {
+        that.things[index] = {
           type: thing,
           count: 0
         };
       };
-      that.things[spot].count += 1;
+      that.things[index].count += 1;
     };
     
     that.getsel = function() {
@@ -52,12 +50,14 @@
     }
     
     that.dropsel = function() {
+      console.log(that.things);
       var t = that.things[that.sel];
       if (typeof t === 'undefined') {
-        return;
+        return null;
       };
       t.count--;
       if (t.count === 0) {
+        // if we're out at that slot, remove the counter object...
         delete that.things[that.sel];
       }
       return t.type;

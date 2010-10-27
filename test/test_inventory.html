@@ -105,12 +105,20 @@
 					var t = this.inv.dropsel();
 					equals(t, THING1, 'dropped a THING1');
 					equals(typeof this.inv.things['1'], 'undefined', 'no more things in slot 1');
+					this.inv.add(THING3);
+					t = this.inv.dropsel();
+					equals(t, THING3, 'dropped a THING3');
 					var t2 = this.inv.dropsel();
 					equals(t2, null, 'nothing to drop anymore');
+					this.inv.add(THING3);
 					this.inv.sel = 2;
 					var t3 = this.inv.dropsel();
 					equals(t3, THING2, 'dropped a THING2');
 					equals(this.inv.things['2'].count, 1, 'count of THING2');
+					this.inv.add(THING1);
+					this.inv.sel = 3;
+					var t4 = this.inv.dropsel();
+					equals(t4, THING1, 'dropped a THING1');
 				});
 			});
 		</script>
