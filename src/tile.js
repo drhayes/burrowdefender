@@ -53,7 +53,10 @@
       var cx = (x * tile.tilesize) + (tile.tilesize / 2);
       var cy = (y * tile.tilesize) + (tile.tilesize / 2);
       // make the drop
-      var dp = dirtpickup({game: args.game});
+      var dp = pickup({
+        game: args.game,
+        item: item.dirtitem({game: args.game})
+      });
       dp.x = cx - (dp.size.x / 2);
       dp.y = cy - (dp.size.y / 2);
       dp.updaterect();

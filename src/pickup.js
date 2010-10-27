@@ -48,15 +48,5 @@
     return that;    
   };
   global.pickup = pickup;
-  
-  // let's define some pickups...
-  
-  var dirtpickup = function(args) {
-    args.item = item.dirtitem(args);
-    var that = pickup(args);
-    
-    return that;
-  };
-  global.dirtpickup = dirtpickup;
 
 })(window, jQuery)
