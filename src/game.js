@@ -149,6 +149,14 @@
     };
     that.add(backgrounddraw);
     
+    // add a zombie, for kicks...
+    that.zombie = zombie({
+      x: 200,
+      y: -200,
+      game: that
+    });
+    that.add(that.zombie);
+    
     // last but not least, add the player
     that.player = player({
       y: -200,

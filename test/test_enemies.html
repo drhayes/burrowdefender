@@ -23,8 +23,15 @@
 					}
 				});
 				
-				test('', function() {
-					
+				test('stats', function() {
+					equals(this.zombie.size.x, 16, 'size.x');
+					equals(this.zombie.size.y, 20, 'size.y');
+					equals(typeof this.zombie.solid, 'boolean', 'solid is a property');
+					ok(!this.zombie.solid, '!solid');
+				});
+				
+				test('draw', function() {
+					equals(typeof this.zombie.draw, 'function', 'draw exists');
 				});
 				
 			});
