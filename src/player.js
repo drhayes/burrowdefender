@@ -57,7 +57,7 @@
         var starty = 10;
         for (var i = 0; i < that.maxhealth; i++) {
           var img = heartfullimage;
-          if (that.health < i) {
+          if (that.health <= i) {
             img = heartemptyimage;
           }
           ctx.drawImage(img, startx + (18 * i), starty);
