@@ -14,6 +14,11 @@
     UP: 3
   };
   
+  var heartfullimage = new Image();
+  heartfullimage.src = 'assets/images/heartfull.png';
+  var heartemptyimage = new Image();
+  heartemptyimage.src = 'assets/images/heartempty.png';
+  
   var STOPFORCE = 0.2;
   
   var player = function(args) {
@@ -35,6 +40,10 @@
     // mining damage
     that.minedamage = 1;
     
+    // health stuff
+    that.health = 5;
+    that.maxhealth = 5;
+    
     that.inventory = inventory();
     
     that.draw = function(drawthing) {
@@ -42,6 +51,17 @@
         ctx.fillStyle('hsl(0, 0%, 90%)');
         // draw a little bigger than player size so player is standing on ground
         ctx.fillRect(that.x, that.y, that.size.x + 1, that.size.y + 1);        
+      });
+      drawthing.hud.push(function(ctx) {
+        var startx = 10;
+        var starty = 10;
+        for (var i = 0; i < that.maxhealth; i++) {
+          var img = heartfullimage;
+          if (that.health < i) {
+            img = heartemptyimage;
+          }
+          ctx.drawImage(img, startx + (18 * i), starty);
+        }
       });
       that.inventory.draw(drawthing);
     };
