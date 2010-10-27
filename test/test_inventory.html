@@ -4,6 +4,7 @@
 		<title>Inventory</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/item.js"></script>
 		<script type="text/javascript" src="../src/inventory.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
@@ -119,6 +120,15 @@
 					this.inv.sel = 3;
 					var t4 = this.inv.dropsel();
 					equals(t4, THING1, 'dropped a THING1');
+				});
+				
+				test('add dirtitems', function() {
+					var i1 = item.dirtitem({game: this.fakegame});
+					var i2 = item.dirtitem({game: this.fakegame});
+					this.inv.add(i1);
+					this.inv.add(i2);
+					var is = this.inv.things['1'];
+					equals(is.count, 2, 'two things');
 				});
 			});
 		</script>

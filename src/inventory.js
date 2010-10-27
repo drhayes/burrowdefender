@@ -26,15 +26,17 @@
     that.add = function(thing) {
       // find the index for this thing
       var index = 1;
+      var key = '' + thing;
       for (var i = 1; i <= MAXITEMS; i++) {
-        if (!that.things.hasOwnProperty(i) || that.things[i].type === thing) {
+        if (!that.things.hasOwnProperty(i) || that.things[i].key === key) {
           index = i;
           break;
         }
       }
       if (!that.things.hasOwnProperty(index)) {
         that.things[index] = {
-          type: thing,
+          key: key,
+          instance: thing,
           count: 0
         };
       };
@@ -46,11 +48,10 @@
       if (!t || t.count === 0) {
         return null;
       }
-      return t.type;
+      return t.instance;
     }
     
     that.dropsel = function() {
-      console.log(that.things);
       var t = that.things[that.sel];
       if (typeof t === 'undefined') {
         return null;
@@ -60,7 +61,7 @@
         // if we're out at that slot, remove the counter object...
         delete that.things[that.sel];
       }
-      return t.type;
+      return t.instance;
     }
     
     that.draw = function(drawthing) {
@@ -83,7 +84,7 @@
           if (that.things.hasOwnProperty(i)) {
             var oldoffset = ctx.offset;
             var invitem = that.things[i];
-            var drawimage = invitem.type.drawimage;
+            var drawimage = invitem.instance.drawimage;
             ctx.offset = {
               x: ctx.offset.x + r.x1 + (r.width / 2) - 8,
               y: ctx.offset.y + r.y1 + (r.height / 2) - 16,
