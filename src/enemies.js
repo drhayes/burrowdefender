@@ -27,6 +27,18 @@
     that.tick = function() {
   		// gravity has to have some effect here...
 			mob.gravitytick.call(this);
+			// track player along the x axis...
+			if (args.game.player.x < that.x) {
+			  that.vel.x = -1;
+			}
+			else if (args.game.player.x > that.x) {
+			  that.vel.x = 1;
+			};
+			// if no forward progress was made, jump
+			if (typeof that.lastx !== 'undefined' && that.x === that.lastx) {
+			  that.jump();
+			}
+			that.lastx = that.x;
     };
     
     return that;

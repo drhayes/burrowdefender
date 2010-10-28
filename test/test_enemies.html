@@ -19,21 +19,50 @@
 				module('zombie', {
 					setup: function() {
 						this.fakegame = new FakeGame();
-						this.zombie = zombie(this.fakegame);
+						this.fakegame.player = {
+							x: 0,
+							y: 0
+						};
+						this.z = zombie({
+							game: this.fakegame,
+							x: 0,
+							y: 0,
+						});
 					}
 				});
 				
 				test('stats', function() {
-					equals(this.zombie.size.x, 16, 'size.x');
-					equals(this.zombie.size.y, 20, 'size.y');
-					equals(typeof this.zombie.solid, 'boolean', 'solid is a property');
-					ok(!this.zombie.solid, '!solid');
+					equals(this.z.size.x, 16, 'size.x');
+					equals(this.z.size.y, 20, 'size.y');
+					equals(typeof this.z.solid, 'boolean', 'solid is a property');
+					ok(!this.z.solid, '!solid');
 				});
 				
 				test('draw', function() {
-					equals(typeof this.zombie.draw, 'function', 'draw exists');
+					equals(typeof this.z.draw, 'function', 'draw exists');
 				});
 				
+				test('tick moves towards player', function() {
+					equals(typeof this.z.tick, 'function', 'tick exists');
+					this.fakegame.player.x = -20;
+					this.z.tick();
+					ok(this.z.vel.x < 0, 'zombie is heading towards player to the left');
+					this.fakegame.player.x = 20;
+					this.z.tick();
+					ok(this.z.vel.x > 0, 'zombie is heading towards player to the right');
+				});
+				
+				test('tick jumps towards player if no x progress', function() {
+					this.fakegame.player.x = -20;
+					this.z.movestate.standing = true;
+					this.z.tick();
+					this.z.x = -1;
+					this.z.tick();
+					// because of gravity, the y of the zombie will increase for a bit...
+					equals(this.z.vel.y, 1, 'zombie is not jumping yet');
+					this.z.tick();
+					ok(this.z.vel.y < 0, 'zombie is jumping to get player');
+				});
 			});
 		</script>
 	</head>
