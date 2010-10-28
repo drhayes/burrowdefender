@@ -33,25 +33,21 @@
       // this version doesn't do anything
     };
     
-    that.mine = function(digger, x, y) {
+    that.mine = function() {
       if (!that.diggable) {
         return;
       }
-  	  that.health -= digger.minedamage;
   	  that.lasthealed = null;
-  	  if (that.health <= 0) {
-  	    that.kill(x, y);
+  	  // if we're not dead, do nothing...
+  	  if (that.health > 0) {
+  	    return;
   	  }
-    };
-    
-    // remove the tile from the tile map and the spatialhash
-    // and replace in tilemap with dug tile
-    that.kill = function(x, y) {
-      args.game.tilemap.set(x, y, tile.dug(args));
+  	  // this tile has been killed!
+      args.game.tilemap.set(that.x, that.y, tile.dug(args));
       args.game.spatialhash.remove(that);
       // find the center point of this tile
-      var cx = (x * tile.tilesize) + (tile.tilesize / 2);
-      var cy = (y * tile.tilesize) + (tile.tilesize / 2);
+      var cx = (that.x * tile.tilesize) + (tile.tilesize / 2);
+      var cy = (that.y * tile.tilesize) + (tile.tilesize / 2);
       // make the drop
       var dp = pickup({
         game: args.game,
@@ -79,6 +75,13 @@
         that.lasthealed = null;
       };
     };
+    
+    that.tick = function() {
+      // is this mine getting dug?
+      that.mine();
+      // is this mine in need of healing?
+      that.healtick();
+    }
     
     return that;
   };
@@ -129,8 +132,6 @@
       return item.dirtitem(args);
     };
     
-    that.tick = that.healtick;
-    
     return that;
   };
   
@@ -148,8 +149,6 @@
       ctx.drawImage(grassimage, 0, 0);
       tile.drawdamage(ctx, that.health / that.maxhealth);
     };
-    
-    that.tick = that.healtick;
     
     return that;
   };

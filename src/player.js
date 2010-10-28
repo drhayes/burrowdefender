@@ -136,7 +136,7 @@
 				// is it a diggable tile?
 				var digtile = args.game.tilemap.get(tilepos.x, tilepos.y);
 				if (digtile) {
-				  digtile.mine(this, tilepos.x, tilepos.y);
+				  digtile.health -= that.minedamage;
 				}
 			}
 		};

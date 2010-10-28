@@ -116,45 +116,60 @@
 					equals(args.img.src.substr(-11), 'cracks3.png', 'cracks3');
 				});
 				
-				test('tile tick', function() {
+				test('healtick', function() {
 					var d = tile.dirt({game: this.fakegame});
 					equals(d.health / d.maxhealth, 1, 'percentage healed is 1');
 					d.health -= 3;
 					var tilehealth = d.health;
 					var currenttime = new Date().getTime();
 					d.lasthealed = null;
-					d.tick();
+					d.healtick();
 					ok(d.lasthealed !== null, 'lasthealed is no longer null');
 					equals(d.health, tilehealth, 'tile is not healing yet');
 					d.lasthealed = currenttime - 750;
-					d.tick();
+					d.healtick();
 					equals(d.health, tilehealth + 1, 'tile is healing');
 					d.lasthealed = currenttime - 1500;
-					d.tick();
+					d.healtick();
 					equals(d.health, tilehealth + 2, 'tile is healing more');
 				});
 				
 				test('mine', function() {
-					expect(5);
-					var d = new tile.dirt({game: this.fakegame});
+					var d = tile.dirt({
+						game: this.fakegame,
+						x: 0,
+						y: 0
+					});
 					equals(typeof(d.mine), 'function', 'mine exists');
-					var currenthealth = d.health;
-					var digger = {
-						minedamage: 1
-					};
-					d.mine(digger, 0, 0);
-					equals(d.health, currenthealth - digger.minedamage, 'health decremented');
-					d.health = currenthealth;
-					digger.minedamage = 2;
-					d.mine(digger, 0, 0);
-					equals(d.health, currenthealth - digger.minedamage, 'health decremented');
-					d.health = 0;
-					digger.minedamage = 1;
-					d.kill = function(x, y) {
-						equals(x, 0, 'x is 0');
-						equals(y, 0, 'y is 0');
+					d.kill = function() {
+						ok(false, 'should not have been called');
 					}
-					d.mine(digger, 0, 0);
+					d.mine();
+					d.health = 0;
+					d.kill = function(x, y) {
+						ok(true, 'kill called');
+					}
+					d.mine();
+					equals(this.fakegame.tilemap.sx, 0, 'tilemap set x is 0');
+					equals(this.fakegame.tilemap.sy, 0, 'tilemap set y is 0');
+					var rt = this.fakegame.spatialhash.rt;
+					equals(rt.x1, d.x1, 'x1');
+					equals(rt.y1, d.y1, 'y1');
+					equals(rt.x2, d.x2, 'x2');
+					equals(rt.y2, d.y2, 'y2');
+					equals(this.fakegame.added.length, 1, 'something got added');
+				});
+				
+				test('tick', function() {
+					expect(2);
+					var d = tile.dirt({game: this.fakegame});
+					d.healtick = function() {
+						ok(true, 'healtick');
+					};
+					d.mine = function() {
+						ok(true, 'mine');
+					};
+					d.tick();
 				});
 				
 				test('dirt kill', function() {
@@ -163,32 +178,7 @@
 						x: 0,
 						y: 0
 					});
-					equals(typeof(d.kill), 'function', 'kill exists');
-					d.kill(0, 0);
-					equals(this.fakegame.tilemap.sx, 0, 'tilemap set x is 0');
-					equals(this.fakegame.tilemap.sy, 0, 'tilemap set y is 0');
-					var rt = this.fakegame.spatialhash.rt;
-					equals(rt.x1, d.x1, 'x1');
-					equals(rt.y1, d.y1, 'y1');
-					equals(rt.x2, d.x2, 'x2');
-					equals(rt.y2, d.y2, 'y2');
-				});
-				
-				test('dirt item stuff', function() {
-					var d = tile.dirt({
-						game: this.fakegame,
-						x: 0,
-						y: 0
-					});
-					equals(typeof d.makeitem, 'function', 'makeitem exists');
-					var i = d.makeitem();
-					equals(i.type, item.types.DIRT, 'type of item is DIRT');
-					// now test the kill stuff
-					d.kill(0, 0);
-					equals(this.fakegame.added.length, 1, 'something got added');
-					var added = this.fakegame.added[0];
-					// the added thing is the pickup
-				});
+				});				
 			});
 		</script>
 	</head>
