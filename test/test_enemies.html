@@ -6,6 +6,9 @@
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
+		<script type="text/javascript" src="../src/item.js"></script>
+		<script type="text/javascript" src="../src/pickup.js"></script>
+		<script type="text/javascript" src="../src/tile.js"></script>
 		<script type="text/javascript" src="../src/enemies.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
@@ -36,10 +39,26 @@
 					equals(this.z.size.y, 20, 'size.y');
 					equals(typeof this.z.solid, 'boolean', 'solid is a property');
 					ok(!this.z.solid, '!solid');
+					equals(typeof this.z.movestate.wantstodig, 'boolean', 'movestate.wantstodig exists');
+					ok(!this.z.movestate.wantstodig, 'wantstodig');
 				});
 				
 				test('draw', function() {
 					equals(typeof this.z.draw, 'function', 'draw exists');
+				});
+				
+				test('collide', function() {
+					equals(typeof this.z.collide, 'function', 'collide exists');
+					this.z.collide({}); // doesn't blow up
+					var thing = {
+						health: 5
+					};
+					this.z.movestate.wantstodig = false;
+					this.z.collide(thing);
+					equals(thing.health, 5, 'thing health is still 5');
+					this.z.movestate.wantstodig = true;
+					this.z.collide(thing);
+					equals(thing.health, 4, 'zombie is digging');
 				});
 				
 				test('tick moves towards player', function() {
@@ -52,16 +71,39 @@
 					ok(this.z.vel.x > 0, 'zombie is heading towards player to the right');
 				});
 				
-				test('tick jumps towards player if no x progress', function() {
+				test('tick jumps towards player if no x progress and player not below', function() {
 					this.fakegame.player.x = -20;
+					this.fakegame.player.y = 32;
 					this.z.movestate.standing = true;
 					this.z.tick();
 					this.z.x = -1;
 					this.z.tick();
 					// because of gravity, the y of the zombie will increase for a bit...
-					equals(this.z.vel.y, 1, 'zombie is not jumping yet');
+					equals(this.z.vel.y, 1, 'zombie is not jumping');
+					this.z.tick();
+					equals(this.z.vel.y, 1, 'zombie is not jumping, player still above');
+					this.fakegame.player.y = -32;
 					this.z.tick();
 					ok(this.z.vel.y < 0, 'zombie is jumping to get player');
+				});
+				
+				test('zombie digs down if player below and no x and y progress', function() {
+					this.fakegame.player.x = 32;
+					this.fakegame.player.y = -32;
+					this.z.movestate.standing = true;
+					this.z.tick();
+					ok(!this.z.movestate.wantstodig, 'zombie is not digging - player above');
+					this.z.tick();
+					ok(!this.z.movestate.wantstodig, 'zombie is not digging - player still above');
+					this.fakegame.player.y = 32;
+					this.z.x = 1;
+					this.z.tick();
+					ok(!this.z.movestate.wantstodig, 'zombie is not digging - making x progress');
+					this.z.tick();
+					ok(this.z.movestate.wantstodig, 'zombie is digging - player below');
+					this.z.y = 32;
+					this.z.tick();
+					ok(!this.z.movestate.wantstodig, 'zombie is not digging - player on same level');
 				});
 			});
 		</script>

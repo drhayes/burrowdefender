@@ -2,7 +2,7 @@
 //
 // All the things that want to kill the player.
 //
-// Depend: mob.js
+// Depend: mob.js, tile.js
 
 (function(global, $) {
   
@@ -16,6 +16,9 @@
     
     // zombies are not solid
     that.solid = false;
+    
+    // custom movestates
+    that.movestate.wantstodig = false;
     
     that.draw = function(drawthing) {
       drawthing.sprite1.push(function(ctx) {
@@ -34,12 +37,31 @@
 			else if (args.game.player.x > that.x) {
 			  that.vel.x = 1;
 			};
-			// if no forward progress was made, jump
-			if (typeof that.lastx !== 'undefined' && that.x === that.lastx) {
+			var madenoforwardprogress = (typeof that.lastx !== 'undefined' && that.x == that.lastx);
+			// if no forward progress was made and player is above or on level, jump
+			if (madenoforwardprogress && args.game.player.y <= that.y) {
 			  that.jump();
 			}
+			// update our last x position for later jumpiness
 			that.lastx = that.x;
+			// if player is below us and we haven't changed y tile coordinates, dig
+			var tilepos = tile.totilepos(that.x, that.y);
+			that.movestate.wantstodig = false;
+			if (madenoforwardprogress && 
+			  args.game.player.y > that.y && typeof that.lasttiley !== 'undefined' && that.lasttiley === tilepos.y) {
+			  that.movestate.wantstodig = true;
+			}
+			that.lasttiley = tilepos.y;
     };
+    
+    that.collide = function(collider) {
+      if (typeof collider.health !== 'number') {
+        return;
+      }
+      if (that.movestate.wantstodig) {
+        collider.health -= 1;
+      }
+    }
     
     return that;
   }
