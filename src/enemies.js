@@ -27,6 +27,10 @@
       });
     };
     
+    var isclose = function(a, b) {
+      return Math.abs(a - b) < 1.5;
+    }
+    
     that.tick = function() {
   		// gravity has to have some effect here...
 			mob.gravitytick.call(this);
@@ -37,7 +41,7 @@
 			else if (args.game.player.x > that.x) {
 			  that.vel.x = 1;
 			};
-			var madenoforwardprogress = (typeof that.lastx !== 'undefined' && that.x == that.lastx);
+			var madenoforwardprogress = (typeof that.lastx !== 'undefined' && isclose(that.x, that.lastx));
 			// if no forward progress was made and player is above or on level, jump
 			if (madenoforwardprogress && args.game.player.y <= that.y) {
 			  that.jump();
