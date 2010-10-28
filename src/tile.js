@@ -37,17 +37,18 @@
       if (!that.diggable) {
         return;
       }
-  	  that.lasthealed = null;
   	  // if we're not dead, do nothing...
   	  if (that.health > 0) {
   	    return;
   	  }
+  	  that.lasthealed = null;
   	  // this tile has been killed!
-      args.game.tilemap.set(that.x, that.y, tile.dug(args));
+  	  var tilepos = tile.totilepos(that.x, that.y);
+      args.game.tilemap.set(tilepos.x, tilepos.y, tile.dug(args));
       args.game.spatialhash.remove(that);
       // find the center point of this tile
-      var cx = (that.x * tile.tilesize) + (tile.tilesize / 2);
-      var cy = (that.y * tile.tilesize) + (tile.tilesize / 2);
+      var cx = that.x + (tile.tilesize / 2);
+      var cy = that.y + (tile.tilesize / 2);
       // make the drop
       var dp = pickup({
         game: args.game,
