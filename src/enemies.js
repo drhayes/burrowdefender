@@ -2,7 +2,7 @@
 //
 // All the things that want to kill the player.
 //
-// Depend: mob.js
+// Depend: mob.js, tile.js
 
 (function(global, $) {
   
@@ -17,8 +17,8 @@
     // zombies are not solid
     that.solid = false;
     
-    // zombies movestates
-    that.movestate.wantstodigx = false;
+    // custom movestates
+    that.movestate.wantstodig = false;
     
     that.draw = function(drawthing) {
       drawthing.sprite1.push(function(ctx) {
