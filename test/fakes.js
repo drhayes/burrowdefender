@@ -55,6 +55,13 @@ var FakeGame = function() {
 			this.sx = x;
 			this.sy = y;
 			this.stile = tile;
+		},
+		get: function(x, y) {
+		  this.gx = x;
+		  this.gy = y;
+		  return {
+		    solid: false
+		  }
 		}
 	};
 	this.spatialhash = {

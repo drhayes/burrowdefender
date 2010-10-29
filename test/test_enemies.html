@@ -5,6 +5,9 @@
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
+		<script type="text/javascript" src="../src/item.js"></script>
+		<script type="text/javascript" src="../src/pickup.js"></script>
+		<script type="text/javascript" src="../src/tile.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
 		<script type="text/javascript" src="../src/enemies.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
@@ -36,6 +39,8 @@
 					equals(this.z.size.y, 20, 'size.y');
 					equals(typeof this.z.solid, 'boolean', 'solid is a property');
 					ok(!this.z.solid, '!solid');
+					equals(typeof this.z.movestate.wantstodigx, 'boolean', 'movestate.wantstodigx is a property');
+					ok(!this.z.movestate.wantstodigx, '!movestate.wantstodigx');
 				});
 				
 				test('draw', function() {
@@ -62,6 +67,50 @@
 					equals(this.z.vel.y, 1, 'zombie is not jumping yet');
 					this.z.tick();
 					ok(this.z.vel.y < 0, 'zombie is jumping to get player');
+				});
+				
+				test('tick jumps towards player while checking null tiles', function() {
+					this.fakegame.tilemap.get = function(x, y) {
+						return null;
+					}
+					this.fakegame.player.x = -20;
+					this.z.movestate.standing = true;
+					this.z.tick();
+					this.z.x = -1;
+					this.z.tick();
+					// because of gravity, the y of the zombie will increase for a bit...
+					equals(this.z.vel.y, 1, 'zombie is not jumping yet');
+					this.z.tick();
+					ok(this.z.vel.y < 0, 'zombie is jumping to get player');
+				});
+				
+				test('tick digs towards player if cannot jump', function() {
+					expect(4);
+					this.fakegame.player.x = -20;
+					this.z.movestate.standing = true;
+					this.z.tick();
+					this.z.x = -1;
+					this.z.tick();
+					// because of gravity, the y of the zombie will increase...
+					equals(this.z.vel.y, 1, 'zombie is not jumping');
+					// when the zombie checks the tilemap, ensure that tiles come back solid
+					var me = this;
+					var gettile1 = function(x, y) {
+						ok(true, 'tilemap.get called');
+						me.fakegame.tilemap.get = gettile2;
+						return {
+							solid: true
+						}
+					};
+					var gettile2 = function(x, y) {
+						ok(true, 'tilemap.get called');
+						return {
+							solid: true
+						}
+					};
+					this.fakegame.tilemap.get = gettile1;
+					this.z.tick();
+					ok(this.z.movestate.wantstodigx, 'zombie wants to dig on the x');
 				});
 			});
 		</script>
