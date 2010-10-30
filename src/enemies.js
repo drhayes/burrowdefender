@@ -72,6 +72,9 @@
       if (that.movestate.wantstodigx) {
         collider.damage(1);
       }
+      if (collider.delicious) {
+        collider.damage(1);
+      }
     }
     
     return that;

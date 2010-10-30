@@ -267,6 +267,9 @@
 					var currenthealth = this.p.health;
 					this.p.damage(2);
 					equals(this.p.health, currenthealth - 2, 'damage decrements health');
+					ok(!this.p.movestate.standing, 'not standing anymore');
+					ok(Math.abs(this.p.vel.x) > 0, 'getting thrown in the x');
+					ok(Math.abs(this.p.vel.y) > 0, 'getting thrown in the y');
 				});
 			});
 		</script>

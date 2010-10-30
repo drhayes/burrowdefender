@@ -43,6 +43,7 @@
     // health stuff
     that.health = 5;
     that.maxhealth = 5;
+    that.delicious = true;
     
     that.inventory = inventory();
     
@@ -197,8 +198,9 @@
 		
 		that.damage = function(amt) {
 		  that.health -= amt;
-		  that.vel.x = -6;
-		  that.vel.y = -4;
+		  that.vel.x = -4;
+		  that.vel.y = -7;
+		  that.movestate.standing = false;
 		};
 		
 		return that;
