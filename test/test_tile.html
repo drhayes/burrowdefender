@@ -116,45 +116,50 @@
 					equals(args.img.src.substr(-11), 'cracks3.png', 'cracks3');
 				});
 				
+				module('actual tile stuff', {
+					setup: function() {
+						this.fakegame = new FakeGame();
+						this.d = tile.dirt({
+							game: this.fakegame,
+							x: 32,
+							y: 32
+						});
+					}
+				})
+				
 				test('healtick', function() {
-					var d = tile.dirt({game: this.fakegame});
-					equals(d.health / d.maxhealth, 1, 'percentage healed is 1');
-					d.health -= 3;
-					var tilehealth = d.health;
+					equals(this.d.health / this.d.maxhealth, 1, 'percentage healed is 1');
+					this.d.health -= 3;
+					var tilehealth = this.d.health;
 					var currenttime = new Date().getTime();
-					d.lasthealed = null;
-					d.healtick();
-					ok(d.lasthealed !== null, 'lasthealed is no longer null');
-					equals(d.health, tilehealth, 'tile is not healing yet');
-					d.lasthealed = currenttime - 750;
-					d.healtick();
-					equals(d.health, tilehealth + 1, 'tile is healing');
-					d.lasthealed = currenttime - 1500;
-					d.healtick();
-					equals(d.health, tilehealth + 2, 'tile is healing more');
+					this.d.lasthealed = null;
+					this.d.healtick();
+					ok(this.d.lasthealed !== null, 'lasthealed is no longer null');
+					equals(this.d.health, tilehealth, 'tile is not healing yet');
+					this.d.lasthealed = currenttime - 750;
+					this.d.healtick();
+					equals(this.d.health, tilehealth + 1, 'tile is healing');
+					this.d.lasthealed = currenttime - 1500;
+					this.d.healtick();
+					equals(this.d.health, tilehealth + 2, 'tile is healing more');
 				});
 				
 				test('mine', function() {
-					var d = tile.dirt({
-						game: this.fakegame,
-						x: 32,
-						y: 32
-					});
-					equals(typeof(d.mine), 'function', 'mine exists');
-					d.kill = function() {
+					equals(typeof(this.d.mine), 'function', 'mine exists');
+					this.d.kill = function() {
 						ok(false, 'should not have been called');
 					}
-					d.mine();
-					d.health = 0;
-					d.kill = function(x, y) {
+					this.d.mine();
+					this.d.health = 0;
+					this.d.kill = function(x, y) {
 						ok(true, 'kill called');
 					}
-					d.mine();
+					this.d.mine();
 					var rt = this.fakegame.spatialhash.rt;
-					equals(rt.x1, d.x1, 'x1');
-					equals(rt.y1, d.y1, 'y1');
-					equals(rt.x2, d.x2, 'x2');
-					equals(rt.y2, d.y2, 'y2');
+					equals(rt.x1, this.d.x1, 'x1');
+					equals(rt.y1, this.d.y1, 'y1');
+					equals(rt.x2, this.d.x2, 'x2');
+					equals(rt.y2, this.d.y2, 'y2');
 					equals(this.fakegame.added.length, 1, 'something got added');
 					// check for dug tile
 					var dt = this.fakegame.tilemap.stile;
@@ -180,7 +185,11 @@
 						x: 0,
 						y: 0
 					});
-				});				
+				});
+				
+				test('damage', function() {
+					equals(typeof this.d.damage, 'function', 'damage exists');
+				});
 			});
 		</script>
 	</head>

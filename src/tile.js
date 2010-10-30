@@ -88,6 +88,10 @@
       that.healtick();
     }
     
+    that.damage = function(amt) {
+      that.health -= amt;
+    }
+    
     return that;
   };
   
