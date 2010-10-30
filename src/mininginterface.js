@@ -53,7 +53,11 @@
     }
     
     that.dig = function() {
-      
+      if (!that.canact || !args.game.mousemanager.leftbutton) {
+        return;
+      }
+      var t = args.game.tilemap.get(that.mousesel.x, that.mousesel.y);
+      t.damage(args.game.player.minedamage);
     };
     
     that.tick = function() {

@@ -138,9 +138,36 @@
 					this.mi.tick();
 				});
 				
-				test('dig', function() {
+				test('digs that cannot happen', function() {
+					expect(1);
 					equals(typeof this.mi.dig, 'function', 'dig exists');
+					this.fakegame.tilemap.get = function() {
+						ok(false, 'should not have been called');
+					}
 					this.fakegame.mousemanager.leftbutton = false;
+					this.mi.dig();
+					this.fakegame.mousemanager.leftbutton = true;
+					this.mi.canact = false;
+					this.mi.dig();
+				});
+				
+				test('digs that can happen', function() {
+					expect(3);
+					this.fakegame.mousemanager.leftbutton = true;
+					this.mi.canact = true;
+					this.mi.mousesel = {
+						x: -1,
+						y: -2
+					};
+					this.fakegame.tilemap.get = function(x, y) {
+						equals(x, -1, 'passed in x');
+						equals(y, -2, 'passed in y');
+						return {
+							damage: function() {
+								ok(true, 'damaged a tile');
+							}
+						}
+					}
 					this.mi.dig();
 				});
 			});
