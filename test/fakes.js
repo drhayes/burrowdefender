@@ -5,6 +5,19 @@ var FakeCtx = function() {
   this.fillStyle = function(style) {
     this.fillStyleArgs.push(style);
   };
+  this.strokeStyleArgs = [];
+  this.strokeStyle = function(style) {
+    this.strokeStyleArgs.push(style);
+  };
+  this.strokeRectArgs = [];
+  this.strokeRect = function(stx, sty, stw, sth) {
+    this.strokeRectArgs.push({
+      stx: stx,
+      sty: sty,
+      stw: stw,
+      sth: sth
+    });
+  }
   this.fillRectArgs = [];
   this.fillRect = function(frx, fry, frw, frh) {
     this.fillRectArgs.push({

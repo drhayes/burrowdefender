@@ -17,6 +17,8 @@
 					var mi = mininginterface({game: new FakeGame()});
 					ok(mi, 'something came back');
 					equals(typeof mi.draw, 'function', 'draw exists');
+					equals(typeof mi.canact, 'boolean', 'canact exists');
+					ok(!mi.canact, 'canact is set to false');
 				});
 				
 				module('usage', {
@@ -51,6 +53,88 @@
 					equals(r.y1, 0, 'y1');
 					equals(r.x2, -24 + tile.tilesize, 'x2');
 					equals(r.y2, tile.tilesize, 'y2');
+				});
+				
+				test('setcanact', function() {
+					equals(typeof this.mi.setcanact, 'function', 'setcanact exists');
+					this.fakegame.player.x = 0;
+					this.fakegame.player.y = 0;
+					this.fakegame.mousemanager.pos = {
+						x: 0,
+						y: 0
+					};
+					this.mi.setcanact();
+					ok(this.mi.canact, 'setcanact is true since mouse is close enough');
+					this.fakegame.mousemanager.pos = {
+						x: -16,
+						y: 0
+					};
+					this.mi.setcanact();
+					ok(this.mi.canact, 'is close enough still');
+					this.fakegame.mousemanager.pos = {
+						x: -16,
+						y: -16
+					};
+					this.mi.setcanact();
+					ok(this.mi.canact, 'is close enough on y too');
+					this.fakegame.mousemanager.pos = {
+						x: -48,
+						y: 0
+					};
+					this.mi.setcanact();
+					ok(!this.mi.canact, 'is not close enough');
+					this.fakegame.mousemanager.pos = {
+						x: 48,
+						y: 0
+					};
+					this.mi.setcanact();
+					ok(this.mi.canact, 'is close enough');
+					this.fakegame.mousemanager.pos = {
+						x: 48,
+						y: 48
+					};
+					this.mi.setcanact();
+					ok(this.mi.canact, 'is close enough');
+					this.fakegame.mousemanager.pos = {
+						x: 65,
+						y: 0,
+					};
+					this.mi.setcanact();
+					ok(!this.mi.canact, 'is not close enough');
+				});
+				
+				test('draw', function() {
+					var drawthing = {
+						hud: [],
+					};
+					this.mi.draw(drawthing);
+					var drawhud = drawthing.hud[0];
+					var fakectx = new FakeCtx();
+					this.mi.setcanact = function() {
+						return true;
+					};
+					drawhud(fakectx);
+					equals(fakectx.strokeStyleArgs.length, 1, 'got stroke args');
+					var args = fakectx.strokeStyleArgs[0];
+					equals(args, 'hsla(120, 80%, 50%, 0.6)', 'reticle on');
+					fakectx.strokeStyleArgs.pop();
+					this.mi.setcanact = function() {
+						return false;
+					}
+					drawhud(fakectx);
+					equals(fakectx.strokeStyleArgs.length, 1, 'got stroke args');
+					var args = fakectx.strokeStyleArgs[0];
+					equals(args, 'hsla(120, 20%, 50%, 0.6)', 'reticle off');
+				});
+				
+				test('tick', function() {
+					equals(typeof this.mi.tick, 'function', 'tick exists');
+					this.fakegame.player.x = 0;
+					this.fakegame.player.y = 0;
+				});
+				
+				test('dig', function() {
+					equals(typeof this.mi.dig, 'function', 'dig exists');
 				});
 			});
 		</script>
