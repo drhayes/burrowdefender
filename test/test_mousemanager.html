@@ -25,10 +25,26 @@
 						this.fakegame = new FakeGame();
 						this.fakegame.canvas = $('#testcanvas');
 						this.m = mousemanager({game: this.fakegame});
+						// calculate our test canvas' position
+						var pos = $('#testcanvas').offset();
+						this.offset = {
+							x: pos.left,
+							y: pos.top
+						};
 					},
 					teardown: function() {
 						this.m.unlatch();
 					}
+				});
+				
+				test('dispatch with mouse position', function() {
+					equals(typeof this.m.dispatch, 'function', 'dispatch exists');
+					ok(this.m.pos, 'pos');
+					this.m.dispatch({
+						pageX: 120,
+						pageY: 50 + this.offset.y
+					});
+					equals(this.m.pos.x, 120 - this.offset.x, 'mouse pos x');
 				});
 			});
 		</script>
@@ -39,6 +55,6 @@
 		<h2 id="qunit-userAgent"></h2>
 		<ol id="qunit-tests"></ol>
 		<div id="qunit-fixture">test markup, will be hidden</div>
-		<canvas id="testcanvas"></canvas>
+		<canvas id="testcanvas" width="400" height="300"></canvas>
 	</body>
 </html>
