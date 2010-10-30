@@ -53,12 +53,23 @@
 		<p>1-8 selects inventory</p>
 		<p>z + direction to place selected block</p>
 		<p>have fun!</p>
+		<button id="addzombie">Add Zombie</button>
 	</div>
 	<canvas id="drawme" width="600" height="500"></canvas>
 	<script type="text/javascript">
 		var g = game('#drawme');
 		$(document).ready(function() {
 			g.start();
+			
+			$('#addzombie').click(function() {
+			    // add a zombie, for kicks...
+			    var zombie = window.zombie({
+			      x: 200,
+			      y: -200,
+			      game: g
+			    });
+			    g.add(zombie);
+			})
 		});
 	</script>
 </body>
