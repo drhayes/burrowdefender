@@ -24,6 +24,7 @@
     that.things = [];
     that.addthings = [];
     that.mousemanager = mousemanager({game: that});
+    that.mininginterface = mininginterface({game: that});
     
     // temporary tile generation
 		that.tilegenerator.generate(31 * tile.tilesize, 0);
@@ -149,6 +150,9 @@
       }
     };
     that.add(backgrounddraw);
+    
+    // show the mining interface
+    that.add(that.mininginterface);
         
     // last but not least, add the player
     that.player = player({
