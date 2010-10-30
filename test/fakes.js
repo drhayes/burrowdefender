@@ -67,6 +67,10 @@ var FakeGame = function() {
 		  return {
 		    solid: false
 		  }
+		},
+		offset: {
+		  x: 0,
+		  y: 0
 		}
 	};
 	this.spatialhash = {
@@ -76,6 +80,14 @@ var FakeGame = function() {
 		remove: function(t) {
 			this.rt = t;
 		}
+	};
+	this.mousemanager = {
+	  pos: {
+	    x: 0,
+	    y: 0
+	  },
+	  leftbutton: false,
+	  rightbutton: false
 	};
 };
 

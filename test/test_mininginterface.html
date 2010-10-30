@@ -4,6 +4,7 @@
 		<title>Mining Interface</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/tile.js"></script>
 		<script type="text/javascript" src="../src/mininginterface.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
@@ -16,6 +17,50 @@
 					var mi = mininginterface({game: new FakeGame()});
 					ok(mi, 'something came back');
 					equals(typeof mi.draw, 'function', 'draw exists');
+				});
+				
+				module('usage', {
+					setup: function() {
+						this.fakegame = new FakeGame();
+						this.mi = mininginterface({game: this.fakegame});
+					}
+				});
+				
+				test('reticlerect', function() {
+					equals(typeof this.mi.reticlerect, 'function', 'reticlerect exists');
+					this.fakegame.tilemap.offset = {
+						x: 0,
+						y: 0
+					};
+					this.fakegame.mousemanager.pos = {
+						x: 0,
+						y: 0
+					};
+					var r = this.mi.reticlerect();
+					equals(r.x1, 0, 'x1');
+					equals(r.y1, 0, 'y1');
+					equals(r.x2, tile.tilesize, 'x2');
+					equals(r.y2, tile.tilesize, 'y2');
+					// now move the mouse
+					this.fakegame.mousemanager.pos = {
+						x: 48,
+						y: 52
+					};
+					r = this.mi.reticlerect();
+					equals(r.x1, tile.tilesize, 'x1');
+					equals(r.y1, tile.tilesize, 'y1');
+					equals(r.x2, tile.tilesize * 2, 'x2');
+					equals(r.y2, tile.tilesize * 2, 'y2');
+					// now do it with an offset
+					this.fakegame.tilemap.offset = {
+						x: -40,
+						y: -100
+					};
+					r = this.mi.reticlerect();
+					equals(r.x1, tile.tilesize * 2, 'x1');
+					equals(r.y1, tile.tilesize * 4, 'y1');
+					equals(r.x2, tile.tilesize * 3, 'x2');
+					equals(r.y2, tile.tilesize * 5, 'y2');
 				});
 			});
 		</script>
