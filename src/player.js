@@ -197,6 +197,8 @@
 		
 		that.damage = function(amt) {
 		  that.health -= amt;
+		  that.vel.x = -6;
+		  that.vel.y = -4;
 		};
 		
 		return that;
