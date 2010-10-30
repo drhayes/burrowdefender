@@ -60,6 +60,24 @@
       t.damage(args.game.player.minedamage);
     };
     
+    that.place = function() {
+      if (!that.canact || !args.game.mousemanager.rightbutton) {
+        return;
+      }
+		  var i = args.game.player.inventory.getsel();
+		  // do we have anything to drop?
+		  if (i === null) {
+		    return;
+		  };
+		  // we have something to drop... place it
+		  var result = i.place(that.mousesel.x * tile.tilesize, that.mousesel.y * tile.tilesize);
+		  // did it actually get placed?
+		  if (!result) {
+		    return;
+		  }
+		  args.game.player.inventory.dropsel();
+    };
+    
     that.tick = function() {
       // get the mouse selection
       that.mousesel = that.getselpos();
@@ -67,6 +85,8 @@
       that.setcanact();
       // are we digging?
       that.dig();
+      // are we placing?
+      that.place();
     };
     
     return that;

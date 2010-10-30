@@ -124,7 +124,7 @@
 				});
 				
 				test('tick', function() {
-					expect(4);
+					expect(5);
 					equals(typeof this.mi.tick, 'function', 'tick exists');
 					this.mi.getselpos = function() {
 						ok(true, 'mousesel called');
@@ -134,6 +134,9 @@
 					}
 					this.mi.dig = function() {
 						ok(true, 'dig called');
+					}
+					this.mi.place = function() {
+						ok(true, 'place called');
 					}
 					this.mi.tick();
 				});
@@ -169,6 +172,45 @@
 						}
 					}
 					this.mi.dig();
+				});
+				
+				test('places that cannot happen', function() {
+					expect(1);
+					equals(typeof this.mi.place, 'function', 'dig exists');
+					this.fakegame.tilemap.get = function() {
+						ok(false, 'should not have been called');
+					}
+					this.fakegame.mousemanager.rightbutton = false;
+					this.mi.place();
+					this.fakegame.mousemanager.rightbutton = true;
+					this.mi.canact = false;
+					this.mi.place();
+				});
+				
+				test('places that can happen', function() {
+					expect(4);
+					this.fakegame.mousemanager.rightbutton = true;
+					this.mi.canact = true;
+					this.mi.mousesel = {
+						x: -1,
+						y: -2
+					};
+					this.fakegame.player.inventory = {
+						getsel: function() {
+							ok(true, 'player.inventory.getsel called');
+							return {
+								place: function(x, y) {
+									equals(x, -32, 'item.place x');
+									equals(y, -64, 'item.place y');
+									return true;
+								}
+							}
+						},
+						dropsel: function() {
+							ok(true, 'player.inventory.dropsel called');
+						}
+					}
+					this.mi.place();
 				});
 			});
 		</script>
