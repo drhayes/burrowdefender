@@ -36,7 +36,8 @@ var FakeGame = function() {
   this.added = [];
   this.add = function(thing) {
     this.added.push(thing);
-  }
+  };
+  this.canvas = {};
 	this.playeroffset = {
 		x: 16,
 		y: 16
