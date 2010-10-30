@@ -19,6 +19,10 @@
 					ok(m, 'something came back');
 					equals(typeof m.latch, 'function', 'latch is a function');
 					equals(typeof m.unlatch, 'function', 'unlatch is a function');
+					equals(typeof m.leftbutton, 'boolean', 'leftbutton exists');
+					ok(!m.leftbutton, 'leftbutton is false');
+					equals(typeof m.rightbutton, 'boolean', 'rightbutton exists');
+					ok(!m.rightbutton, 'rightbutton is false');
 					m.unlatch();
 				});
 				
@@ -47,10 +51,26 @@
 					this.eo.pageY = 50 + this.offset.y;
 					this.m.dispatch(this.eo);
 					equals(this.m.pos.x, 120 - this.offset.x, 'mouse pos x');
+					ok(this.eo.preventedDefault, 'preventedDefault');
+					ok(this.eo.stoppedPropagation, 'stoppedPropagation');
 				});
 				
-				test('dispatch with mouse click', function() {
-					
+				test('dispatch with left mouse click', function() {
+					this.eo.type = 'mousedown';
+					this.m.dispatch(this.eo);
+					ok(this.m.leftbutton, 'leftbutton clicked');
+					this.eo.type = 'mouseup';
+					this.m.dispatch(this.eo);
+					ok(!this.m.leftbutton, 'leftbutton not clicked');
+				});
+				
+				test('dispatch with right mouse click', function() {
+					this.eo.type = 'contextmenu';
+					this.m.dispatch(this.eo);
+					ok(this.m.rightbutton, 'rightbutton clicked');
+					this.eo.type = 'mouseup';
+					this.m.dispatch(this.eo);
+					ok(!this.m.rightbutton, 'rightbutton not clicked');
 				});
 			});
 		</script>
