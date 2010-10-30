@@ -110,17 +110,13 @@
 					this.mi.draw(drawthing);
 					var drawhud = drawthing.hud[0];
 					var fakectx = new FakeCtx();
-					this.mi.setcanact = function() {
-						return true;
-					};
+					this.mi.canact = true;
 					drawhud(fakectx);
 					equals(fakectx.strokeStyleArgs.length, 1, 'got stroke args');
 					var args = fakectx.strokeStyleArgs[0];
 					equals(args, 'hsla(120, 80%, 50%, 0.6)', 'reticle on');
 					fakectx.strokeStyleArgs.pop();
-					this.mi.setcanact = function() {
-						return false;
-					}
+					this.mi.canact = false;
 					drawhud(fakectx);
 					equals(fakectx.strokeStyleArgs.length, 1, 'got stroke args');
 					var args = fakectx.strokeStyleArgs[0];

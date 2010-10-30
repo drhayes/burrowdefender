@@ -35,8 +35,7 @@
     that.draw = function(drawthing) {
       drawthing.hud.push(function(ctx) {
         var rect = that.reticlerect();
-        var can = that.setcanact();
-        var style = can ? 'hsla(120, 80%, 50%, 0.6)' : 'hsla(120, 20%, 50%, 0.6)';
+        var style = that.canact ? 'hsla(120, 80%, 50%, 0.6)' : 'hsla(120, 20%, 50%, 0.6)';
         ctx.strokeStyle(style);
         ctx.strokeRect(rect.x1, rect.y1, rect.x2 - rect.x1, rect.y2 - rect.y1);
       })
