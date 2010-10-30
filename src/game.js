@@ -49,8 +49,8 @@
     that.update = function() {
       // update the offsets
       that.worldoffset = {
-        x: -(that.player.x - that.playeroffset.x),
-        y: -(that.player.y - that.playeroffset.y)
+        x: that.player.x - that.playeroffset.x,
+        y: that.player.y - that.playeroffset.y
       };
       // update the tilemap
       that.tilemap.tick();
@@ -90,8 +90,8 @@
     
     var drawiterate = function(drawthing, layer) {
       var drawthings = drawthing[layer];
-      that.ctx.offset.x = that.worldoffset.x;
-      that.ctx.offset.y = that.worldoffset.y;
+      that.ctx.offset.x = -that.worldoffset.x;
+      that.ctx.offset.y = -that.worldoffset.y;
       // hud does not get drawn with offset
       if (layer === 'hud') {
         that.ctx.offset.x = 0;

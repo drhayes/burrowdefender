@@ -44,6 +44,10 @@ var FakeGame = function() {
 		x: 16,
 		y: 16
 	};
+	this.worldoffset = {
+	  x: 0,
+	  y: 0
+	};
 	this.player = {
 	  x: 0,
 	  y: 0

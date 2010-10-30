@@ -157,7 +157,7 @@
 						this.tm.set(t);
 					}
 					// non tilesize aligned
-					this.tm.offset = {
+					this.fakegame.worldoffset = {
 						x: 20,
 						y: 0
 					};
@@ -170,17 +170,6 @@
 					equals(args[1].offx, 12, 'offset.y');
 					equals(args[2].frx, 0, 'third frx');
 					equals(args[2].offx, 44, 'offset.y');
-				});
-				
-				test('tick', function() {
-					equals(typeof this.tm.tick, 'function', 'tick exists');
-					this.fakegame.player.x = 10;
-					this.fakegame.player.y = 20;
-					this.fakegame.playeroffset.x = 100;
-					this.fakegame.playeroffset.y = 180;
-					this.tm.tick();
-					equals(this.tm.offset.x, -90, 'offset.x');
-					equals(this.tm.offset.y, -160, 'offset.y');
 				});
 			});
 		</script>

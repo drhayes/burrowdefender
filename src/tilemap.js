@@ -10,10 +10,6 @@
   var tilemap = function(args) {
     var that = {};
     that.tilemap = {};
-    that.offset = {
-      x: 0,
-      y: 0
-    };
     
     that.get = function(x, y) {
       var key = tilemap.makekey(x, y);
@@ -31,10 +27,10 @@
     };
     
     var iterateviewabletiles = function(tilefunc) {
-      var startx = Math.floor(that.offset.x / tile.tilesize);
-      var starty = Math.floor(that.offset.y / tile.tilesize);
-      var endx = Math.floor((that.offset.x + args.game.width) / tile.tilesize) + 1;
-      var endy = Math.floor((that.offset.y + args.game.height) / tile.tilesize) + 1;
+      var startx = Math.floor(args.game.worldoffset.x / tile.tilesize);
+      var starty = Math.floor(args.game.worldoffset.y / tile.tilesize);
+      var endx = Math.floor((args.game.worldoffset.x + args.game.width) / tile.tilesize) + 1;
+      var endy = Math.floor((args.game.worldoffset.y + args.game.height) / tile.tilesize) + 1;
       for (var x = startx; x < endx; x++) {
         for (var y = starty; y < endy; y++) {
           var sometile = that.get(x, y);
@@ -53,8 +49,8 @@
     that.draw = function(ctx) {
       iterateviewabletiles(function(sometile, tilex, tiley) {
         ctx.offset = {
-          x: tilex - that.offset.x,
-          y: tiley - that.offset.y
+          x: tilex - args.game.worldoffset.x,
+          y: tiley - args.game.worldoffset.y
         };
         sometile.draw(ctx);
       });
@@ -62,11 +58,6 @@
     
     // any visible tile that has a tick method will get it called.
     that.tick = function() {
-      // update the offsets
-      that.offset = {
-        x: args.game.player.x - args.game.playeroffset.x,
-        y: args.game.player.y - args.game.playeroffset.y
-      };
       // now tick the tiles
       iterateviewabletiles(function(tile, tilex, tiley) {
         if (typeof(tile.tick) !== 'undefined') {
