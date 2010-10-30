@@ -13,7 +13,9 @@
 				
 				test('ctor', function() {
 					equals(typeof mousemanager, 'function', 'mousemanager exists');
-					var m = mousemanager({game: new FakeGame()});
+					var g = new FakeGame();
+					g.canvas = $('#testcanvas');
+					var m = mousemanager({game: g});
 					ok(m, 'something came back');
 					equals(typeof m.latch, 'function', 'latch is a function');
 					equals(typeof m.unlatch, 'function', 'unlatch is a function');
@@ -31,6 +33,7 @@
 							x: pos.left,
 							y: pos.top
 						};
+						this.eo = new FakeEventObject();
 					},
 					teardown: function() {
 						this.m.unlatch();
@@ -40,11 +43,14 @@
 				test('dispatch with mouse position', function() {
 					equals(typeof this.m.dispatch, 'function', 'dispatch exists');
 					ok(this.m.pos, 'pos');
-					this.m.dispatch({
-						pageX: 120,
-						pageY: 50 + this.offset.y
-					});
+					this.eo.pageX = 120;
+					this.eo.pageY = 50 + this.offset.y;
+					this.m.dispatch(this.eo);
 					equals(this.m.pos.x, 120 - this.offset.x, 'mouse pos x');
+				});
+				
+				test('dispatch with mouse click', function() {
+					
 				});
 			});
 		</script>

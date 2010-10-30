@@ -74,3 +74,23 @@ var FakeGame = function() {
 		}
 	};
 };
+
+var FakeEventObject = function() {
+  this.preventedDefault = false;
+  this.stoppedPropagation = false;
+  this.removedEventListener = false;
+  this.pageX = 0;
+  this.pageY = 0;
+
+  this.preventDefault = function() {
+    this.preventedDefault = true;
+  };
+  
+  this.stopPropagation = function() {
+    this.stoppedPropagation = true;
+  };
+  
+  this.removeEventListener = function() {
+    this.removedEventListener = true;
+  }
+}
