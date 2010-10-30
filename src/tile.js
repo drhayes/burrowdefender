@@ -41,7 +41,6 @@
   	  if (that.health > 0) {
   	    return;
   	  }
-  	  that.lasthealed = null;
   	  // this tile has been killed!
   	  var dugtile = tile.dug({
   	    game: args.game,
@@ -50,16 +49,13 @@
   	  })
       args.game.tilemap.set(dugtile);
       args.game.spatialhash.remove(that);
-      // find the center point of this tile
-      var cx = that.x + (tile.tilesize / 2);
-      var cy = that.y + (tile.tilesize / 2);
-      // make the drop
+      // make the drop at the center point of this tile
       var dp = pickup({
+        x: that.x + (tile.tilesize / 2) - 8,
+        y: that.y + (tile.tilesize / 2) - 8,
         game: args.game,
         item: item.dirtitem({game: args.game})
       });
-      dp.x = cx - (dp.size.x / 2);
-      dp.y = cy - (dp.size.y / 2);
       dp.updaterect();
       args.game.spatialhash.set(dp);
       args.game.add(dp);
