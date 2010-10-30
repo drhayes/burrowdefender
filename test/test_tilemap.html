@@ -68,6 +68,15 @@
 					var key = tilemap.makekey(0, 0);
 					ok(this.tm.tilemap[key] === dirt, 'the dirt tile is in the tilemap');
 					ok(this.tm.get(0, 0) === dirt, 'the dirt tile we set is gettable');
+					var dirt2 = tile.dirt({
+						x: 32,
+						y: 0,
+						game: this.fakegame
+					});
+					this.tm.set(dirt2);
+					key = tilemap.makekey(1, 0);
+					ok(this.tm.tilemap[key] === dirt2, 'dirt2 is in tilemap');
+					ok(this.tm.get(1, 0) === dirt2, 'dirt2 is gettable at tile coordinates');
 				});
 				
 				module('drawing', {
@@ -84,12 +93,12 @@
 					var tile1 = tile.dirt({
 						game: this.fakegame,
 						x: 0,
-						y: 3
+						y: 3 * tile.tilesize
 					});
 					var tile2 = tile.dirt({
 						game: this.fakegame,
-						x: 1,
-						y: 3
+						x: 1 * tile.tilesize,
+						y: 3 * tile.tilesize
 					});
 					this.tm.set(tile1);
 					this.tm.set(tile2);
@@ -113,13 +122,17 @@
 					for (var i = 0; i < 5; i++) {
 						var t = tile.dirt({
 							game: this.fakegame,
-							x: i,
+							x: i * tile.tilesize,
 							y: 0
 						});
 						this.tm.set(t);
 					}
 					// first test the easy tilesize-aligned version
-					this.tm.draw(this.fakectx, 32, 0);
+					this.tm.offset = {
+						x: 32,
+						y: 0
+					};
+					this.tm.draw(this.fakectx);
 					equals(this.fakectx.fillRectArgs.length, 3, 'called 3 times');
 					var args = this.fakectx.fillRectArgs;
 					equals(args[0].frx, 0, 'first frx');
@@ -138,13 +151,17 @@
 					for (var i = 0; i < 5; i++) {
 						var t = tile.dirt({
 							game: this.fakegame,
-							x: i,
+							x: i * tile.tilesize,
 							y: 0
 						})
 						this.tm.set(t);
 					}
 					// non tilesize aligned
-					this.tm.draw(this.fakectx, 20, 0);
+					this.tm.offset = {
+						x: 20,
+						y: 0
+					};
+					this.tm.draw(this.fakectx);
 					equals(this.fakectx.fillRectArgs.length, 3, 'called 3 times');
 					var args = this.fakectx.fillRectArgs;
 					equals(args[0].frx, 0, 'first frx');
@@ -153,7 +170,18 @@
 					equals(args[1].offx, 12, 'offset.y');
 					equals(args[2].frx, 0, 'third frx');
 					equals(args[2].offx, 44, 'offset.y');
-				});				
+				});
+				
+				test('tick', function() {
+					equals(typeof this.tm.tick, 'function', 'tick exists');
+					this.fakegame.player.x = 10;
+					this.fakegame.player.y = 20;
+					this.fakegame.playeroffset.x = 100;
+					this.fakegame.playeroffset.y = 180;
+					this.tm.tick();
+					equals(this.tm.offset.x, -90, 'offset.x');
+					equals(this.tm.offset.y, -160, 'offset.y');
+				});
 			});
 		</script>
 	</head>

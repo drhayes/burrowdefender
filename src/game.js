@@ -134,7 +134,7 @@
     };
     
     that.drawtiles = function(ctx) {
-      that.tilemap.draw(ctx, that.player.x - that.playeroffset.x, that.player.y - that.playeroffset.y);
+      that.tilemap.draw(ctx);
     };
     
     // add our drawing tasks
