@@ -19,7 +19,6 @@
         return that.tilemap[key];
       }
       return null;
-      return theAir;
     };
     
     that.set = function(x, y, tile) {
