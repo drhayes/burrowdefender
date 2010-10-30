@@ -44,16 +44,14 @@
 
       // latch onto keydown and keyup events of the body element
       that.latch = function() {
-          $('body').keydown(dispatchCallback);
-          $('body').keyup(dispatchCallback);
+          $('body').keydown(dispatchCallback).keyup(dispatchCallback);
       }
 
       // we are latched on construction
       that.latch();
 
       that.unlatch = function() {
-          $('body').unbind('keydown', dispatchCallback);
-          $('body').unbind('keyup', dispatchCallback);
+          $('body').unbind('keydown', dispatchCallback).unbind('keyup', dispatchCallback);
       }
 
       // function called when receiving a keyboard event
