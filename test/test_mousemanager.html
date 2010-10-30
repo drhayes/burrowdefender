@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Mouse Manager</title>
+		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/mousemanager.js"></script>
+		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<script>
+			$(document).ready(function() {
+				module('basics');
+				
+				test('ctor', function() {
+					equals(typeof mousemanager, 'function', 'mousemanager exists');
+					var m = mousemanager();
+					ok(m, 'something came back');
+					equals(typeof m.latch, 'function', 'latch is a function');
+					equals(typeof m.unlatch, 'function', 'unlatch is a function');
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1 id="qunit-header">Mouse Manager Test</h1>
+		<h2 id="qunit-banner"></h2>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">test markup, will be hidden</div>
+	</body>
+</html>
