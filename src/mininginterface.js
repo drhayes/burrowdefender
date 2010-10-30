@@ -10,6 +10,10 @@
     var that = {};
     
     that.canact = false;
+    that.mousesel = {
+      x: 0,
+      y: 0
+    };
     
     // returns selected tile in tile-space coordinates.
     that.getselpos = function() {
@@ -35,19 +39,17 @@
     that.draw = function(drawthing) {
       drawthing.hud.push(function(ctx) {
         var rect = that.reticlerect();
-        var style = that.canact ? 'hsla(120, 80%, 50%, 0.6)' : 'hsla(120, 20%, 50%, 0.6)';
+        var style = that.canact ? 'hsla(120, 80%, 50%, 0.9)' : 'hsla(120, 0%, 50%, 0.9)';
         ctx.strokeStyle(style);
         ctx.strokeRect(rect.x1, rect.y1, rect.x2 - rect.x1, rect.y2 - rect.y1);
       })
     };
     
     that.setcanact = function() {
-      // what tilepos is the mouse at?
-      var mousetilepos = tile.totilepos(args.game.mousemanager.pos.x, args.game.mousemanager.pos.y);
       // what tilepos is the player at?
       var playertilepos = tile.totilepos(args.game.player.x, args.game.player.y);
-      that.canact = Math.abs(mousetilepos.x - playertilepos.x) <= 1 &&
-        Math.abs(mousetilepos.y - playertilepos.y) <= 1;
+      that.canact = Math.abs(that.mousesel.x - playertilepos.x) <= 1 &&
+        Math.abs(that.mousesel.y - playertilepos.y) <= 1;
     }
     
     that.dig = function() {
@@ -55,7 +57,12 @@
     };
     
     that.tick = function() {
-      
+      // get the mouse selection
+      that.mousesel = that.getselpos();
+      // can we act?
+      that.setcanact();
+      // are we digging?
+      that.dig();
     };
     
     return that;

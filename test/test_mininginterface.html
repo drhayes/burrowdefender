@@ -59,44 +59,44 @@
 					equals(typeof this.mi.setcanact, 'function', 'setcanact exists');
 					this.fakegame.player.x = 0;
 					this.fakegame.player.y = 0;
-					this.fakegame.mousemanager.pos = {
+					this.mi.mousesel = {
 						x: 0,
 						y: 0
 					};
 					this.mi.setcanact();
 					ok(this.mi.canact, 'setcanact is true since mouse is close enough');
-					this.fakegame.mousemanager.pos = {
-						x: -16,
+					this.mi.mousesel = {
+						x: -1,
 						y: 0
 					};
 					this.mi.setcanact();
 					ok(this.mi.canact, 'is close enough still');
-					this.fakegame.mousemanager.pos = {
-						x: -16,
-						y: -16
+					this.mi.mousesel = {
+						x: -1,
+						y: -1
 					};
 					this.mi.setcanact();
 					ok(this.mi.canact, 'is close enough on y too');
-					this.fakegame.mousemanager.pos = {
-						x: -48,
+					this.mi.mousesel = {
+						x: -2,
 						y: 0
 					};
 					this.mi.setcanact();
 					ok(!this.mi.canact, 'is not close enough');
-					this.fakegame.mousemanager.pos = {
-						x: 48,
+					this.mi.mousesel = {
+						x: 1,
 						y: 0
 					};
 					this.mi.setcanact();
 					ok(this.mi.canact, 'is close enough');
-					this.fakegame.mousemanager.pos = {
-						x: 48,
-						y: 48
+					this.mi.mousesel = {
+						x: 1,
+						y: 1
 					};
 					this.mi.setcanact();
 					ok(this.mi.canact, 'is close enough');
-					this.fakegame.mousemanager.pos = {
-						x: 65,
+					this.mi.mousesel = {
+						x: 2,
 						y: 0,
 					};
 					this.mi.setcanact();
@@ -114,23 +114,34 @@
 					drawhud(fakectx);
 					equals(fakectx.strokeStyleArgs.length, 1, 'got stroke args');
 					var args = fakectx.strokeStyleArgs[0];
-					equals(args, 'hsla(120, 80%, 50%, 0.6)', 'reticle on');
+					equals(args, 'hsla(120, 80%, 50%, 0.9)', 'reticle on');
 					fakectx.strokeStyleArgs.pop();
 					this.mi.canact = false;
 					drawhud(fakectx);
 					equals(fakectx.strokeStyleArgs.length, 1, 'got stroke args');
 					var args = fakectx.strokeStyleArgs[0];
-					equals(args, 'hsla(120, 20%, 50%, 0.6)', 'reticle off');
+					equals(args, 'hsla(120, 0%, 50%, 0.9)', 'reticle off');
 				});
 				
 				test('tick', function() {
+					expect(4);
 					equals(typeof this.mi.tick, 'function', 'tick exists');
-					this.fakegame.player.x = 0;
-					this.fakegame.player.y = 0;
+					this.mi.getselpos = function() {
+						ok(true, 'mousesel called');
+					}
+					this.mi.setcanact = function() {
+						ok(true, 'setcanact called');
+					}
+					this.mi.dig = function() {
+						ok(true, 'dig called');
+					}
+					this.mi.tick();
 				});
 				
 				test('dig', function() {
 					equals(typeof this.mi.dig, 'function', 'dig exists');
+					this.fakegame.mousemanager.leftbutton = false;
+					this.mi.dig();
 				});
 			});
 		</script>
