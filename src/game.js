@@ -20,6 +20,10 @@
       x: that.width / 2,
       y: that.height / 2
     };
+    that.worldoffset = {
+      x: 0,
+      y: 0
+    };
     that.updater = updater();
     that.things = [];
     that.addthings = [];
@@ -43,6 +47,11 @@
     };
     
     that.update = function() {
+      // update the offsets
+      that.worldoffset = {
+        x: -(that.player.x - that.playeroffset.x),
+        y: -(that.player.y - that.playeroffset.y)
+      };
       // update the tilemap
       that.tilemap.tick();
       // things can kill themselves on tick, so we need a new list of the
@@ -81,18 +90,14 @@
     
     var drawiterate = function(drawthing, layer) {
       var drawthings = drawthing[layer];
+      that.ctx.offset.x = that.worldoffset.x;
+      that.ctx.offset.y = that.worldoffset.y;
+      // hud does not get drawn with offset
+      if (layer === 'hud') {
+        that.ctx.offset.x = 0;
+        that.ctx.offset.y = 0;
+      }
       $.each(drawthings, function(i, thing) {
-        var offsetx = -(that.player.x - that.playeroffset.x);
-        var offsety = -(that.player.y - that.playeroffset.y);
-        // hud does not get drawn with offset
-        if (layer === 'hud') {
-          offsetx = 0;
-          offsety = 0;
-        }
-        that.ctx.offset = {
-          x: offsetx,
-          y: offsety
-        };
         thing(that.ctx);
       });
     };

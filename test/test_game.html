@@ -17,6 +17,7 @@
 		<script type="text/javascript" src="../src/player.js"></script>
 		<script type="text/javascript" src="../src/inventory.js"></script>
 		<script type="text/javascript" src="../src/mousemanager.js"></script>
+		<script type="text/javascript" src="../src/mininginterface.js"></script>
 		<script type="text/javascript" src="../src/game.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
@@ -43,8 +44,9 @@
 					equals(g.player.x, 0, 'g.player.x');
 					equals(g.player.y, -200, 'g.player.y');
 					equals(g.things.length, 0, 'things has nothing in it');
-					equals(g.addthings.length, 2, 'background and player will be added first tick');
+					equals(g.addthings.length, 3, 'background, player, mininginterface will be added first tick');
 					ok(g.mousemanager, 'g.mousemanager');
+					ok(g.worldoffset, 'g.worldoffset');
 				});
 				
 				module('usage', {
@@ -135,20 +137,14 @@
 				});
 				
 				test('drawtiles', function() {
+					expect(2);
 					ok(typeof(this.g.drawtiles) === 'function', 'drawtiles exists');
 					this.g.tilemap = {
-						draw: function(ctx, x, y) {
-							this.ctx = ctx;
-							this.x = x;
-							this.y = y;
+						draw: function(ctx) {
+							ok(true, 'draw called');
 						}
 					};
-					this.g.player.x = -30;
-					this.g.player.y = 200;
 					this.g.drawtiles(this.fakectx);
-					same(this.g.tilemap.ctx, this.fakectx, 'tilemap has right ctx');
-					equals(this.g.tilemap.x, -155, 'tilemap.draw x');
-					equals(this.g.tilemap.y, 125, 'tilemap.draw y');
 				});
 				
 				module('layered drawing', {
