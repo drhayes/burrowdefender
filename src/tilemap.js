@@ -7,7 +7,7 @@
 
 (function(global, $) {
   
-  var tilemap = function(width, height) {
+  var tilemap = function(args) {
     var that = {};
     that.tilemap = {};
     
@@ -28,8 +28,8 @@
     var iterateviewabletiles = function(tilefunc) {
       var startx = Math.floor(that.offsetx / tile.tilesize);
       var starty = Math.floor(that.offsety / tile.tilesize);
-      var endx = Math.floor((that.offsetx + width) / tile.tilesize) + 1;
-      var endy = Math.floor((that.offsety + height) / tile.tilesize) + 1;
+      var endx = Math.floor((that.offsetx + args.game.width) / tile.tilesize) + 1;
+      var endy = Math.floor((that.offsety + args.game.height) / tile.tilesize) + 1;
       for (var x = startx; x < endx; x++) {
         for (var y = starty; y < endy; y++) {
           var sometile = that.get(x, y);

@@ -33,6 +33,8 @@ var FakeCtx = function() {
 };
 
 var FakeGame = function() {
+  this.width = 600;
+  this.height = 500;
   this.added = [];
   this.add = function(thing) {
     this.added.push(thing);
