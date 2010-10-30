@@ -64,8 +64,6 @@
 					};
 					var result = this.di.place(-33, 0);
 					ok(result, 'placed something');
-					equals(this.fakegame.tilemap.sx, -2, 'placed a tile at -1');
-					equals(this.fakegame.tilemap.sy, 0, 'placed a tile at 0');
 					ok(this.fakegame.tilemap.stile, 'placed a tile of some kind');
 					var t = this.fakegame.tilemap.stile;
 					equals(t.x, -64, 'tile.x is -64');
@@ -82,8 +80,6 @@
 					};
 					var result = this.di.place(-33, 0);
 					ok(result, 'placed something');
-					equals(this.fakegame.tilemap.sx, -2, 'placed a tile at -1');
-					equals(this.fakegame.tilemap.sy, 0, 'placed a tile at 0');
 					ok(this.fakegame.tilemap.stile, 'placed a tile of some kind');
 					var t = this.fakegame.tilemap.stile;
 					equals(t.x, -64, 'tile.x is -64');

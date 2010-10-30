@@ -21,8 +21,8 @@
       return null;
     };
     
-    that.set = function(x, y, tile) {
-      that.tilemap[tilemap.makekey(x, y)] = tile;
+    that.set = function(tile) {
+      that.tilemap[tilemap.makekey(tile.x, tile.y)] = tile;
     };
     
     var iterateviewabletiles = function(tilefunc) {

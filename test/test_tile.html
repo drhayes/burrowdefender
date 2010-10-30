@@ -150,8 +150,6 @@
 						ok(true, 'kill called');
 					}
 					d.mine();
-					equals(this.fakegame.tilemap.sx, 0, 'tilemap set x is 0');
-					equals(this.fakegame.tilemap.sy, 0, 'tilemap set y is 0');
 					var rt = this.fakegame.spatialhash.rt;
 					equals(rt.x1, d.x1, 'x1');
 					equals(rt.y1, d.y1, 'y1');

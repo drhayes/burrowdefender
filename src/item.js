@@ -48,7 +48,7 @@
         x: tilepos.x * tile.tilesize,
         y: tilepos.y * tile.tilesize
       });
-      options.game.tilemap.set(tilepos.x, tilepos.y, gentile);
+      options.game.tilemap.set(gentile);
       options.game.spatialhash.set(gentile);
       return true;
     };

@@ -51,7 +51,7 @@
           else {
             gentile = tile.dirt(args);
           }
-          that.tilemap.set(i, y + j, gentile);
+          that.tilemap.set(gentile);
           that.spatialhash.set(gentile);
         }
       }

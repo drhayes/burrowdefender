@@ -54,9 +54,7 @@ var FakeGame = function() {
 		}
 	};
 	this.tilemap = {
-		set: function(x, y, tile) {
-			this.sx = x;
-			this.sy = y;
+		set: function(tile) {
 			this.stile = tile;
 		},
 		get: function(x, y) {

@@ -59,8 +59,12 @@
 					equals(t, null, 't is null');
 					var t2 = this.tm.get(3, -2);
 					equals(t2, null, 't2 is null also');
-					var dirt = tile.dirt({game: this.fakegame});
-					this.tm.set(0, 0, dirt);
+					var dirt = tile.dirt({
+						x: 0,
+						y: 0,
+						game: this.fakegame
+					});
+					this.tm.set(dirt);
 					var key = tilemap.makekey(0, 0);
 					ok(this.tm.tilemap[key] === dirt, 'the dirt tile is in the tilemap');
 					ok(this.tm.get(0, 0) === dirt, 'the dirt tile we set is gettable');
@@ -77,12 +81,18 @@
 				});
 				
 				test('draw with two tiles noscroll', function() {
-					var goargs = {
-						game: this.fakegame
-					}
-					this.tm = tilemap(goargs);
-					this.tm.set(0, 3, tile.dirt(goargs));
-					this.tm.set(1, 3, tile.dirt(goargs));
+					var tile1 = tile.dirt({
+						game: this.fakegame,
+						x: 0,
+						y: 3
+					});
+					var tile2 = tile.dirt({
+						game: this.fakegame,
+						x: 1,
+						y: 3
+					});
+					this.tm.set(tile1);
+					this.tm.set(tile2);
 					this.tm.draw(this.fakectx);
 					equals(this.fakectx.fillRectArgs.length, 2, 'called twice');
 					var args = this.fakectx.fillRectArgs;
@@ -101,7 +111,12 @@
 					this.fakegame.width = tile.tilesize * 2;
 					this.fakegame.height = tile.tilesize * 2;
 					for (var i = 0; i < 5; i++) {
-						this.tm.set(i, 0, new tile.dirt({game: this.fakegame}));
+						var t = tile.dirt({
+							game: this.fakegame,
+							x: i,
+							y: 0
+						});
+						this.tm.set(t);
 					}
 					// first test the easy tilesize-aligned version
 					this.tm.draw(this.fakectx, 32, 0);
@@ -121,7 +136,12 @@
 					this.fakegame.width = tile.tilesize * 2;
 					this.fakegame.height = tile.tilesize * 2;
 					for (var i = 0; i < 5; i++) {
-						this.tm.set(i, 0, new tile.dirt({game: this.fakegame}));
+						var t = tile.dirt({
+							game: this.fakegame,
+							x: i,
+							y: 0
+						})
+						this.tm.set(t);
 					}
 					// non tilesize aligned
 					this.tm.draw(this.fakectx, 20, 0);

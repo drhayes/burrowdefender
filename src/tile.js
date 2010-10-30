@@ -44,7 +44,12 @@
   	  that.lasthealed = null;
   	  // this tile has been killed!
   	  var tilepos = tile.totilepos(that.x, that.y);
-      args.game.tilemap.set(tilepos.x, tilepos.y, tile.dug(args));
+  	  var dugtile = tile.dug({
+  	    game: args.game,
+  	    x: tilepos.x,
+  	    y: tilepos.y
+  	  })
+      args.game.tilemap.set(dugtile);
       args.game.spatialhash.remove(that);
       // find the center point of this tile
       var cx = that.x + (tile.tilesize / 2);
