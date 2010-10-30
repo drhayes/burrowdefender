@@ -15,6 +15,8 @@
 		<script type="text/javascript" src="../src/keyboardmanager.js"></script>
 		<script type="text/javascript" src="../src/updater.js"></script>
 		<script type="text/javascript" src="../src/player.js"></script>
+		<script type="text/javascript" src="../src/inventory.js"></script>
+		<script type="text/javascript" src="../src/mousemanager.js"></script>
 		<script type="text/javascript" src="../src/game.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
@@ -42,6 +44,7 @@
 					equals(g.player.y, -200, 'g.player.y');
 					equals(g.things.length, 0, 'things has nothing in it');
 					equals(g.addthings.length, 2, 'background and player will be added first tick');
+					ok(g.mousemanager, 'g.mousemanager');
 				});
 				
 				module('usage', {

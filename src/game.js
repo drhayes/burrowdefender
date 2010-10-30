@@ -23,6 +23,7 @@
     that.updater = updater();
     that.things = [];
     that.addthings = [];
+    that.mousemanager = mousemanager({game: that});
     
     // temporary tile generation
 		that.tilegenerator.generate(31 * tile.tilesize, 0);
