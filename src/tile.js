@@ -43,11 +43,10 @@
   	  }
   	  that.lasthealed = null;
   	  // this tile has been killed!
-  	  var tilepos = tile.totilepos(that.x, that.y);
   	  var dugtile = tile.dug({
   	    game: args.game,
-  	    x: tilepos.x,
-  	    y: tilepos.y
+  	    x: that.x,
+  	    y: that.y
   	  })
       args.game.tilemap.set(dugtile);
       args.game.spatialhash.remove(that);

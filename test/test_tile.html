@@ -137,8 +137,8 @@
 				test('mine', function() {
 					var d = tile.dirt({
 						game: this.fakegame,
-						x: 0,
-						y: 0
+						x: 32,
+						y: 32
 					});
 					equals(typeof(d.mine), 'function', 'mine exists');
 					d.kill = function() {
@@ -156,6 +156,10 @@
 					equals(rt.x2, d.x2, 'x2');
 					equals(rt.y2, d.y2, 'y2');
 					equals(this.fakegame.added.length, 1, 'something got added');
+					// check for dug tile
+					var dt = this.fakegame.tilemap.stile;
+					equals(dt.x, 32, 'dug tile x is 32');
+					equals(dt.y, 32, 'dug tile y is 32');
 				});
 				
 				test('tick', function() {
