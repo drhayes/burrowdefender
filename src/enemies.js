@@ -66,11 +66,11 @@
     };
     
     that.collide = function(collider) {
-      if (typeof collider.health === 'undefined') {
+      if (typeof collider.damage !== 'function') {
         return;
       }
       if (that.movestate.wantstodigx) {
-        collider.health -= 1;
+        collider.damage(1);
       }
     }
     

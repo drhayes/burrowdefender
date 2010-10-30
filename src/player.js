@@ -136,7 +136,7 @@
 				// is it a diggable tile?
 				var digtile = args.game.tilemap.get(tilepos.x, tilepos.y);
 				if (digtile) {
-				  digtile.health -= that.minedamage;
+				  digtile.damage(that.minedamage);
 				}
 			}
 		};
@@ -193,6 +193,10 @@
 			that.walk();
 			// placing anything?
 			that.place();
+		};
+		
+		that.damage = function(amt) {
+		  that.health -= amt;
 		};
 		
 		return that;

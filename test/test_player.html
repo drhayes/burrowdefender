@@ -136,7 +136,7 @@
 							return this.faketile;
 						},
 						faketile: {
-							mine: function() {
+							damage: function() {
 								this.mined = true;
 							}
 						}
@@ -260,6 +260,13 @@
 						ok(true, 'inventory dropsel called');
 					}
 					this.p.place();
+				});
+				
+				test('damage', function() {
+					equals(typeof this.p.damage, 'function', 'damage exists');
+					var currenthealth = this.p.health;
+					this.p.damage(2);
+					equals(this.p.health, currenthealth - 2, 'damage decrements health');
 				});
 			});
 		</script>
