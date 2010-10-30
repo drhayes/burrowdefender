@@ -90,14 +90,19 @@
     
     var drawiterate = function(drawthing, layer) {
       var drawthings = drawthing[layer];
-      that.ctx.offset.x = -that.worldoffset.x;
-      that.ctx.offset.y = -that.worldoffset.y;
+      var offsetx = -that.worldoffset.x;
+      var offsety = -that.worldoffset.y;
       // hud does not get drawn with offset
       if (layer === 'hud') {
-        that.ctx.offset.x = 0;
-        that.ctx.offset.y = 0;
+        offsetx = 0;
+        offsety = 0;
       }
       $.each(drawthings, function(i, thing) {
+        // reset the context offset
+        that.ctx.offset = {
+          x: offsetx,
+          y: offsety
+        }
         thing(that.ctx);
       });
     };
