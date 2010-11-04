@@ -76,6 +76,31 @@
 					equals(this.g.addthings.length, 0, 'after tick, nothing to add');
 					equals(this.g.things.length, addthingslength + 1, 'after tick, have a thing');
 				});
+				
+				test('add sets the spatialhash if rect', function() {
+					var thing1 = {
+						cats: 'pants'
+					};
+					var thing2 = {
+						x1: 0,
+						y1: 0,
+						x2: 16,
+						y2: 16
+					};
+					// mock up the spatial hash
+					this.g.spatialhash = {
+						set: function(r) {
+							this.sr = r;
+						}
+					};
+					var addthingslength = this.g.addthings.length;
+					this.g.add(thing1);
+					equals(this.g.addthings.length, addthingslength + 1, 'added a thing');
+					equals(this.g.spatialhash.sr, undefined, 'did not set the spatial hash');
+					this.g.add(thing2);
+					equals(this.g.addthings.length, addthingslength + 2, 'added another thing');
+					equals(this.g.spatialhash.sr, thing2, 'set thing2 in the spatial hash');
+				});
 
 				test('remove via killed', function() {
 					var thing1 = {

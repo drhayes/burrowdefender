@@ -44,6 +44,13 @@
     // can draw itself, add to drawables. If it ticks, add it there. Etc...
     that.add = function(thing) {
       that.addthings.push(thing);
+      // if the thing is a rect, set it in the spatialhash
+      if (typeof thing.x1 === 'number' &&
+          typeof thing.y1 === 'number' &&
+          typeof thing.x2 === 'number' &&
+          typeof thing.y2 === 'number') {
+        that.spatialhash.set(thing);      
+      }
     };
     
     that.update = function() {

@@ -57,7 +57,6 @@
         item: item.dirtitem({game: args.game})
       });
       dp.updaterect();
-      args.game.spatialhash.set(dp);
       args.game.add(dp);
     };
     
