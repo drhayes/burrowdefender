@@ -140,7 +140,7 @@
 				var tilepos = tileposindirection();
 				// is it a diggable tile?
 				var digtile = args.game.tilemap.get(tilepos.x, tilepos.y);
-				if (digtile) {
+				if (digtile && typeof digtile.damage === 'function') {
 				  digtile.damage(that.minedamage);
 				}
 			}
