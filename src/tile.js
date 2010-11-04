@@ -2,7 +2,7 @@
 //
 // The thing a player and mobs walk on top of. Tend not to move.
 //
-// Depends: pickup.js
+// Depends: pickup.js, utils.js
 
 (function(global, $) {
   
@@ -83,10 +83,6 @@
       that.healtick();
     }
     
-    that.damage = function(amt) {
-      that.health -= amt;
-    }
-    
     return that;
   };
   
@@ -122,8 +118,10 @@
       alert('args.game!')
     }
     var that = tile(args);
-    that.health = 20;
-    that.maxhealth = 20;
+    // dirt tiles can be damaged
+    utils.damageable(that, {
+      health: 20
+    });
     
     that.draw = function(ctx) {
       ctx.fillStyle('rgb(102,51,0)');
