@@ -10,6 +10,45 @@
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
 			$(document).ready(function() {
+				module('bullet', {
+					setup: function() {
+						this.fakegame = new FakeGame();
+						this.fakectx = new FakeCtx();
+						this.b = defenses.bullet({
+							x: 0,
+							y: 0,
+							game: this.fakegame
+						});
+					}
+				});
+				
+				test('basics', function() {
+					ok(this.b, 'bullet instance is there');
+					equals(this.b.size.x, 2, 'size.x is 2');
+					equals(this.b.size.y, 2, 'size.y is 2');
+				});
+				
+				test('drawing', function() {
+					var drawthing = {
+						sprite1: []
+					};
+					this.b.x = 23;
+					this.b.y = 34;
+					this.b.draw(drawthing);
+					equals(drawthing.sprite1.length, 1, 'draws in sprite1');
+					var draw = drawthing.sprite1[0];
+					draw(this.fakectx);
+					equals(this.fakectx.fillStyleArgs.length, 1, 'fillStyleArgs length');
+					var args = this.fakectx.fillStyleArgs[0];
+					equals(args, 'hsl(120, 100%, 100%)', 'fillStyle for bullet');
+					equals(this.fakectx.fillRectArgs.length, 1, 'fillRectArgs length');
+					args = this.fakectx.fillRectArgs[0];
+					equals(args.frx, 23, 'frx');
+					equals(args.fry, 34, 'fry');
+					equals(args.frw, 2, 'frw');
+					equals(args.frh, 2, 'frh');
+				});
+				
 				module('sentrygun', {
 					setup: function() {
 						this.fakegame = new FakeGame();
