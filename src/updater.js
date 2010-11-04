@@ -54,5 +54,5 @@
 
   global.updater = updater;
   
-})(window, jQuery)
+})(this, jQuery)
 

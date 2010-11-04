@@ -83,4 +83,4 @@
 
   global.tilemap = tilemap;
   
-})(window, jQuery)
+})(this, jQuery)

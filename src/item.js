@@ -73,4 +73,4 @@
 
   global.item = item;
 
-})(window, jQuery)
+})(this, jQuery)

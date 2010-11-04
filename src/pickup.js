@@ -49,4 +49,4 @@
   };
   global.pickup = pickup;
 
-})(window, jQuery)
+})(this, jQuery)

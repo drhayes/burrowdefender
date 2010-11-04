@@ -44,4 +44,4 @@
 
   global.eventer = eventer;
   
-})(window, jQuery)
+})(this, jQuery)

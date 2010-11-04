@@ -41,4 +41,4 @@
   
   global.tilefrag = tilefrag;
   
-})(window, jQuery);
+})(this, jQuery);

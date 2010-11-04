@@ -208,4 +208,4 @@
     
   global.player = player;
   
-})(window, jQuery)
+})(this, jQuery)

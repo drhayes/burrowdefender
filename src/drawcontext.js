@@ -54,4 +54,4 @@
   
   global.drawcontext = drawcontext;
   
-})(window, jQuery)
+})(this, jQuery)

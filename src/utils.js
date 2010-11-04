@@ -4,7 +4,7 @@
 
 (function(global, $) {
   
-  window.utils = {
+  global.utils = {
     collide: function(rect1, rect2) {
       if (rect1.y2 < rect2.y1) {
         return false;
@@ -31,4 +31,4 @@
     }
   }
   
-})(window, jQuery)
+})(this, jQuery)

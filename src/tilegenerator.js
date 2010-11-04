@@ -76,4 +76,4 @@
 
   global.tilegenerator = tilegenerator;
 
-})(window, jQuery)
+})(this, jQuery)

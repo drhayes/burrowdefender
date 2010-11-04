@@ -182,4 +182,4 @@
   
   global.mob = mob;
 
-})(window, jQuery)
+})(this, jQuery)

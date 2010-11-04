@@ -80,5 +80,5 @@
   
   global.keyboardmanager = keyboardmanager;
   
-})(window, jQuery)
+})(this, jQuery)
 

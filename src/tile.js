@@ -173,4 +173,4 @@
   
   global.tile = tile;
   
-})(window, jQuery)
+})(this, jQuery)

@@ -94,4 +94,4 @@
   
   global.mininginterface = mininginterface;
   
-})(window, jQuery)
+})(this, jQuery)

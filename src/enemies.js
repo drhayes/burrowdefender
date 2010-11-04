@@ -82,4 +82,4 @@
   
   global.zombie = zombie;
   
-})(window, jQuery);
+})(this, jQuery);

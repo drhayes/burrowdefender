@@ -114,4 +114,4 @@
 
   global.spatialhash = spatialhash;
 
-})(window, jQuery)
+})(this, jQuery)

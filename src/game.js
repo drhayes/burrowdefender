@@ -183,4 +183,4 @@
   
   global.game = game;
   
-})(window, jQuery)
+})(this, jQuery)

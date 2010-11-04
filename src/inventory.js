@@ -123,4 +123,4 @@
   
   global.inventory = inventory;
   
-})(window, jQuery);
+})(this, jQuery);

@@ -59,4 +59,4 @@
 
   global.mousemanager = mousemanager;
 
-})(window, jQuery)
+})(this, jQuery)
