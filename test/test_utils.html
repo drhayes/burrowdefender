@@ -13,7 +13,7 @@
 				});
 				
 				test('collide', function() {
-					ok(typeof(utils.collide) != 'undefined', 'utils.collide exists');
+					equals(typeof utils.collide, 'function', 'utils.collide exists');
 					var collide = utils.collide;
 					rect1 = {x1: 0, y1: 0, x2: 10, y2: 10};
 					rect2 = {x1: -5, y1: -5, x2: 5, y2: 5};
@@ -23,13 +23,43 @@
 				});
 				
 				test('intersect', function() {
-					ok(typeof(utils.intersect) != 'undefined', 'utils.intersect exists');
+					equals(typeof utils.intersect, 'function', 'utils.intersect exists');
 					var intersect = utils.intersect;
 					ok(!intersect(-1, 0, 1, 4), 'no intersect');
 					ok(intersect(0, 2, 1, 4), 'intersect');
 					ok(intersect(2, 3, 1, 4), 'intersect');
 					ok(intersect(3, 6, 1, 4), 'intersect');
 					ok(!intersect(5, 8, 1, 4), 'no intersect');
+				});
+				
+				test('damageable', function() {
+					equals(typeof utils.damageable, 'function', 'utils.damageable exists');
+					var thing = {};
+					utils.damageable(thing, {
+						health: 5
+					});
+					equals(typeof thing.damage, 'function', 'thing has a damage function');
+					equals(typeof thing.health, 'number', 'thing has health');
+					equals(typeof thing.maxhealth, 'number', 'thing has maxhealth');
+					equals(thing.health, 5, 'health is set to 5');
+					equals(thing.maxhealth, 5, 'maxhealth is set to 5');
+					thing.damage(2);
+					equals(thing.health, 3, 'thing.health decremented by damage call');
+					// reset to check for thrown
+					thing = {
+						vel: {
+							x: 0,
+							y: 0
+						}
+					};
+					utils.damageable(thing, {
+						health: 10
+					});
+					equals(thing.health, 10, 'thing.health is 10');
+					thing.damage(2);
+					equals(thing.health, 8, 'thing.health decremented by damage call');
+					equals(thing.vel.x, -4, 'thing thrown in x by -4');
+					equals(thing.vel.y, -7, 'thing thrown in y by -7');
 				});
 			});
 		</script>
