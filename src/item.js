@@ -67,6 +67,8 @@
     that.drawimage = function(ctx) {
       ctx.drawImage(sentrygunitemimage, 0, 0);
     }
+    
+    return that;
   }
 
   global.item = item;

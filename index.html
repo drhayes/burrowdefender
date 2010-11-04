@@ -58,6 +58,7 @@
 		<p>...or right-click when selector is green to place (new!)</p>
 		<p>have fun!</p>
 		<button id="addzombie">Add Zombie</button>
+		<button id="addgun">Add Sentry Gun</button>
 		<p id="debug"></p>
 	</div>
 	<canvas id="drawme" width="600" height="500"></canvas>
@@ -74,6 +75,17 @@
 			      game: g
 			    });
 			    g.add(zombie);
+			});
+			
+			$('#addgun').click(function() {
+				// add a sentry gun
+				var sentrygun = pickup({
+					x: 200,
+					y: -200,
+					game: g,
+					item: item.sentrygunitem({game: g})
+				});
+				g.add(sentrygun);
 			})
 		});
 	</script>
