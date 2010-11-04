@@ -44,12 +44,12 @@
 					this.inv.add(THING1);
 					var stuff = this.inv.things['1'];
 					ok(stuff, 'got stuff back from place 1');
-					equals(stuff.type, THING1, 'type of stuff is THING1');
+					equals(stuff.instance, THING1, 'type of stuff is THING1');
 					equals(stuff.count, 1, 'count of stuff is 1');
 					this.inv.add(THING1)
 					stuff = this.inv.things['1'];
 					ok(stuff, 'got stuff back from place 1 for 2 things');
-					equals(stuff.type, THING1, 'type of stuff is THING1');
+					equals(stuff.instance, THING1, 'type of stuff is THING1');
 					equals(stuff.count, 2, 'count of stuff is 2');
 				});
 				
@@ -58,16 +58,16 @@
 					this.inv.add(THING2);
 					var stuff = this.inv.things['1'];
 					ok(stuff, 'got stuff back from place 1');
-					equals(stuff.type, THING1, 'type of stuff is THING1');
+					equals(stuff.instance, THING1, 'type of stuff is THING1');
 					equals(stuff.count, 1, 'count of stuff is 1');
 					stuff = this.inv.things['2'];
 					ok(stuff, 'got stuff back from place 2');
-					equals(stuff.type, THING2, 'type of stuff is THING2');
+					equals(stuff.instance, THING2, 'type of stuff is THING2');
 					equals(stuff.count, 1, 'count of stuff is 1');
 					this.inv.add(THING1);
 					stuff = this.inv.things['1'];
 					ok(stuff, 'got stuff back from place 1');
-					equals(stuff.type, THING1, 'type of stuff is THING1');
+					equals(stuff.instance, THING1, 'type of stuff is THING1');
 					equals(stuff.count, 2, 'count of stuff is 2');
 				});
 				
@@ -129,6 +129,17 @@
 					this.inv.add(i2);
 					var is = this.inv.things['1'];
 					equals(is.count, 2, 'two things');
+				});
+				
+				test('add dirtitems and sentryguns', function() {
+					var i1 = item.dirtitem({game: this.fakegame});
+					var i2 = item.sentrygunitem({game: this.fakegame});
+					this.inv.add(i1);
+					this.inv.add(i2);
+					var is = this.inv.things['1'];
+					equals(is.count, 1, 'one dirt item picked up');
+					is = this.inv.things[2];
+					equals(is.count, 1, 'one sentry gun picked up');
 				});
 			});
 		</script>

@@ -26,7 +26,7 @@
     that.add = function(thing) {
       // find the index for this thing
       var index = 1;
-      var key = '' + thing;
+      var key = thing.type || thing.toString();
       for (var i = 1; i <= MAXITEMS; i++) {
         if (!that.things.hasOwnProperty(i) || that.things[i].key === key) {
           index = i;
