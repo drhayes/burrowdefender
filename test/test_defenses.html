@@ -49,6 +49,21 @@
 					equals(args.frh, 2, 'frh');
 				});
 				
+				test('collide', function() {
+					equals(typeof this.b.collide, 'function', 'collide exists');
+					var thing = {};
+					this.b.collide(thing);
+					ok(!this.b.killed, 'not killed');
+					thing = {
+						damage: function(amt) {
+							thing.damt = amt;
+						}
+					};
+					this.b.collide(thing);
+					equals(thing.damt, 3, 'collide calls damage when available');
+					ok(this.b.killed, 'killed');
+				});
+				
 				module('sentrygun', {
 					setup: function() {
 						this.fakegame = new FakeGame();

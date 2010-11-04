@@ -20,7 +20,16 @@
         ctx.fillStyle('hsl(120, 100%, 100%)');
         ctx.fillRect(that.x, that.y, 2, 2);
       });
-    }
+    };
+    
+    that.collide = function(collider) {
+      if (typeof collider.damage !== 'function') {
+        return;
+      }
+      collider.damage(3);
+      // remove the bullet from the game... its dread business is done
+      that.killed = true;
+    };
     
     return that;
   }
