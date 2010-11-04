@@ -8,6 +8,7 @@
 	<script type="text/javascript" src="src/utils.js"></script>
 	<script type="text/javascript" src="src/drawcontext.js"></script>
 	<script type="text/javascript" src="src/mob.js"></script>
+	<script type="text/javascript" src="src/defenses.js"></script>
 	<script type="text/javascript" src="src/tilefrag.js"></script>
 	<script type="text/javascript" src="src/pickup.js"></script>
 	<script type="text/javascript" src="src/tile.js"></script>
@@ -59,6 +60,7 @@
 		<p>have fun!</p>
 		<button id="addzombie">Add Zombie</button>
 		<button id="addgun">Add Sentry Gun</button>
+		<button id="firebullet">Fire Bullet</button>
 		<p id="debug"></p>
 	</div>
 	<canvas id="drawme" width="600" height="500"></canvas>
@@ -86,6 +88,20 @@
 					item: item.sentrygunitem({game: g})
 				});
 				g.add(sentrygun);
+			});
+			
+			$('#firebullet').click(function() {
+				// player fires a bullet!
+				var bullet = defenses.bullet({
+					x: g.player.x + 18,
+					y: g.player.y + 10,
+					game: g,
+					vel: {
+						x: 6,
+						y: 0
+					}
+				});
+				g.add(bullet);
 			})
 		});
 	</script>
