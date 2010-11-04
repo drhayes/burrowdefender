@@ -19,11 +19,14 @@
 					});
 					equals(i.type, item.types.DIRT, 'set for the DIRT type');
 					equals(typeof i.place, 'function', 'i.place exists');
+					equals(typeof item.dirtitem, 'function', 'dirtitem exists');
+					equals(typeof item.sentrygunitem, 'function', 'sentrygunitem exists');
 				});
 				
 				test('types', function() {
 					equals(typeof item.types, 'object', 'item.types');
 					equals(item.types.DIRT, '1', 'the type of dirt');
+					equals(item.types.SENTRYGUN, '2', 'the type of sentry guns');
 				});
 				
 				module('usage', {
@@ -102,6 +105,16 @@
 					equals(typeof this.fakegame.tilemap.sx, 'undefined', 'tilemap sx is undefined');
 					equals(typeof this.fakegame.tilemap.sy, 'undefined', 'tilemap sy is undefined');
 					equals(typeof this.fakegame.spatialhash.st, 'undefined', 'spatialhash st is undefined');
+				});
+				
+				module('sentrygun item', {
+					setup: function() {
+						this.fakegame = new FakeGame();
+						this.fakectx = new FakeCtx();
+						this.sg = item.sentrygunitem({
+							game: this.fakegame
+						});
+					}
 				});
 			});
 		</script>

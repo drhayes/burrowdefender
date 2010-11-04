@@ -8,6 +8,8 @@
 
   var dirtitemimage = new Image();
   dirtitemimage.src = 'assets/images/dirtitem.png';
+  var sentrygunitemimage = new Image();
+  sentrygunitemimage.src = 'assets/images/sentrygunitem.png';
 
   var item = function(options) {
     var that = {};
@@ -23,7 +25,8 @@
   };
 
   item.types = {
-    DIRT: '1'
+    DIRT: '1',
+    SENTRYGUN: '2'
   };
 
   item.dirtitem = function(options) {
@@ -55,6 +58,16 @@
     
     return that;
   };
+  
+  item.sentrygunitem = function(args) {
+    var that = item({
+      type: item.types.SENTRYGUN
+    });
+    
+    that.drawimage = function(ctx) {
+      ctx.drawImage(sentrygunitemimage, 0, 0);
+    }
+  }
 
   global.item = item;
 
