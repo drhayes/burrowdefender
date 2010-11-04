@@ -11,9 +11,9 @@
   var sentrygunitemimage = new Image();
   sentrygunitemimage.src = 'assets/images/sentrygunitem.png';
 
-  var item = function(options) {
+  var item = function(args) {
     var that = {};
-    that.type = options.type;
+    that.type = args.type;
 
     that.drawimage = function(ctx) {};
     
@@ -28,8 +28,15 @@
     DIRT: '1',
     SENTRYGUN: '2'
   };
+  
+  // given a tile position, return a boolean indicating whether we can place
+  // a physical object there.
+  var isvalidforplace = function(game, tilepos) {
+    var existingtile = game.tilemap.get(tilepos.x, tilepos.y);
+    return !(existingtile !== null && existingtile.solid)
+  }
 
-  item.dirtitem = function(options) {
+  item.dirtitem = function(args) {
     var that = item({
       type: item.types.DIRT
     });
@@ -41,18 +48,16 @@
     // x,y given in world coordinates. returns true if something was placed.
     that.place = function(x, y) {
       var tilepos = tile.totilepos(x, y);
-      // are we trying to place in a solid tile?
-      var existingtile = options.game.tilemap.get(tilepos.x, tilepos.y);
-      if (existingtile !== null && existingtile.solid) {
+      if (!isvalidforplace(args.game, tilepos)) {
         return false;
       }
       var gentile = tile.dirt({
-        game: options.game,
+        game: args.game,
         x: tilepos.x * tile.tilesize,
         y: tilepos.y * tile.tilesize
       });
-      options.game.tilemap.set(gentile);
-      options.game.spatialhash.set(gentile);
+      args.game.tilemap.set(gentile);
+      args.game.spatialhash.set(gentile);
       return true;
     };
     
@@ -66,6 +71,10 @@
     
     that.drawimage = function(ctx) {
       ctx.drawImage(sentrygunitemimage, 0, 0);
+    }
+    
+    that.place = function(x, y) {
+      
     }
     
     return that;
