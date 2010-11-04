@@ -2,7 +2,7 @@
 //
 // The player. Y'know, of the game.
 //
-// Depends: Mob, KeyboardManager, Tile, Inventory
+// Depends: Mob, KeyboardManager, Tile, Inventory, utils.js
 
 (function(global, $) {
   
@@ -41,8 +41,12 @@
     that.minedamage = 1;
     
     // health stuff
-    that.health = 5;
-    that.maxhealth = 5;
+    utils.damageable(that, {
+      health: 5,
+      whendamaged: function(amt) {
+  		  that.movestate.standing = false;
+      }
+    });
     that.delicious = true;
     
     that.inventory = inventory();
@@ -194,13 +198,6 @@
 			that.walk();
 			// placing anything?
 			that.place();
-		};
-		
-		that.damage = function(amt) {
-		  that.health -= amt;
-		  that.vel.x = -4;
-		  that.vel.y = -7;
-		  that.movestate.standing = false;
 		};
 		
 		return that;
