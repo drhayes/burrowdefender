@@ -31,7 +31,7 @@
   
   // given a tile position, return a boolean indicating whether we can place
   // a physical object there.
-  var isvalidforplace = function(game, tilepos) {
+  var isvalidtileforplace = function(game, tilepos) {
     var existingtile = game.tilemap.get(tilepos.x, tilepos.y);
     return !(existingtile !== null && existingtile.solid)
   }
@@ -48,7 +48,7 @@
     // x,y given in world coordinates. returns true if something was placed.
     that.place = function(x, y) {
       var tilepos = tile.totilepos(x, y);
-      if (!isvalidforplace(args.game, tilepos)) {
+      if (!isvalidtileforplace(args.game, tilepos)) {
         return false;
       }
       var gentile = tile.dirt({
@@ -74,7 +74,12 @@
     }
     
     that.place = function(x, y) {
-      
+      var tilepos = tile.totilepos(x, y);
+      if (!isvalidtileforplace(args.game, tilepos)) {
+        return false;
+      }
+      alert('place sentry gun!');
+      return true;
     }
     
     return that;
