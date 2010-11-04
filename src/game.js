@@ -6,6 +6,13 @@
 
 (function(global, $) {
   
+  var isrect = function(thing) {
+    return typeof thing.x1 === 'number' &&
+        typeof thing.y1 === 'number' &&
+        typeof thing.x2 === 'number' &&
+        typeof thing.y2 === 'number';
+  }
+  
   var game = function(canvasid) {
     var that = {};
     that.canvas = $(canvasid)[0];
@@ -45,10 +52,7 @@
     that.add = function(thing) {
       that.addthings.push(thing);
       // if the thing is a rect, set it in the spatialhash
-      if (typeof thing.x1 === 'number' &&
-          typeof thing.y1 === 'number' &&
-          typeof thing.x2 === 'number' &&
-          typeof thing.y2 === 'number') {
+      if (isrect(thing)) {
         that.spatialhash.set(thing);      
       }
     };
@@ -84,6 +88,12 @@
         };
         if (typeof(thing.killed) === 'undefined' || !thing.killed) {
           newthings.push(thing);
+        }
+        else {
+          // should we remove it from the spatial hash?
+          if (isrect(thing)) {
+            that.spatialhash.remove(thing);
+          }
         }
       });
       // swap the list if anything was killed and add anything that was added
