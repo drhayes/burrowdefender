@@ -24,8 +24,8 @@
 				
 				test('basics', function() {
 					ok(this.b, 'bullet instance is there');
-					equals(this.b.size.x, 2, 'size.x is 2');
-					equals(this.b.size.y, 2, 'size.y is 2');
+					equals(this.b.size.x, 4, 'size.x is 2');
+					equals(this.b.size.y, 4, 'size.y is 2');
 				});
 				
 				test('drawing', function() {
@@ -45,8 +45,8 @@
 					args = this.fakectx.fillRectArgs[0];
 					equals(args.frx, 23, 'frx');
 					equals(args.fry, 34, 'fry');
-					equals(args.frw, 2, 'frw');
-					equals(args.frh, 2, 'frh');
+					equals(args.frw, 4, 'frw');
+					equals(args.frh, 4, 'frh');
 				});
 				
 				test('collide', function() {
@@ -60,7 +60,7 @@
 						}
 					};
 					this.b.collide(thing);
-					equals(thing.damt, 3, 'collide calls damage when available');
+					equals(thing.damt, 7, 'collide calls damage when available');
 					ok(this.b.killed, 'killed');
 				});
 				

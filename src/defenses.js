@@ -11,14 +11,14 @@
   defenses.bullet = function(args) {
     var that = mob(args);
     that.size = {
-      x: 2,
-      y: 2
+      x: 4,
+      y: 4
     };
     
     that.draw = function(drawthing) {
       drawthing.sprite1.push(function(ctx) {
         ctx.fillStyle('hsl(120, 100%, 100%)');
-        ctx.fillRect(that.x, that.y, 2, 2);
+        ctx.fillRect(that.x, that.y, 4, 4);
       });
     };
     
@@ -26,7 +26,7 @@
       if (typeof collider.damage !== 'function') {
         return;
       }
-      collider.damage(3);
+      collider.damage(7);
       // remove the bullet from the game... its dread business is done
       that.killed = true;
     };
