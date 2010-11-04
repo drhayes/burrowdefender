@@ -50,6 +50,10 @@
 			else if (args.game.player.x > that.x) {
 			  that.vel.x = 1;
 			};
+			// have I been killed?
+			if (that.health <= 0) {
+			  that.killed = true;
+			}
 			// if no forward progress was made, jump or dig
 	    that.movestate.wantstodigx = false;
 			var tilepos = tile.totilepos(that.x, that.y);
