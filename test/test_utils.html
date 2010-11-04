@@ -60,6 +60,29 @@
 					equals(thing.health, 8, 'thing.health decremented by damage call');
 					equals(thing.vel.x, -4, 'thing thrown in x by -4');
 					equals(thing.vel.y, -7, 'thing thrown in y by -7');
+					thing = {};
+					utils.damageable(thing, {
+						health: 5,
+						whendamaged: function(amt) {
+							thing.whenamt = amt;
+						}
+					});
+					thing.damage(2);
+					equals(thing.whenamt, 2, 'whendamaged called for bare thing');
+					thing = {
+						vel: {
+							x: 0,
+							y: 0
+						}
+					};
+					utils.damageable(thing, {
+						health: 7,
+						whendamaged: function(amt) {
+							thing.whenamt = amt;
+						}
+					});
+					thing.damage(3);
+					equals(thing.whenamt, 3, 'whendamaged called for velocity thing');
 				});
 			});
 		</script>

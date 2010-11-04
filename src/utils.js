@@ -43,11 +43,17 @@
           thing.health -= amt;
           thing.vel.x = -4;
           thing.vel.y = -7;
+          if (typeof args.whendamaged === 'function') {
+            args.whendamaged(amt);
+          }
         }
       }
       else {
         thing.damage = function(amt) {
           thing.health -= amt;
+          if (typeof args.whendamaged === 'function') {
+            args.whendamaged(amt);
+          }
         }
       }
     }
