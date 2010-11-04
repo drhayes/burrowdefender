@@ -47,6 +47,10 @@
 					equals(typeof this.z.draw, 'function', 'draw exists');
 				});
 				
+				test('damage', function() {
+					equals(typeof this.z.damage, 'function', 'zombies are damageable');
+				});
+				
 				test('tick moves towards player', function() {
 					equals(typeof this.z.tick, 'function', 'tick exists');
 					this.fakegame.player.x = -20;

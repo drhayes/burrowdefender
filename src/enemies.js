@@ -17,6 +17,11 @@
     // zombies are not solid
     that.solid = false;
     
+    // zombies are damageable
+    utils.damageable(that, {
+      health: 20
+    });
+    
     // custom movestates
     that.movestate.wantstodig = false;
     
