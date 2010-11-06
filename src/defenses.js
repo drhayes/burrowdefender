@@ -48,6 +48,15 @@
   defenses.sentrygun = function(args) {
     var that = mob(args);
     that.bounce = 0.4;
+    that.lastai = 0;
+    
+    that.ai = function() {
+      var current = new Date().getTime();
+      if (current - that.lastai < 1000) {
+        return;
+      };
+      that.lastai = current;
+    };
     
     that.tick = function() {
       mob.gravitytick.call(that);
