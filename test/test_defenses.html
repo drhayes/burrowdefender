@@ -49,6 +49,15 @@
 					equals(args.frh, 4, 'frh');
 				});
 				
+				test('tick', function() {
+					equals(typeof this.b.tick, 'function', 'tick exists');
+					ok(this.b.created, 'created attribute');
+					this.b.created -= 1001;
+					ok(!this.b.killed, 'bullet is not killed yet');
+					this.b.tick();
+					ok(this.b.killed, 'bullet is killed');
+				});
+				
 				test('collide', function() {
 					equals(typeof this.b.collide, 'function', 'collide exists');
 					var thing = {};
