@@ -60,7 +60,6 @@
 		<p>have fun!</p>
 		<button id="addzombie">Add Zombie</button>
 		<button id="addgunpickup">Add Sentry Gun Pickup</button>
-		<button id="addgun">Add Sentry Gun</button>
 		<p id="debug"></p>
 	</div>
 	<canvas id="drawme" width="600" height="500"></canvas>
@@ -86,16 +85,6 @@
 					y: -200,
 					game: g,
 					item: item.sentrygunitem({game: g})
-				});
-				g.add(sentrygun);
-			});
-			
-			$('#addgun').click(function() {
-				// add a sentry gun
-				var sentrygun = defenses.sentrygun({
-					x: 100,
-					y: -250,
-					game: g
 				});
 				g.add(sentrygun);
 			});

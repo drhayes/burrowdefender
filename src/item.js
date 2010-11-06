@@ -2,7 +2,7 @@
 //
 // Things that go in inventory and are contained in pickups.
 //
-// Depends: tile.js
+// Depends: tile.js, defenses.js
 
 (function(global, $) {
 
@@ -78,7 +78,12 @@
       if (!isvalidtileforplace(args.game, tilepos)) {
         return false;
       }
-      alert('place sentry gun!');
+      var sg = defenses.sentrygun({
+        game: args.game,
+        x: x,
+        y: y
+      });
+      args.game.add(sg);
       return true;
     }
     
