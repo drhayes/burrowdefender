@@ -50,6 +50,7 @@
     that.solid = false;
     that.bounce = 0.4;
     that.lastai = 0;
+    that.lastfired = 0;
     that.target = null;
     
     that.ai = function() {
@@ -75,7 +76,22 @@
     };
     
     that.fire = function() {
-      
+      if (!that.target) {
+        return;
+      };
+      // have we fired recently?
+      var current = new Date().getTime();
+      if (current - that.lastfired < 500) {
+        return;
+      }
+      that.lastfired = current;
+      // create bullet
+      var b = defenses.bullet({
+        game: args.game,
+        x: that.x,
+        y: that.y
+      });
+      args.game.add(b);
     };
     
     that.tick = function() {

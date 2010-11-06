@@ -146,15 +146,44 @@
 				
 				test('fire without target', function() {
 					equals(typeof this.sg.fire, 'function', 'fire exists');
+					this.fakegame.add = function() {
+						ok(false, 'should not have been called');
+					}
 					this.sg.target = null;
 					this.sg.fire();
 				});
 				
 				test('fire with target', function() {
+					expect(3);
 					this.sg.target = {
 						x: -10,
 						y: -20
 					};
+					this.fakegame.add = function(t) {
+						// is that a bullet?
+						equals(typeof t.x, 'number', 't.x');
+						equals(typeof t.x, 'number', 't.y');
+						ok(t.vel, 't.vel');
+					};
+					this.sg.fire();
+				});
+				
+				test('fire with target rate-limited', function() {
+					expect(1);
+					this.sg.target = {
+						x: 20,
+						y: 30
+					};
+					this.fakegame.add = function(t) {
+						ok(false, 'add should not have been called');
+					};
+					this.sg.lastfired = new Date().getTime();
+					this.sg.fire();
+					this.fakegame.add = function(t) {
+						ok(true, 'add should be called');
+					};
+					this.sg.lastfired -= 501;
+					this.sg.fire();
 				});
 			});
 		</script>
