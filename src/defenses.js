@@ -48,6 +48,19 @@
     return that;
   }
   
+  // returns velocity object pointing from mypos to targetpos. resultant vector
+  // is a unit vector.
+  defenses.aim = function(mypos, targetpos) {
+    var deltax = targetpos.x - mypos.x;
+    var deltay = targetpos.y - mypos.y;
+    // normalize
+    var l = Math.sqrt(deltax * deltax + deltay * deltay);
+    return {
+      x: deltax / l,
+      y: deltay / l
+    };
+  };
+  
   defenses.sentrygun = function(args) {
     var that = mob(args);
     that.solid = false;
@@ -77,15 +90,20 @@
         return;
       };
       // create bullet
-      var velx = that.target.x < that.x ? -4 : 4;
-      var vely = ((that.target.y - that.y) / 4) * .2;
+      var aimvelocity = defenses.aim({
+        x: that.x,
+        y: that.y
+      }, {
+        x: that.target.x,
+        y: that.target.y
+      });
       var b = defenses.bullet({
         game: args.game,
         x: that.x,
         y: that.y,
         vel: {
-          x: velx,
-          y: vely
+          x: aimvelocity.x * 5,
+          y: aimvelocity.y * 5
         }
       });
       args.game.add(b);

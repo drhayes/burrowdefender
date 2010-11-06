@@ -189,6 +189,12 @@
 					};
 					this.sg.fire();
 				});
+				
+				module('other stuff');
+				
+				test('aim', function() {
+					equals(typeof defenses.aim, 'function', 'aim exists');
+				});
 			});
 		</script>
 	</head>
