@@ -25,8 +25,11 @@
       }
     });
     
+    // zombies are an enemy
+    that.enemy = true;
+    
     // custom movestates
-    that.movestate.wantstodig = false;
+    that.movestate.wantstodigx = false;
     
     that.draw = function(drawthing) {
       drawthing.sprite1.push(function(ctx) {

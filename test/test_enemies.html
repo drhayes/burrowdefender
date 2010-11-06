@@ -39,6 +39,8 @@
 					equals(this.z.size.y, 20, 'size.y');
 					equals(typeof this.z.solid, 'boolean', 'solid is a property');
 					ok(!this.z.solid, '!solid');
+					equals(typeof this.z.enemy, 'boolean', 'enemy is a property');
+					ok(this.z.enemy, 'zombies are an enemy');
 					equals(typeof this.z.movestate.wantstodigx, 'boolean', 'movestate.wantstodigx is a property');
 					ok(!this.z.movestate.wantstodigx, '!movestate.wantstodigx');
 				});
