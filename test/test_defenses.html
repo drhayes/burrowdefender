@@ -86,6 +86,16 @@
 				
 				test('basics', function() {
 					ok(this.sg, 'sentrygun instance is there');
+					equals(this.sg.size.x, 16, 'size.x');
+					equals(this.sg.size.y, 16, 'size.y');
+					equals(this.sg.bounce, 0.4, 'bounce');
+				});
+				
+				test('tick', function() {
+					equals(typeof this.sg.tick, 'function', 'tick exists');
+					this.sg.vel.y = 0;
+					this.sg.tick();
+					ok(this.sg.vel.y > 0, 'sentrygun is affected by gravity');
 				});
 			});
 		</script>

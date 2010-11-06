@@ -29,7 +29,7 @@
       if (typeof collider.damage !== 'function') {
         return;
       }
-      collider.damage(7);
+      collider.damage(7, that.vel.x > 0);
       // remove the bullet from the game... its dread business is done
       that.killed = true;
     };
@@ -47,6 +47,19 @@
   
   defenses.sentrygun = function(args) {
     var that = mob(args);
+    that.bounce = 0.4;
+    
+    that.tick = function() {
+      mob.gravitytick.call(that);
+    }
+    
+    that.draw = function(drawthing) {
+      drawthing.sprite1.push(function(ctx) {
+        ctx.strokeStyle('hsl(120, 0%, 30%)');
+        ctx.lineWidth(5);
+        ctx.strokeRect(that.x, that.y, that.size.x, that.size.y);
+      })
+    };
     
     return that;
   }
