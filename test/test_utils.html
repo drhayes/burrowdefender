@@ -60,6 +60,8 @@
 					equals(thing.health, 8, 'thing.health decremented by damage call');
 					equals(thing.vel.x, -4, 'thing thrown in x by -4');
 					equals(thing.vel.y, -7, 'thing thrown in y by -7');
+					thing.damage(2, true);
+					equals(thing.vel.x, 4, 'thing thrown in x by 4');
 					thing = {};
 					utils.damageable(thing, {
 						health: 5,

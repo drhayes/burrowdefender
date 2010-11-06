@@ -39,9 +39,10 @@
       thing.maxhealth = args.health;
       // is this a something that should have its velocity affected by damage?
       if (typeof thing.vel === 'object') {
-        thing.damage = function(amt) {
+        thing.damage = function(amt, fromright) {
           thing.health -= amt;
-          thing.vel.x = -4;
+          var velxfactor = fromright ? -1 : 1;
+          thing.vel.x = -4 * velxfactor;
           thing.vel.y = -7;
           if (typeof args.whendamaged === 'function') {
             args.whendamaged(amt);
