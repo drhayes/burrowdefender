@@ -86,6 +86,26 @@
 					thing.damage(3);
 					equals(thing.whenamt, 3, 'whendamaged called for velocity thing');
 				});
+				
+				test('ratelimit', function() {
+					expect(4);
+					var f = function() {};
+					equals(typeof f.ratelimit, 'function', 'ratelimit is on functions');
+					var counter = 1;
+					f = function() {
+						ok(true, 'got called ' + counter);
+						counter += 1;
+					}.ratelimit(50);
+					equals(typeof f, 'function', 'f is still a function');
+					var current = new Date().getTime();
+					f();
+					f();
+					stop();
+					setTimeout(function() {
+						f();
+						start();
+					}, 100);
+				});
 			});
 		</script>
 	</head>

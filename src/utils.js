@@ -58,6 +58,20 @@
         }
       }
     }
-  }
+  };
+  
+  // modify the Function prototype to provide rate-limiting for functions that
+  // shouldn't actually run until some time limit has passed by.
+  Function.prototype.ratelimit = function(interval) {
+    var lastcalled = 0;
+    var me = this;
+    return function() {
+      var current = new Date().getTime();
+      if (current - lastcalled >= interval) {
+        lastcalled = current;
+        me();
+      }
+    }
+  };
   
 })(this, jQuery)
