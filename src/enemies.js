@@ -19,7 +19,10 @@
     
     // zombies are damageable
     utils.damageable(that, {
-      health: 20
+      health: 20,
+      whendamaged: function() {
+        that.movestate.standing = false;
+      }
     });
     
     // custom movestates
