@@ -109,21 +109,19 @@
 					ok(this.sg.vel.y > 0, 'sentrygun is affected by gravity');
 				});
 				
-				test('ai only runs every second', function() {
+				test('ai is rate-limited', function() {
+					expect(2);
+					equals(typeof this.sg.ai, 'function', 'ai exists');
 					this.fakegame.spatialhash.get = function() {
+						ok(true, 'spatialhash.get called is okay');
 						return [];
 					};
-					equals(typeof this.sg.ai, 'function', 'ai exists');
-					equals(typeof this.sg.lastai, 'number', 'lastai attribute');
-					equals(this.sg.lastai, 0, 'lastai starts at 0');
 					this.sg.ai();
-					var lastai = this.sg.lastai;
-					ok(this.sg.lastai > 0, 'lastai is set to something closer to current');
+					this.fakegame.spatialhash.get = function() {
+						ok(false, 'spatialhash.get called is not okay');
+						return [];
+					};
 					this.sg.ai();
-					equals(this.sg.lastai, lastai, 'has not changed');
-					this.sg.lastai -= 501;
-					this.sg.ai();
-					ok(this.sg.lastai >= lastai, 'updated since we ran');
 				});
 				
 				test('ai with target', function() {
@@ -146,7 +144,8 @@
 					this.fakegame.spatialhash.get = function(r) {
 						return [];
 					}
-					this.sg.lastai = 0;
+					// force the rate-limit for debugging reasons
+					this.sg.ai.force = true;
 					this.sg.ai();
 					equals(this.sg.target, null, 'target is nothing');
 				});

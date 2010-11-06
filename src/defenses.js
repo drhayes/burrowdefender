@@ -52,15 +52,9 @@
     var that = mob(args);
     that.solid = false;
     that.bounce = 0.4;
-    that.lastai = 0;
     that.target = null;
     
     that.ai = function() {
-      var current = new Date().getTime();
-      if (current - that.lastai < 500) {
-        return;
-      };
-      that.lastai = current;
       // find an enemy to target
       var nearby = args.game.spatialhash.get({
         x1: that.x - tile.tilesize * 8,
@@ -76,7 +70,7 @@
           break;
         }
       }
-    };
+    }.ratelimit(500);
     
     that.fire = function() {
       if (!that.target) {
