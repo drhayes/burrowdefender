@@ -4,7 +4,10 @@
 		<title>Item</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/utils.js"></script>
 		<script type="text/javascript" src="../src/tile.js"></script>
+		<script type="text/javascript" src="../src/mob.js"></script>
+		<script type="text/javascript" src="../src/defenses.js"></script>
 		<script type="text/javascript" src="../src/item.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
@@ -119,6 +122,19 @@
 				
 				test('basics', function() {
 					ok(this.sg, 'created a sentrygun');
+				});
+				
+				test('place is ratelimited', function() {
+					expect(2);
+					this.fakegame.tilemap.get = function() {
+						ok(true, 'get is okay once');
+						return {
+							solid: false
+						};
+					};
+					var result = this.sg.place(0, 0);
+					ok(result, 'placed just fine');
+					result = this.sg.place(0, 0);
 				});
 			});
 		</script>

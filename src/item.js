@@ -85,7 +85,7 @@
       });
       args.game.add(sg);
       return true;
-    }
+    }.ratelimit(250);
     
     return that;
   }
