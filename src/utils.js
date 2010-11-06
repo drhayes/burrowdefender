@@ -65,9 +65,11 @@
   Function.prototype.ratelimit = function(interval) {
     var lastcalled = 0;
     var me = this;
-    return function() {
+    return function limiter() {
       var current = new Date().getTime();
-      if (current - lastcalled >= interval) {
+      // force is in place for debugging purposes and is reset every call
+      if (current - lastcalled >= interval || limiter.force) {
+        limiter.force = false;
         lastcalled = current;
         me();
       }

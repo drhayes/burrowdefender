@@ -106,6 +106,17 @@
 						start();
 					}, 100);
 				});
+				
+				test('ratelimit with force (for testing)', function() {
+					expect(2);
+					var f = function() {
+						ok(true, 'got called');
+					}.ratelimit(100);
+					f();
+					f.force = true;
+					f();
+					f();
+				});
 			});
 		</script>
 	</head>
