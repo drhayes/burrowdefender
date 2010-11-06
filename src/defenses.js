@@ -2,7 +2,7 @@
 //
 // All the things the player can use to defend against enemies.
 //
-// Depends: mob.js
+// Depends: mob.js, utils.js
 
 (function(global, $) {
   
@@ -53,7 +53,6 @@
     that.solid = false;
     that.bounce = 0.4;
     that.lastai = 0;
-    that.lastfired = 0;
     that.target = null;
     
     that.ai = function() {
@@ -83,12 +82,6 @@
       if (!that.target) {
         return;
       };
-      // have we fired recently?
-      var current = new Date().getTime();
-      if (current - that.lastfired < 350) {
-        return;
-      }
-      that.lastfired = current;
       // create bullet
       var velx = that.target.x < that.x ? -4 : 4;
       var vely = ((that.target.y - that.y) / 4) * .2;
@@ -102,7 +95,7 @@
         }
       });
       args.game.add(b);
-    };
+    }.ratelimit(350);
     
     that.tick = function() {
       mob.gravitytick.call(that);

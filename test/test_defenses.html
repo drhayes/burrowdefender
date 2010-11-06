@@ -4,6 +4,7 @@
 		<title>Defenses</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/utils.js"></script>
 		<script type="text/javascript" src="../src/tile.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
 		<script type="text/javascript" src="../src/defenses.js"></script>
@@ -181,14 +182,12 @@
 						y: 30
 					};
 					this.fakegame.add = function(t) {
-						ok(false, 'add should not have been called');
+						ok(true, 'add called once');
 					};
-					this.sg.lastfired = new Date().getTime();
 					this.sg.fire();
 					this.fakegame.add = function(t) {
-						ok(true, 'add should be called');
+						ok(false, 'add should not be called');
 					};
-					this.sg.lastfired -= 351;
 					this.sg.fire();
 				});
 			});
