@@ -126,7 +126,7 @@
 				});
 				
 				test('ai with target', function() {
-					expect(6);
+					expect(7);
 					equals(typeof this.sg.target, 'object', 'target attribute');
 					var sgx = this.sg.x;
 					var sgy = this.sg.y;
@@ -142,6 +142,12 @@
 					};
 					this.sg.ai();
 					equals(this.sg.target, r2, 'target is set to enemy');
+					this.fakegame.spatialhash.get = function(r) {
+						return [];
+					}
+					this.sg.lastai = 0;
+					this.sg.ai();
+					equals(this.sg.target, null, 'target is nothing');
 				});
 				
 				test('fire without target', function() {

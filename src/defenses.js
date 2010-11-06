@@ -66,6 +66,7 @@
         x2: that.x + tile.tilesize * 9,
         y2: that.y + tile.tilesize * 3,
       });
+      that.target = null;
       for (var i = 0; i < nearby.length; i++) {
         var thing = nearby[i];
         if (thing.enemy) {
@@ -86,10 +87,16 @@
       }
       that.lastfired = current;
       // create bullet
+      var velx = that.target.x < that.x ? -4 : 4;
+      var vely = 0;
       var b = defenses.bullet({
         game: args.game,
         x: that.x,
-        y: that.y
+        y: that.y,
+        vel: {
+          x: velx,
+          y: vely
+        }
       });
       args.game.add(b);
     };
