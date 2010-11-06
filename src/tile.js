@@ -66,6 +66,7 @@
       }
       if (!that.lasthealed) {
         that.lasthealed = new Date().getTime();
+        return;
       };
       var currenttime = new Date().getTime();
       if (currenttime - that.lasthealed >= 750) {
@@ -120,7 +121,10 @@
     var that = tile(args);
     // dirt tiles can be damaged
     utils.damageable(that, {
-      health: 20
+      health: 20,
+      whendamaged: function() {
+        that.lasthealed = null;
+      }
     });
     
     that.draw = function(ctx) {
