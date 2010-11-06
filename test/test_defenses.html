@@ -120,7 +120,7 @@
 					ok(this.sg.lastai > 0, 'lastai is set to something closer to current');
 					this.sg.ai();
 					equals(this.sg.lastai, lastai, 'has not changed');
-					this.sg.lastai -= 1001;
+					this.sg.lastai -= 501;
 					this.sg.ai();
 					ok(this.sg.lastai >= lastai, 'updated since we ran');
 				});
@@ -188,7 +188,7 @@
 					this.fakegame.add = function(t) {
 						ok(true, 'add should be called');
 					};
-					this.sg.lastfired -= 501;
+					this.sg.lastfired -= 351;
 					this.sg.fire();
 				});
 			});

@@ -15,6 +15,9 @@
       y: 4
     };
     
+    // bullets are not solid
+    that.solid = false;
+    
     // used to kill the bullet after it has lived too long
     that.created = new Date().getTime();
     
@@ -55,7 +58,7 @@
     
     that.ai = function() {
       var current = new Date().getTime();
-      if (current - that.lastai < 1000) {
+      if (current - that.lastai < 500) {
         return;
       };
       that.lastai = current;
@@ -82,13 +85,13 @@
       };
       // have we fired recently?
       var current = new Date().getTime();
-      if (current - that.lastfired < 500) {
+      if (current - that.lastfired < 350) {
         return;
       }
       that.lastfired = current;
       // create bullet
       var velx = that.target.x < that.x ? -4 : 4;
-      var vely = 0;
+      var vely = ((that.target.y - that.y) / 4) * .2;
       var b = defenses.bullet({
         game: args.game,
         x: that.x,
