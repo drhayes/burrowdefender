@@ -92,9 +92,16 @@
 					equals(this.sg.bounce, 0.4, 'bounce');
 				});
 				
-				test('tick', function() {
+				test('tick does gravity', function() {
+					expect(4);
 					equals(typeof this.sg.tick, 'function', 'tick exists');
 					this.sg.vel.y = 0;
+					this.sg.ai = function() {
+						ok(true, 'ai called');
+					};
+					this.sg.fire = function() {
+						ok(true, 'fire called');
+					}
 					this.sg.tick();
 					ok(this.sg.vel.y > 0, 'sentrygun is affected by gravity');
 				});
@@ -113,7 +120,7 @@
 					equals(this.sg.lastai, lastai, 'has not changed');
 					this.sg.lastai -= 1001;
 					this.sg.ai();
-					equals(this.sg.lastai, lastai, 'updated since we ran');
+					ok(this.sg.lastai >= lastai, 'updated since we ran');
 				});
 				
 				test('ai with target', function() {
@@ -133,6 +140,10 @@
 					};
 					this.sg.ai();
 					equals(this.sg.target, r2, 'target is set to enemy');
+				});
+				
+				test('fire without target', function() {
+					equals(typeof this.sg.fire, 'function', 'fire exists');
 				});
 			});
 		</script>

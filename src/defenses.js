@@ -73,8 +73,16 @@
       }
     };
     
+    that.fire = function() {
+      
+    };
+    
     that.tick = function() {
       mob.gravitytick.call(that);
+      // update the ai
+      that.ai();
+      // if we have a target, fire at it
+      that.fire();
     }
     
     that.draw = function(drawthing) {
