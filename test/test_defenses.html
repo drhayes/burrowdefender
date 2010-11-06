@@ -90,6 +90,8 @@
 					equals(this.sg.size.x, 16, 'size.x');
 					equals(this.sg.size.y, 16, 'size.y');
 					equals(this.sg.bounce, 0.4, 'bounce');
+					equals(typeof this.sg.solid, 'boolean', 'solid is a boolean');
+					ok(!this.sg.solid, '!solid');
 				});
 				
 				test('tick does gravity', function() {
@@ -144,6 +146,15 @@
 				
 				test('fire without target', function() {
 					equals(typeof this.sg.fire, 'function', 'fire exists');
+					this.sg.target = null;
+					this.sg.fire();
+				});
+				
+				test('fire with target', function() {
+					this.sg.target = {
+						x: -10,
+						y: -20
+					};
 				});
 			});
 		</script>

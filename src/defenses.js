@@ -47,6 +47,7 @@
   
   defenses.sentrygun = function(args) {
     var that = mob(args);
+    that.solid = false;
     that.bounce = 0.4;
     that.lastai = 0;
     that.target = null;
