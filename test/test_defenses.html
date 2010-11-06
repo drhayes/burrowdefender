@@ -4,6 +4,7 @@
 		<title>Defenses</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/tile.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
 		<script type="text/javascript" src="../src/defenses.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
@@ -99,6 +100,9 @@
 				});
 				
 				test('ai only runs every second', function() {
+					this.fakegame.spatialhash.get = function() {
+						return [];
+					};
 					equals(typeof this.sg.ai, 'function', 'ai exists');
 					equals(typeof this.sg.lastai, 'number', 'lastai attribute');
 					equals(this.sg.lastai, 0, 'lastai starts at 0');
@@ -110,6 +114,25 @@
 					this.sg.lastai -= 1001;
 					this.sg.ai();
 					equals(this.sg.lastai, lastai, 'updated since we ran');
+				});
+				
+				test('ai with target', function() {
+					expect(6);
+					equals(typeof this.sg.target, 'object', 'target attribute');
+					var sgx = this.sg.x;
+					var sgy = this.sg.y;
+					var r1 = {x1: -5, y1: -5, x2: 0, y2: 0};
+					var r2 = {x1: -10, y1: -10, x2: -5, y2: -5, enemy: true};
+					var r3 = {x1: -15, y1: -15, x2: -10, y2: -10, enemy: true};
+					this.fakegame.spatialhash.get = function(r) {
+						equals(r.x1, sgx - (tile.tilesize * 8), 'aim x1');
+						equals(r.y1, sgy - (tile.tilesize * 2), 'aim y1');
+						equals(r.x2, sgx + (tile.tilesize * 9), 'aim x2');
+						equals(r.y2, sgy + (tile.tilesize * 3), 'aim y2');
+						return [r1, r2, r3];
+					};
+					this.sg.ai();
+					equals(this.sg.target, r2, 'target is set to enemy');
 				});
 			});
 		</script>

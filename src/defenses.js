@@ -49,6 +49,7 @@
     var that = mob(args);
     that.bounce = 0.4;
     that.lastai = 0;
+    that.target = null;
     
     that.ai = function() {
       var current = new Date().getTime();
@@ -56,6 +57,20 @@
         return;
       };
       that.lastai = current;
+      // find an enemy to target
+      var nearby = args.game.spatialhash.get({
+        x1: that.x - tile.tilesize * 8,
+        y1: that.y - tile.tilesize * 2,
+        x2: that.x + tile.tilesize * 9,
+        y2: that.y + tile.tilesize * 3,
+      });
+      for (var i = 0; i < nearby.length; i++) {
+        var thing = nearby[i];
+        if (thing.enemy) {
+          that.target = thing;
+          break;
+        }
+      }
     };
     
     that.tick = function() {
