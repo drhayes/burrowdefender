@@ -71,7 +71,7 @@
       if (current - lastcalled >= interval || limiter.force) {
         limiter.force = false;
         lastcalled = current;
-        me();
+        return me.apply(me, arguments);
       }
     }
   };
