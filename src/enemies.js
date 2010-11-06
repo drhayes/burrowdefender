@@ -89,6 +89,7 @@
       }
       if (collider.delicious) {
         collider.damage(1, that.vel.x > 0);
+        return true;
       }
     }
     
