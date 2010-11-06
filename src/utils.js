@@ -42,8 +42,8 @@
         thing.damage = function(amt, fromright) {
           thing.health -= amt;
           var velxfactor = fromright ? -1 : 1;
-          thing.vel.x = -4 * velxfactor;
-          thing.vel.y = -7;
+          thing.vel.x = -2 * velxfactor;
+          thing.vel.y = -4;
           if (typeof args.whendamaged === 'function') {
             args.whendamaged(amt);
           }
