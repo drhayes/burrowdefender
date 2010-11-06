@@ -266,6 +266,28 @@
 					this.m.move([r2])
 				});
 				
+				test('collide function returning false cancels rest of collisions', function() {
+					var r1 = makerect(-20, -20, 0, 0);
+					var r2 = makerect(-10, -10, 5, 5);
+					var r3 = makerect(0, 0, 10, 10);
+					r1.collide = function() {
+						ok(true, 'r1 collide');
+						// don't stop
+						return false;
+					}
+					r2.collide = function() {
+						ok(true, 'r2 collide');
+						// stop
+						return true;
+					}
+					r3.collide = function() {
+						ok(false, 'r3 collide should not have been called');
+					}
+					this.m.vel.x = -10;
+					this.m.vel.y = -10;
+					this.m.move([r1, r2, r3]);
+				});
+				
 				test('solid', function() {
 					var r1 = makerect(-20, -20, 0, 10);
 					r1.solid = false;

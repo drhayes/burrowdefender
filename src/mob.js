@@ -73,16 +73,6 @@
       that.halfy = that.halfheight + that.y1;
     };
     
-    that.runcollides = function(r) {
-      if (typeof r.collide === 'function') {
-        r.collide(that);
-      };
-      // other way around, too...
-      if (typeof that.collide === 'function') {
-        that.collide(r);
-      };
-    };
-    
     that.move = function(collides) {
       // remove from the spatial hash
       options.game.spatialhash.remove(that);
@@ -114,7 +104,18 @@
           return;
         };
         // does what we're colliding with have a collide function?
-        that.runcollides(r);
+        var stop = false;
+        if (typeof r.collide === 'function') {
+          stop |= r.collide(that);
+        };
+        // other way around, too...
+        if (typeof that.collide === 'function') {
+          stop |= that.collide(r);
+        };
+        // if any of those collide methods returned false, stop the colliding
+        if (stop) {
+          return false;
+        }
         // is this thing solid?
         if (typeof r.solid !== 'undefined' && !r.solid) {
           return

@@ -35,6 +35,8 @@
       collider.damage(7, that.vel.x > 0);
       // remove the bullet from the game... its dread business is done
       that.killed = true;
+      // stop colliding with things, its killed enough
+      return true;
     };
     
     // kill the bullet after a second or so
