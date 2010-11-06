@@ -52,7 +52,7 @@
 				test('tick', function() {
 					equals(typeof this.b.tick, 'function', 'tick exists');
 					ok(this.b.created, 'created attribute');
-					this.b.created -= 1001;
+					this.b.created -= 1501;
 					ok(!this.b.killed, 'bullet is not killed yet');
 					this.b.tick();
 					ok(this.b.killed, 'bullet is killed');

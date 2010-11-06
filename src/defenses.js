@@ -37,7 +37,7 @@
     // kill the bullet after a second or so
     that.tick = function() {
       var current = new Date().getTime();
-      if (current - that.created > 1000) {
+      if (current - that.created > 1500) {
         that.killed = true;
       }
     };
