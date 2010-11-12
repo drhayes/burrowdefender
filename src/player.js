@@ -30,8 +30,20 @@
   figurer4.src = 'assets/images/figurer4.png';
   var figurer5 = new Image();
   figurer5.src = 'assets/images/figurer5.png';
+  var figurel1 = new Image();
+  figurel1.src = 'assets/images/figurel1.png';
+  var figurel2 = new Image();
+  figurel2.src = 'assets/images/figurel2.png';
+  var figurel3 = new Image();
+  figurel3.src = 'assets/images/figurel3.png';
+  var figurel4 = new Image();
+  figurel4.src = 'assets/images/figurel4.png';
+  var figurel5 = new Image();
+  figurel5.src = 'assets/images/figurel5.png';
+
   
-  var animationframes = [figurer1, figurer2, figurer3, figurer4, figurer5]
+  var animationframesr = [figurer1, figurer2, figurer3, figurer4, figurer5];
+  var animationframesl = [figurel1, figurel2, figurel3, figurel4, figurel5];
   var currentframe = 0;
   
   var STOPFORCE = 0.2;
@@ -68,14 +80,19 @@
     
     that.draw = function(drawthing) {
       drawthing.sprite1.push(function(ctx) {
+        var imgtodraw = figures;
         if (that.movestate.walking === walking.STANDING) {
-          ctx.drawImage(figures, that.x, that.y + 1)
           currentframe = 0;
         }
-        else {
-          ctx.drawImage(animationframes[Math.floor(currentframe / 3)], that.x, that.y + 1);
+        else if (that.movestate.walking === walking.LEFT) {
+          imgtodraw = animationframesl[Math.floor(currentframe / 3)];
           currentframe = (currentframe + 1) % 15;
         }
+        else if (that.movestate.walking === walking.RIGHT) {
+          imgtodraw = animationframesr[Math.floor(currentframe / 3)];
+          currentframe = (currentframe + 1) % 15;
+        };
+        ctx.drawImage(imgtodraw, that.x, that.y + 1);
       });
       drawthing.hud.push(function(ctx) {
         var startx = 10;
