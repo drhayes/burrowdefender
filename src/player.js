@@ -18,6 +18,8 @@
   heartfullimage.src = 'assets/images/heartfull.png';
   var heartemptyimage = new Image();
   heartemptyimage.src = 'assets/images/heartempty.png';
+  var figures = new Image();
+  figures.src = 'assets/images/figures.png';
   var figurer1 = new Image();
   figurer1.src = 'assets/images/figurer1.png';
   var figurer2 = new Image();
@@ -66,11 +68,14 @@
     
     that.draw = function(drawthing) {
       drawthing.sprite1.push(function(ctx) {
-        ctx.drawImage(animationframes[Math.floor(currentframe / 3)], that.x, that.y);
-        currentframe = (currentframe + 1) % 15;
-        // ctx.fillStyle('hsl(0, 0%, 90%)');
-        // // draw a little bigger than player size so player is standing on ground
-        // ctx.fillRect(that.x, that.y, that.size.x + 1, that.size.y + 1);        
+        if (that.movestate.walking === walking.STANDING) {
+          ctx.drawImage(figures, that.x, that.y + 1)
+          currentframe = 0;
+        }
+        else {
+          ctx.drawImage(animationframes[Math.floor(currentframe / 3)], that.x, that.y + 1);
+          currentframe = (currentframe + 1) % 15;
+        }
       });
       drawthing.hud.push(function(ctx) {
         var startx = 10;
