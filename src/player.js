@@ -29,7 +29,7 @@
   var figurer5 = new Image();
   figurer5.src = 'assets/images/figurer5.png';
   
-  var animationframes = [figurer1, figurer2, figurer3, figurer4]
+  var animationframes = [figurer1, figurer2, figurer3, figurer4, figurer5]
   var currentframe = 0;
   
   var STOPFORCE = 0.2;
@@ -67,7 +67,7 @@
     that.draw = function(drawthing) {
       drawthing.sprite1.push(function(ctx) {
         ctx.drawImage(animationframes[Math.floor(currentframe / 3)], that.x, that.y);
-        currentframe = (currentframe + 1) % 12;
+        currentframe = (currentframe + 1) % 15;
         // ctx.fillStyle('hsl(0, 0%, 90%)');
         // // draw a little bigger than player size so player is standing on ground
         // ctx.fillRect(that.x, that.y, that.size.x + 1, that.size.y + 1);        
