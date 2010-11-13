@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>World</title>
+		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/base.js"></script>
+		<script type="text/javascript" src="../src/tileutils.js"></script>
+		<script type="text/javascript" src="../src/world.js"></script>
+		<script type="text/javascript" src="fakes.js"></script>
+		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<script>
+			$(document).ready(function() {
+				module('tilegenerator', {
+					setup: function() {
+						var me = this;
+						loki.define('world', function(env) {
+							me.tilegenerator = env.tilegenerator;
+						});
+						this.fakegame = new FakeGame();
+						this.tg = this.tilegenerator({
+							game: this.fakegame,
+							// usually a dirtwithgrass tile
+							surfacetile: function(args) {
+								me.surfacetileargs = args;
+							},
+							// usually a dirt tile
+							firstgroundtile: function(args) {
+								me.firstgroundtileargs = args;
+							}
+							
+						});
+					}
+				})
+				test('ctor', function() {
+					ok(this.tg.generated, 'tg.generated');
+				});
+				
+				test('makekey', function() {
+					var me = this;
+					loki.define('tileutils', function(env) {
+						equals(typeof me.tilegenerator.makekey, 'function', 'makekey exists');
+						equals(me.tilegenerator.makekey(0, 0), '0:0', 'key for (0,0)');
+						equals(me.tilegenerator.makekey(-1, 0), '-1:0', 'key for (-1, 0)');
+						equals(me.tilegenerator.makekey(env.tilesize * 31, 0), '1:0', 'key for (tilesize*11, 0)');
+						equals(me.tilegenerator.makekey(env.tilesize * 61, 0), '2:0', 'key for (tilesize*21, 0)');
+					})
+				});
+				
+				test('gensurface', function() {
+					ok(typeof(this.tilegenerator.gensurface) === 'function', 'gensurface defined');
+					var y = this.tilegenerator.gensurface(0);
+					ok(typeof(y) === 'number', 'y is a number');
+				});
+				
+				test('generate first chunk', function() {
+					var me = this;
+					loki.define('tileutils', function(env) {
+						equals(typeof me.tg.generate, 'function', 'tg.generate is function');
+						var testoffset = 31;
+						me.tg.generate(env.tilesize * testoffset, 0);
+					})
+				});
+
+				test('generate noops if already generated', function() {
+					var key = this.tilegenerator.makekey(0, 0);
+					this.tg.generated[key] = true;
+					this.tg.generate(0, 0);
+					equals(this.fakegame.tilemap.stile, null, 'set not called on tilemap');
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1 id="qunit-header">World Test</h1>
+		<h2 id="qunit-banner"></h2>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">test markup, will be hidden</div>
+	</body>
+</html>
