@@ -18,18 +18,21 @@
       modules = (args[0] && typeof args[0] === 'string') ? args: args[0],
       i;
       
-      if (!modules || modules[0] === '*') {
-        modules = [];
-        for (i in loki.modules) {
-          if (loki.modules.hasOwnProperty(i)) {
-            modules.push(i);
+      // did the caller ask for any modules?
+      if (modules) {
+        if (modules[0] === '*') {
+          modules = [];
+          for (i in loki.modules) {
+            if (loki.modules.hasOwnProperty(i)) {
+              modules.push(i);
+            }
           }
-        }
-      };
-      
-      // initialize the modules
-      for (i = 0; i < modules.length; i += 1) {
-        loki.modules[modules[i]](that);
+        };
+
+        // initialize the modules
+        for (i = 0; i < modules.length; i += 1) {
+          loki.modules[modules[i]](that);
+        };
       };
       
       // call the callback

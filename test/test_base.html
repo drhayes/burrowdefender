@@ -43,7 +43,7 @@
 					});
 				});
 				
-				test('all modules by default', function() {
+				test('no modules by default', function() {
 					expect(2);
 					loki.modules.one = function(m) {
 						m.one = true;
@@ -52,8 +52,8 @@
 						m.two = true;
 					};
 					loki.define(function(m) {
-						ok(m.one, 'm.one');
-						ok(m.two, 'm.two');
+						equals(typeof m.one, 'undefined', '!m.one');
+						equals(typeof m.two, 'undefined', '!m.two');
 					})
 				});
 			});
