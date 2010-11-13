@@ -1,34 +1,38 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>Mining Interface</title>
+		<title>Interfaces</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
-		<script type="text/javascript" src="../src/tile.js"></script>
-		<script type="text/javascript" src="../src/mininginterface.js"></script>
+		<script type="text/javascript" src="../src/base.js"></script>
+		<script type="text/javascript" src="../src/tileutils.js"></script>
+		<script type="text/javascript" src="../src/interfaces.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
 			$(document).ready(function() {
-				module('basics');
-				
-				test('ctor', function() {
-					equals(typeof mininginterface, 'function', 'mininginterface exists');
-					var mi = mininginterface({game: new FakeGame()});
-					ok(mi, 'something came back');
-					equals(typeof mi.draw, 'function', 'draw exists');
-					equals(typeof mi.canact, 'boolean', 'canact exists');
-					ok(!mi.canact, 'canact is set to false');
-				});
-				
-				module('usage', {
+				module('mininginterface', {
 					setup: function() {
 						this.fakegame = new FakeGame();
-						this.mi = mininginterface({game: this.fakegame});
+						var me = this;
+						loki.define('interfaces', function(env) {
+							me.mi = env.mininginterface({game: me.fakegame});
+						})
 					}
 				});
 				
+				test('ctor', function() {
+					ok(this.mi, 'something came back');
+					equals(typeof this.mi.draw, 'function', 'draw exists');
+					equals(typeof this.mi.canact, 'boolean', 'canact exists');
+					ok(!this.mi.canact, 'canact is set to false');
+				});
+				
 				test('reticlerect', function() {
+					var tilesize;
+					loki.define('tileutils', function(env) {
+						tilesize = env.tilesize;
+					})
 					equals(typeof this.mi.reticlerect, 'function', 'reticlerect exists');
 					this.fakegame.worldoffset = {
 						x: 0,
@@ -41,8 +45,8 @@
 					var r = this.mi.reticlerect();
 					equals(r.x1, 0, 'x1');
 					equals(r.y1, 0, 'y1');
-					equals(r.x2, tile.tilesize, 'x2');
-					equals(r.y2, tile.tilesize, 'y2');
+					equals(r.x2, tilesize, 'x2');
+					equals(r.y2, tilesize, 'y2');
 					// now do it with an offset and no mouse move
 					this.fakegame.worldoffset = {
 						x: -40,
@@ -51,8 +55,8 @@
 					r = this.mi.reticlerect();
 					equals(r.x1, -24, 'x1');
 					equals(r.y1, 0, 'y1');
-					equals(r.x2, -24 + tile.tilesize, 'x2');
-					equals(r.y2, tile.tilesize, 'y2');
+					equals(r.x2, -24 + tilesize, 'x2');
+					equals(r.y2, tilesize, 'y2');
 				});
 				
 				test('setcanact', function() {
@@ -216,7 +220,7 @@
 		</script>
 	</head>
 	<body>
-		<h1 id="qunit-header">Mining Interface Test</h1>
+		<h1 id="qunit-header">Interfaces Test</h1>
 		<h2 id="qunit-banner"></h2>
 		<h2 id="qunit-userAgent"></h2>
 		<ol id="qunit-tests"></ol>
