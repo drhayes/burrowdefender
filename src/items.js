@@ -9,11 +9,12 @@
   var sentrygunitemimage = new Image();
   sentrygunitemimage.src = 'assets/images/sentrygunitem.png';
   
-  loki.define('tileutils', 'tiles', 'mob', function(env) {
+  loki.define('tileutils', 'tiles', 'mob', 'defenses', function(env) {
     var tilesize = env.tilesize,
       totilepos = env.totilepos,
       dirt = env.dirt,
-      mob = env.mob;
+      mob = env.mob,
+      sentrygun = env.sentrygun;
     
     loki.modules.items = function(env) {
       // private shared ctor thing
@@ -84,12 +85,12 @@
           if (!isvalidtileforplace(args.game, tilepos)) {
             return false;
           }
-          // var sg = defenses.sentrygun({
-          //   game: args.game,
-          //   x: x,
-          //   y: y
-          // });
-          // args.game.add(sg);
+          var sg = sentrygun({
+            game: args.game,
+            x: x,
+            y: y
+          });
+          args.game.add(sg);
           return true;
         }.ratelimit(250);
 
