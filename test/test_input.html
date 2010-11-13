@@ -1,25 +1,20 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>KeyboardManager</title>
+		<title>Input</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
-		<script type="text/javascript" src="../src/eventer.js"></script>
-		<script type="text/javascript" src="../src/keyboardmanager.js"></script>
+		<script type="text/javascript" src="../src/base.js"></script>
+		<script type="text/javascript" src="../src/input.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
-		<script type="text/javascript" charset="utf-8">
+		<script>
 			$(document).ready(function() {
-				
-				module('basics');
-				
-				test('ctor', function() {
-					var keyman = keyboardmanager();
-					keyman.unlatch();
-				});
-				
-				module('usage', {
+				module('keyboardmanager', {
 					setup: function() {
-						this.keyman = keyboardmanager();
+						var me = this;
+						loki.define('input', function(env) {
+							me.keyman = env.keyboardmanager();
+						})
 					},
 					teardown: function() {
 						this.keyman.unlatch();
@@ -67,12 +62,12 @@
 						keyCode: 87 // w
 					});
 					ok(!this.keyman.keymap['w'], 'w is not pressed anymore');
-				});				
+				});
 			});
 		</script>
 	</head>
 	<body>
-		<h1 id="qunit-header">KeyboardManager Test</h1>
+		<h1 id="qunit-header">Input Test</h1>
 		<h2 id="qunit-banner"></h2>
 		<h2 id="qunit-userAgent"></h2>
 		<ol id="qunit-tests"></ol>

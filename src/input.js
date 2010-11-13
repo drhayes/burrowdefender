@@ -1,11 +1,11 @@
-// keyboardmanager.js
+// input.js
 //
-// much of the design of this class is taken from JavaScript: The
-// Definitive Guide with some modifications.
+// All things related to getting information from the player.
 
 (function(global, $) {
-
-  var keyboardmanager = function() {
+  
+  loki.modules.input = function(env) {
+    env.keyboardmanager = function() {
       var that = {};
     
       // This object maps keyCode values to key names for common nonprinting
@@ -76,9 +76,7 @@
       }
       
       return that;
+    } // keyboardmanager
   }
   
-  global.keyboardmanager = keyboardmanager;
-  
-})(this, jQuery)
-
+}(this, jQuery))
