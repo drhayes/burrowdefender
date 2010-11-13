@@ -51,7 +51,7 @@
 						this.fakegame = new FakeGame();
 						loki.define('mob', function(env) {
 							me.m = env.mob({
-								game: this.fakegame,
+								game: me.fakegame,
 								x: 5,
 								y: 5,
 								size: {
@@ -99,7 +99,7 @@
 				});
 
 				test('move', function() {
-					ok(typeof(this.m.move) !== 'undefined', 'move defined');
+					equals(typeof this.m.move, 'function', 'move exists');
 					this.m.vel.x = 5;
 					this.m.vel.y = 3;
 					this.m.move();
@@ -331,19 +331,22 @@
 				module('jumping', {
 					setup: function() {
 						this.fakegame = new FakeGame();
-						this.m = mob({
-							game: this.fakegame,
-							x: 0,
-							y: 0,
-							size: {
-								x: 10,
-								y: 10
-							},
-							vel: {
+						var me = this;
+						loki.define('mob', function(env) {
+							me.m = env.mob({
+								game: me.fakegame,
 								x: 0,
-								y: 0
-							}
-						});
+								y: 0,
+								size: {
+									x: 10,
+									y: 10
+								},
+								vel: {
+									x: 0,
+									y: 0
+								}
+							});
+						})
 					}
 				});
 				

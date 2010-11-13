@@ -3,8 +3,6 @@
 // Movable things that can collide with other things. Entities have a position
 // in world space and a velocity. Entities do not handle their own collision
 // detection.
-//
-// Depends: utils.js
 
 (function(global, $) {
   
@@ -104,7 +102,7 @@
               return;
             };
             // are we actually colliding?
-            if (!utils.collide(that, r)) {
+            if (!collide(that, r)) {
               return;
             };
             // does what we're colliding with have a collide function?
