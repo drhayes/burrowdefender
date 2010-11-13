@@ -5,6 +5,13 @@
 
 (function(global, $) {
   
+  var cracks1image = new Image();
+  cracks1image.src = 'assets/images/cracks1.png';
+  var cracks2image = new Image();
+  cracks2image.src = 'assets/images/cracks2.png';
+  var cracks3image = new Image();
+  cracks3image.src = 'assets/images/cracks3.png';
+  
   loki.define('tileutils', function(env) {
     var tilesize = env.tilesize,
       totilepos = env.totilepos,
@@ -16,6 +23,12 @@
     }
 
     loki.modules.world = function(env) {
+      // Tilegenerator args:
+      // * game - the game mediator with access to tilemap and spatialhash
+      // * surfacetile - function used to generate a tile suitable for placement
+      //   on the surface.
+      // * firstgroundtile - function used to generate a tile suitable for just
+      //   underground.
       env.tilegenerator = function(args) {
         var that = {};
         var game = args.game;
@@ -74,7 +87,92 @@
           5.1 * Math.cos(0.09 * x);
         return Math.round(y);
       }
-    };
+      
+      env.tile = function(args) {
+        var that = {};
+        that.diggable = true;
+        that.solid = true;
+        that.x = that.x1 = args.x;
+        that.y = that.y1 = args.y;
+        that.x2 = tilesize + that.x1;
+        that.y2 = tilesize + that.y1;
+        that.halfwidth = (that.x2 - that.x1) / 2;
+        that.halfheight = (that.y2 - that.y1) / 2;
+        that.halfx = that.halfwidth + that.x1;
+        that.halfy = that.halfheight + that.y1;
+        that.draw = function(x, y, ctx) {
+          // this version doesn't do anything
+        };
+
+        that.mine = function() {
+          if (!that.diggable) {
+            return;
+          }
+      	  // if we're not dead, do nothing...
+      	  if (that.health > 0) {
+      	    return;
+      	  }
+      	  // this tile has been killed!
+      	  var dugtile = tile.dug({
+      	    game: args.game,
+      	    x: that.x,
+      	    y: that.y
+      	  })
+          args.game.tilemap.set(dugtile);
+          args.game.spatialhash.remove(that);
+          // make the drop at the center point of this tile
+          var dp = pickup({
+            x: that.x + (tilesize / 2) - 8,
+            y: that.y + (tilesize / 2) - 8,
+            game: args.game,
+            item: item.dirtitem({game: args.game})
+          });
+          dp.updaterect();
+          args.game.add(dp);
+        };
+
+        that.healtick = function() {
+          if (that.health === that.maxhealth) {
+            return;
+          }
+          if (!that.lasthealed) {
+            that.lasthealed = new Date().getTime();
+            return;
+          };
+          var currenttime = new Date().getTime();
+          if (currenttime - that.lasthealed >= 750) {
+            that.health += 1;
+          };
+          if (that.health >= that.maxhealth) {
+            that.lasthealed = null;
+          };
+        };
+
+        that.tick = function() {
+          // is this mine getting dug?
+          that.mine();
+          // is this mine in need of healing?
+          that.healtick();
+        }
+
+        return that;
+      }; // tile
+      
+      // Draw the tile damage tiles
+      env.tile.drawdamage = function(ctx, percentage) {
+        if (percentage === 1) {
+          return;
+        };
+        var image = cracks1image;
+        if (percentage <= 0.3) {
+          image = cracks3image;
+        }
+        else if (percentage <= 0.6) {
+          image = cracks2image;
+        }
+        ctx.drawImage(image, 0, 0);
+      };
+    }; // world module
   });
   
 }(this, jQuery));
