@@ -5,6 +5,7 @@
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="../src/base.js"></script>
+		<script type="text/javascript" src="../src/system.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
 		<script type="text/javascript" src="../src/tileutils.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
@@ -21,6 +22,28 @@
 						equals(typeof env.itemtypes, 'object', 'item.types');
 						equals(env.itemtypes.DIRT, '1', 'the type of dirt');
 						equals(env.itemtypes.SENTRYGUN, '2', 'the type of sentry guns');
+					})
+				});
+				
+				module('item events');
+				
+				test('mined', function() {
+					loki.define('items', function(env) {
+						var eb = new FakeEventer();
+						var fakegame = new FakeGame();
+						equals(typeof env.subscribeitemevents, 'function', 'subscribeitemevents');
+						env.subscribeitemevents(fakegame, eb);
+						equals(eb.subscribed.length, 1, 'have a subscription');
+						var callback = eb.subscribed[0].callback;
+						var faketile = {
+							x: 20,
+							y: 30
+						};
+						callback(faketile);
+						equals(fakegame.added.length, 1, 'something got added');
+						var p = fakegame.added[0];
+						equals(p.x, 28, 'pickup x');
+						equals(p.y, 38, 'pickup y');
 					})
 				});
 				

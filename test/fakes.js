@@ -45,11 +45,8 @@ var FakeCtx = function() {
   };
 };
 
-var FakeGame = function() {
-  this.width = 600;
-  this.height = 500;
-  this.added = [];
-  this.eventbus = {
+var FakeEventer = function() {
+  return {
     subscribed: [],
     subscribe: function(eventname, callback) {
       this.subscribed.push({
@@ -64,7 +61,15 @@ var FakeGame = function() {
         eventarg: eventarg
       });
     }
-  };
+  }
+};
+
+
+var FakeGame = function() {
+  this.width = 600;
+  this.height = 500;
+  this.added = [];
+  this.eventbus = new FakeEventer();
   this.add = function(thing) {
     this.added.push(thing);
   };

@@ -148,15 +148,6 @@
           args.game.spatialhash.remove(that);
           // fire an event notifying that this tile has been mined
           args.game.eventbus.fire('mined', that);
-          // make the drop at the center point of this tile if we can
-          // if (args.genpickup) {
-          //   var dp = args.genpickup({
-          //     x: that.x + (tilesize / 2) - 8,
-          //     y: that.y + (tilesize / 2) - 8
-          //   });
-          //   dp.updaterect();
-          //   args.game.add(dp);
-          // }
         };
 
         that.healtick = function() {

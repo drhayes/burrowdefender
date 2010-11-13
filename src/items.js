@@ -96,6 +96,9 @@
         return that;
       }; // sentrygun
       
+      // Args:
+      // * mob arguments
+      // * item - The item that this pickup represents.
       env.pickup = function(args) {
         var that = mob(args);
         that.vel.y = -2;
@@ -139,6 +142,31 @@
       
         return that;    
       }; // pickup
+      
+      // make the drop at the center point of this tile if we can
+      // if (args.genpickup) {
+      //   var dp = args.genpickup({
+      //     x: that.x + (tilesize / 2) - 8,
+      //     y: that.y + (tilesize / 2) - 8
+      //   });
+      //   dp.updaterect();
+      //   args.game.add(dp);
+      // }
+      
+      // We want to pick up on events like tiles getting mined (which should
+      // drop a dirtitem), etc.
+      env.subscribeitemevents = function(game, eventer) {
+        eventer.subscribe('mined', function(tile) {
+          // create a pickup for that tile in its center
+          var pickup = env.pickup({
+            x: tile.x + (tilesize / 2) - 8,
+            y: tile.y + (tilesize / 2) - 8,
+            item: env.dirtitem({game: game})
+          });
+          // add to the game
+          game.add(pickup);
+        });
+      };
     };
     
   });
