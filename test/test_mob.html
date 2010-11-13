@@ -4,6 +4,7 @@
 		<title>Mob</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/base.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
@@ -13,50 +14,57 @@
 				module('basics');
 				
 				test('ctor', function() {
-					equals(typeof mob, 'function', 'mob exists');
-					var m = mob();
-					equals(m.x, 0, 'initial x pos');
-					equals(m.y, 0, 'initial y pos');
-					equals(m.size.x, 16, 'initial x size');
-					equals(m.size.y, 16, 'initial y size');
-					equals(m.vel.x, 0, 'initial x velocity');
-					equals(m.vel.y, 0, 'initial y velocity');
-					equals(m.bounce, 0, 'initial bounce');
-					equals(m.friction, 1, 'initil friction');
-					ok(m.movestate, 'movestate');
-					ok(m.velocities, 'velocities');
+					loki.define('mob', function(env) {
+						equals(typeof env.mob, 'function', 'mob exists');
+						var m = env.mob();
+						equals(m.x, 0, 'initial x pos');
+						equals(m.y, 0, 'initial y pos');
+						equals(m.size.x, 16, 'initial x size');
+						equals(m.size.y, 16, 'initial y size');
+						equals(m.vel.x, 0, 'initial x velocity');
+						equals(m.vel.y, 0, 'initial y velocity');
+						equals(m.bounce, 0, 'initial bounce');
+						equals(m.friction, 1, 'initil friction');
+						ok(m.movestate, 'movestate');
+						ok(m.velocities, 'velocities');
+					})
 				});
 				
 				test('ctor with options', function() {
-					var m = new mob({
-						x: 30,
-						vel: {
-							x: -3,
-							y: 5
-						}
-					});
-					equals(m.x, 30, 'mob.x === 30');
-					equals(m.vel.x, -3, 'mob.vel.x === -3');
-					equals(m.vel.y, 5, 'mob.vel.y === 5');
+					loki.define('mob', function(env) {
+						var m = new env.mob({
+							x: 30,
+							vel: {
+								x: -3,
+								y: 5
+							}
+						});
+						equals(m.x, 30, 'mob.x === 30');
+						equals(m.vel.x, -3, 'mob.vel.x === -3');
+						equals(m.vel.y, 5, 'mob.vel.y === 5');
+					})
 				});
 				
 				module('usage', {
 					setup: function() {
+						var me = this;
 						this.fakegame = new FakeGame();
-						this.m = mob({
-							game: this.fakegame,
-							x: 5,
-							y: 5,
-							size: {
-								x: 30,
-								y: 30
-							},
-							vel: {
-								x: 0,
-								y: 0
-							},
-							bounce: 0,
-							friction: 1
+						loki.define('mob', function(env) {
+							me.m = env.mob({
+								game: this.fakegame,
+								x: 5,
+								y: 5,
+								size: {
+									x: 30,
+									y: 30
+								},
+								vel: {
+									x: 0,
+									y: 0
+								},
+								bounce: 0,
+								friction: 1
+							});
 						});
 					}
 				});
@@ -71,20 +79,23 @@
 				});
 				
 				test('gravitytick', function() {
-					ok(typeof(mob.gravitytick) === 'function', 'gravity tick is a function');
-					this.m.movestate.standing = true;
-					for (var i = 0; i < 10; i++) {
-						mob.gravitytick.call(this.m);
-					};
-					equals(this.m.vel.y, 1, 'y velocity set to 1 when standing');
-					this.m.movestate.standing = false;
-					for (var i = 0; i < 10; i++) {
-						mob.gravitytick.call(this.m);
-					};
-					ok(this.m.vel.y > 0, 'gravity is taking effect');
-					this.m.movestate.standing = true;
-					mob.gravitytick.call(this.m);
-					ok(this.m.vel.y === 1, 'y velocity is 1 when standing');
+					var me = this;
+					loki.define('mob', function(env) {
+						equals(typeof env.mob.gravitytick, 'function', 'gravitytick exists');
+						me.m.movestate.standing = true;
+						for (var i = 0; i < 10; i++) {
+							env.mob.gravitytick.call(me.m);
+						};
+						equals(me.m.vel.y, 1, 'y velocity set to 1 when standing');
+						me.m.movestate.standing = false;
+						for (var i = 0; i < 10; i++) {
+							env.mob.gravitytick.call(me.m);
+						};
+						ok(me.m.vel.y > 0, 'gravity is taking effect');
+						me.m.movestate.standing = true;
+						env.mob.gravitytick.call(me.m);
+						ok(me.m.vel.y === 1, 'y velocity is 1 when standing');
+					})
 				});
 
 				test('move', function() {
