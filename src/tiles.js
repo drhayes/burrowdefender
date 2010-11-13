@@ -32,6 +32,9 @@
       
       // The other really common tile.
       env.dirt = function(args) {
+        args.genminedtile = function(args) {
+          return env.dug(args);
+        }
         var that = tile(args);
         // dirt tiles can be damaged
         damageable(that, {

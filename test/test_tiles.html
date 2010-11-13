@@ -91,6 +91,12 @@
 				test('damage', function() {
 					equals(typeof this.d.damage, 'function', 'damage exists');
 				});
+				
+				test('dirt has set genminedtile', function() {
+					equals(typeof this.d.mine, 'function', 'mine exists');
+					this.d.health = 0;
+					this.d.mine();
+				});
 			});
 		</script>
 	</head>
