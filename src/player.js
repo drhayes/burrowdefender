@@ -51,6 +51,7 @@
   loki.define('mob', 'tileutils', 'components', function(env) {
     var mob = env.mob,
       tilesize = env.tilesize,
+      totilepos = env.totilepos,
       damageable = env.damageable;
       
     loki.modules.player = function(env) {
@@ -169,7 +170,7 @@
 
         var tileposindirection = function() {
     			// respect player's center of mass
-    			var tilepos = tile.totilepos(that.x + that.size.x / 2, that.y + that.size.y / 2);
+    			var tilepos = totilepos(that.x + that.size.x / 2, that.y + that.size.y / 2);
     			if (that.movestate.walking === walking.LEFT) {
     				tilepos.x -= 1;
     			}
