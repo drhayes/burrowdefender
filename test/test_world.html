@@ -5,6 +5,7 @@
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="../src/base.js"></script>
+		<script type="text/javascript" src="../src/components.js"></script>
 		<script type="text/javascript" src="../src/tileutils.js"></script>
 		<script type="text/javascript" src="../src/world.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
@@ -115,6 +116,95 @@
 					equals(this.fakectx.drawImageArgs.length, 3, 'drawImage called');
 					var args = this.fakectx.drawImageArgs[2];
 					equals(args.img.src.substr(-11), 'cracks3.png', 'cracks3');
+				});
+				
+				module('tile instance', {
+					setup: function() {
+						var me = this;
+						loki.define('world', function(env) {
+							me.tile = env.tile;
+						});
+						this.fakectx = new FakeCtx();
+						this.fakegame = new FakeGame();
+						// a fake tile type I can test with.
+						loki.define('components', function(env) {
+							var faketile = function(args) {
+								var that = me.tile(args);
+							    env.damageable(that, {
+							      health: 20,
+							      whendamaged: function() {
+							        that.lasthealed = null;
+							      }
+							    });
+								return that;
+							};
+							me.targs = {
+								game: me.fakegame,
+								x: 0,
+								y: 0,
+								genminedtile: function(args) {
+									this.genminedtileargs = args;
+									return {};
+								},
+								genpickup: function(args) {
+									this.genpickupargs = args;
+									return {
+										updaterect: function() {}
+									};
+								}
+							};
+							me.t = faketile(me.targs)
+						});
+					}
+				});
+				
+				test('healtick', function() {
+					equals(this.t.health / this.t.maxhealth, 1, 'percentage healed is 1');
+					this.t.health -= 3;
+					var tilehealth = this.t.health;
+					var currenttime = new Date().getTime();
+					this.t.lasthealed = null;
+					this.t.healtick();
+					ok(this.t.lasthealed !== null, 'lasthealed is no longer null');
+					equals(this.t.health, tilehealth, 'tile is not healing yet');
+					this.t.lasthealed = currenttime - 750;
+					this.t.healtick();
+					equals(this.t.health, tilehealth + 1, 'tile is healing');
+					this.t.lasthealed = currenttime - 1500;
+					this.t.healtick();
+					equals(this.t.health, tilehealth + 2, 'tile is healing more');
+				});
+				
+				test('mine respects health', function() {
+					equals(typeof(this.t.mine), 'function', 'mine exists');
+					this.t.mine();
+					// verify nothing was added to spatialhash in response
+					equals(this.fakegame.spatialhash.rt, undefined, 'nothing added to spatialhash');
+					this.t.health = 0;
+					this.t.mine();
+					var rt = this.fakegame.spatialhash.rt;
+					equals(rt.x1, this.t.x1, 'x1');
+					equals(rt.y1, this.t.y1, 'y1');
+					equals(rt.x2, this.t.x2, 'x2');
+					equals(rt.y2, this.t.y2, 'y2');
+				});
+				
+				test('mine with no genpickup', function() {
+					// remove genpickup function
+					delete this.targs.genpickup;
+					this.t.health = 0;
+					this.t.mine();
+					// verify nothing was added to game in response
+					equals(this.fakegame.added.length, 0, 'nothing added');
+				});
+				
+				test('mine with genpickup', function() {
+					this.t.health = 0;
+					this.t.mine();
+					equals(this.fakegame.added.length, 1, 'something added');
+					// check passed-in args
+					equals(this.targs.genpickupargs.x, 8, 'pickupargs.x');
+					equals(this.targs.genpickupargs.y, 8, 'pickupargs.y');
 				});
 			});
 		</script>

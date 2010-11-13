@@ -23,7 +23,8 @@
     }
 
     loki.modules.world = function(env) {
-      // Tilegenerator args:
+      // Procedurally generates the world the player can walk around on.
+      // Args:
       // * game - the game mediator with access to tilemap and spatialhash
       // * surfacetile - function used to generate a tile suitable for placement
       //   on the surface.
@@ -88,6 +89,15 @@
         return Math.round(y);
       }
       
+      // A tile the player can walk around on in the game.
+      // Args:
+      // * game - the mediator object that has spatialhash and tilemap
+      // * x - the x position in worldspace of this tile
+      // * y - the y position in worldspace of this tile
+      // * genminedtile - function that generates tile to replace this tile when
+      //   it is mined.
+      // * genpickup - function that generates pickup player can grab into
+      //   inventory (optional).
       env.tile = function(args) {
         var that = {};
         that.diggable = true;
@@ -113,22 +123,24 @@
       	    return;
       	  }
       	  // this tile has been killed!
-      	  var dugtile = tile.dug({
+      	  var minedtile = args.genminedtile({
       	    game: args.game,
       	    x: that.x,
       	    y: that.y
-      	  })
-          args.game.tilemap.set(dugtile);
+      	  });
+          args.game.tilemap.set(minedtile);
           args.game.spatialhash.remove(that);
-          // make the drop at the center point of this tile
-          var dp = pickup({
-            x: that.x + (tilesize / 2) - 8,
-            y: that.y + (tilesize / 2) - 8,
-            game: args.game,
-            item: item.dirtitem({game: args.game})
-          });
-          dp.updaterect();
-          args.game.add(dp);
+          // make the drop at the center point of this tile if we can
+          if (args.genpickup) {
+            var dp = args.genpickup({
+              x: that.x + (tilesize / 2) - 8,
+              y: that.y + (tilesize / 2) - 8
+              // game: args.game,
+              // item: item.dirtitem({game: args.game})
+            });
+            dp.updaterect();
+            args.game.add(dp);
+          }
         };
 
         that.healtick = function() {
