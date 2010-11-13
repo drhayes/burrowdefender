@@ -56,6 +56,54 @@
 						equals(typeof m.two, 'undefined', '!m.two');
 					})
 				});
+
+				test('ratelimit', function() {
+					expect(4);
+					var f = function() {};
+					equals(typeof f.ratelimit, 'function', 'ratelimit is on functions');
+					var counter = 1;
+					f = function() {
+						ok(true, 'got called ' + counter);
+						counter += 1;
+					}.ratelimit(50);
+					equals(typeof f, 'function', 'f is still a function');
+					var current = new Date().getTime();
+					f();
+					f();
+					stop();
+					setTimeout(function() {
+						f();
+						start();
+					}, 100);
+				});
+				
+				test('ratelimit with force (for testing)', function() {
+					expect(2);
+					var f = function() {
+						ok(true, 'got called');
+					}.ratelimit(100);
+					f();
+					f.force = true;
+					f();
+					f();
+				});
+				
+				test('ratelimit preserves return value', function() {
+					var f = function() {
+						return 'catpants';
+					}.ratelimit(100);
+					equals(f(), 'catpants', 'got catpants');
+				});
+				
+				test('ratelimit preserves arguments', function() {
+					expect(3);
+					var f = function(x, y, z) {
+						equals(x, 1, 'x is 1');
+						equals(y, 2, 'y is 2');
+						equals(z, 3, 'z is 3');
+					}.ratelimit(500);
+					f(1, 2, 3);
+				});
 			});
 		</script>
 	</head>

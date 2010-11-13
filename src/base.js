@@ -41,4 +41,21 @@
   
   global.loki = loki;
   
+  // modify the Function prototype to provide rate-limiting for functions that
+  // shouldn't actually run until some time limit has passed by.
+  Function.prototype.ratelimit = function(interval) {
+    var lastcalled = 0;
+    var me = this;
+    return function limiter() {
+      var current = new Date().getTime();
+      // force is in place for debugging purposes and is reset every call
+      if (current - lastcalled >= interval || limiter.force) {
+        limiter.force = false;
+        lastcalled = current;
+        return me.apply(me, arguments);
+      }
+    }
+  };
+
+  
 }(this, jQuery));

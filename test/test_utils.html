@@ -4,126 +4,26 @@
 		<title>Utils</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/base.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
 			$(document).ready(function() {
 				test('utils', function() {
-					ok(typeof(utils) != 'undefined', 'utils object exists');
+					equals(typeof loki.modules.utils, 'function', 'utils exists');
 				});
 				
 				test('collide', function() {
-					equals(typeof utils.collide, 'function', 'utils.collide exists');
-					var collide = utils.collide;
-					rect1 = {x1: 0, y1: 0, x2: 10, y2: 10};
-					rect2 = {x1: -5, y1: -5, x2: 5, y2: 5};
-					rect3 = {x1: 11, y1:0, x2:6, y2: 5};
-					ok(collide(rect1, rect2), 'rect1 and rect2 collide');
-					ok(!collide(rect1, rect3), 'rect2 and rect3 do not collide');
+					loki.define('utils', function(env) {
+						equals(typeof env.collide, 'function', 'utils.collide exists');
+						rect1 = {x1: 0, y1: 0, x2: 10, y2: 10};
+						rect2 = {x1: -5, y1: -5, x2: 5, y2: 5};
+						rect3 = {x1: 11, y1:0, x2:6, y2: 5};
+						ok(env.collide(rect1, rect2), 'rect1 and rect2 collide');
+						ok(!env.collide(rect1, rect3), 'rect2 and rect3 do not collide');
+					})
 				});
 				
-				test('damageable', function() {
-					equals(typeof utils.damageable, 'function', 'utils.damageable exists');
-					var thing = {};
-					utils.damageable(thing, {
-						health: 5
-					});
-					equals(typeof thing.damage, 'function', 'thing has a damage function');
-					equals(typeof thing.health, 'number', 'thing has health');
-					equals(typeof thing.maxhealth, 'number', 'thing has maxhealth');
-					equals(thing.health, 5, 'health is set to 5');
-					equals(thing.maxhealth, 5, 'maxhealth is set to 5');
-					thing.damage(2);
-					equals(thing.health, 3, 'thing.health decremented by damage call');
-					// reset to check for thrown
-					thing = {
-						vel: {
-							x: 0,
-							y: 0
-						}
-					};
-					utils.damageable(thing, {
-						health: 10
-					});
-					equals(thing.health, 10, 'thing.health is 10');
-					thing.damage(2);
-					equals(thing.health, 8, 'thing.health decremented by damage call');
-					equals(thing.vel.x, -2, 'thing thrown in x by -4');
-					equals(thing.vel.y, -4, 'thing thrown in y by -7');
-					thing.damage(2, true);
-					equals(thing.vel.x, 2, 'thing thrown in x by 4');
-					thing = {};
-					utils.damageable(thing, {
-						health: 5,
-						whendamaged: function(amt) {
-							thing.whenamt = amt;
-						}
-					});
-					thing.damage(2);
-					equals(thing.whenamt, 2, 'whendamaged called for bare thing');
-					thing = {
-						vel: {
-							x: 0,
-							y: 0
-						}
-					};
-					utils.damageable(thing, {
-						health: 7,
-						whendamaged: function(amt) {
-							thing.whenamt = amt;
-						}
-					});
-					thing.damage(3);
-					equals(thing.whenamt, 3, 'whendamaged called for velocity thing');
-				});
-				
-				test('ratelimit', function() {
-					expect(4);
-					var f = function() {};
-					equals(typeof f.ratelimit, 'function', 'ratelimit is on functions');
-					var counter = 1;
-					f = function() {
-						ok(true, 'got called ' + counter);
-						counter += 1;
-					}.ratelimit(50);
-					equals(typeof f, 'function', 'f is still a function');
-					var current = new Date().getTime();
-					f();
-					f();
-					stop();
-					setTimeout(function() {
-						f();
-						start();
-					}, 100);
-				});
-				
-				test('ratelimit with force (for testing)', function() {
-					expect(2);
-					var f = function() {
-						ok(true, 'got called');
-					}.ratelimit(100);
-					f();
-					f.force = true;
-					f();
-					f();
-				});
-				
-				test('ratelimit preserves return value', function() {
-					var f = function() {
-						return 'catpants';
-					}.ratelimit(100);
-					equals(f(), 'catpants', 'got catpants');
-				});
-				
-				test('ratelimit preserves arguments', function() {
-					expect(3);
-					var f = function(x, y, z) {
-						equals(x, 1, 'x is 1');
-						equals(y, 2, 'y is 2');
-						equals(z, 3, 'z is 3');
-					}.ratelimit(500);
-					f(1, 2, 3);
-				});
 			});
 		</script>
 	</head>
