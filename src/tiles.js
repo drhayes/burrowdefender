@@ -50,25 +50,21 @@
       
         return that;
       }; // dirt
+      
+      // The common tile, but on the surface with grass
+      env.dirtwithgrass = function(args) {
+        var that = env.dirt(args);
+      
+        that.draw = function(ctx) {
+          ctx.fillStyle('rgb(102,51,0)');
+          ctx.fillRect(0, tilesize - 2, tilesize, 3);
+          ctx.drawImage(dirtimage, 0, 0);
+          ctx.drawImage(grassimage, 0, 0);
+          tile.drawdamage(ctx, that.health / that.maxhealth);
+        };
+      
+        return that;
+      }; // dirtwithgrass
     }
-  });
-      // 
-      // // The common tile, but on the surface with grass
-      // env.dirtwithgrass = function(args) {
-      //   if (typeof(args.game) === 'undefined') {
-      //     alert('args.game!')
-      //   }
-      //   var that = tile.dirt(args);
-      // 
-      //   that.draw = function(ctx) {
-      //     ctx.fillStyle('rgb(102,51,0)');
-      //     ctx.fillRect(0, tile.tilesize - 2, tile.tilesize, 3);
-      //     ctx.drawImage(dirtimage, 0, 0);
-      //     ctx.drawImage(grassimage, 0, 0);
-      //     tile.drawdamage(ctx, that.health / that.maxhealth);
-      //   };
-      // 
-      //   return that;
-      // }; // dirtwithgrass
-  
+  });  
 }(this, jQuery));

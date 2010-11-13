@@ -51,69 +51,46 @@
 					})
 				});
 				
-				// test('DirtWithGrass', function() {
-				// 	checkexists(tile.dirtwithgrass, 'DirtWithGrass exists');
-				// 	var dirt = tile.dirtwithgrass({game: this.fakegame});
-				// 	ok(typeof(dirt.draw) === 'function', 'draw exists');
-				// 	ok(dirt.diggable, 'DirtWithGrass is diggable');
-				// 	dirt.draw(this.fakectx);
-				// 	equals(this.fakectx.fillRectArgs.length, 1, 'fill called once');
-				// });
-				// 
-				// test('drawdamage', function() {
-				// 	equals(typeof(tile.drawdamage), 'function', 'drawdamage exists');
-				// 	tile.drawdamage(this.fakectx, 1);
-				// 	equals(this.fakectx.drawImageArgs.length, 0, 'drawImage not called');
-				// 	tile.drawdamage(this.fakectx, 0.9);
-				// 	equals(this.fakectx.drawImageArgs.length, 1, 'drawImage called');
-				// 	var args = this.fakectx.drawImageArgs[0];
-				// 	equals(args.drx, 0, 'x is 0');
-				// 	equals(args.dry, 0, 'y is 0');
-				// 	equals(args.img.src.substr(-11), 'cracks1.png', 'cracks1');
-				// 	tile.drawdamage(this.fakectx, 0.6);
-				// 	equals(this.fakectx.drawImageArgs.length, 2, 'drawImage called');
-				// 	var args = this.fakectx.drawImageArgs[1];
-				// 	equals(args.img.src.substr(-11), 'cracks2.png', 'cracks2');
-				// 	tile.drawdamage(this.fakectx, 0.3);
-				// 	equals(this.fakectx.drawImageArgs.length, 3, 'drawImage called');
-				// 	var args = this.fakectx.drawImageArgs[2];
-				// 	equals(args.img.src.substr(-11), 'cracks3.png', 'cracks3');
-				// });
-				// 
-				// module('actual tile stuff', {
-				// 	setup: function() {
-				// 		this.fakegame = new FakeGame();
-				// 		this.d = tile.dirt({
-				// 			game: this.fakegame,
-				// 			x: 32,
-				// 			y: 32
-				// 		});
-				// 	}
-				// })
-				// 				
-				// test('tick', function() {
-				// 	expect(2);
-				// 	var d = tile.dirt({game: this.fakegame});
-				// 	d.healtick = function() {
-				// 		ok(true, 'healtick');
-				// 	};
-				// 	d.mine = function() {
-				// 		ok(true, 'mine');
-				// 	};
-				// 	d.tick();
-				// });
-				// 
-				// test('dirt kill', function() {
-				// 	var d = tile.dirt({
-				// 		game: this.fakegame,
-				// 		x: 0,
-				// 		y: 0
-				// 	});
-				// });
-				// 
-				// test('damage', function() {
-				// 	equals(typeof this.d.damage, 'function', 'damage exists');
-				// });
+				test('dirtwithgrass', function() {
+					var me = this;
+					loki.define('tiles', 'tileutils', function(env) {
+						equals(typeof env.dirtwithgrass, 'function', 'dirtwithgrass exists');
+						var dirt = env.dirtwithgrass({game: me.fakegame});
+						ok(typeof(dirt.draw) === 'function', 'draw exists');
+						ok(dirt.diggable, 'is diggable');
+						dirt.draw(me.fakectx);
+						equals(me.fakectx.fillRectArgs.length, 1, 'fill called once');
+					})
+				});
+
+				module('dirt tests', {
+					setup: function() {
+						var me = this;
+						this.fakegame = new FakeGame();
+						loki.define('tiles', function(env) {
+							me.d = env.dirt({
+								game: me.fakegame,
+								x: 32,
+								y: 32
+							})
+						})
+					}
+				})
+								
+				test('tick', function() {
+					expect(2);
+					this.d.healtick = function() {
+						ok(true, 'healtick');
+					};
+					this.d.mine = function() {
+						ok(true, 'mine');
+					};
+					this.d.tick();
+				});
+				
+				test('damage', function() {
+					equals(typeof this.d.damage, 'function', 'damage exists');
+				});
 			});
 		</script>
 	</head>
