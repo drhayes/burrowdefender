@@ -192,22 +192,14 @@
 					equals(rt.y2, this.t.y2, 'y2');
 				});
 				
-				test('mine with no genpickup', function() {
-					// remove genpickup function
-					delete this.targs.genpickup;
+				test('mine fires mined event on game', function() {
+					equals(this.fakegame.eventbus.fired.length, 0, 'no events fired yet');
 					this.t.health = 0;
 					this.t.mine();
-					// verify nothing was added to game in response
-					equals(this.fakegame.added.length, 0, 'nothing added');
-				});
-				
-				test('mine with genpickup', function() {
-					this.t.health = 0;
-					this.t.mine();
-					equals(this.fakegame.added.length, 1, 'something added');
-					// check passed-in args
-					equals(this.targs.genpickupargs.x, 8, 'pickupargs.x');
-					equals(this.targs.genpickupargs.y, 8, 'pickupargs.y');
+					equals(this.fakegame.eventbus.fired.length, 1, 'fired an event');
+					var args = this.fakegame.eventbus.fired[0];
+					equals(args.eventname, 'mined', 'fired the mined event');
+					same(args.eventarg, this.t, 'passed along the tile that got mined');
 				});
 				
 				module('tilemap', {

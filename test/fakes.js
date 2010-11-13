@@ -49,6 +49,22 @@ var FakeGame = function() {
   this.width = 600;
   this.height = 500;
   this.added = [];
+  this.eventbus = {
+    subscribed: [],
+    subscribe: function(eventname, callback) {
+      this.subscribed.push({
+        eventname: eventname,
+        callback: callback
+      });
+    },
+    fired: [],
+    fire: function(eventname, eventarg) {
+      this.fired.push({
+        eventname: eventname,
+        eventarg: eventarg
+      });
+    }
+  };
   this.add = function(thing) {
     this.added.push(thing);
   };

@@ -114,8 +114,6 @@
       // * y - the y position in worldspace of this tile
       // * genminedtile - function that generates tile to replace this tile when
       //   it is mined.
-      // * genpickup - function that generates pickup player can grab into
-      //   inventory (optional).
       env.tile = function(args) {
         var that = {};
         that.diggable = true;
@@ -148,15 +146,17 @@
       	  });
           args.game.tilemap.set(minedtile);
           args.game.spatialhash.remove(that);
+          // fire an event notifying that this tile has been mined
+          args.game.eventbus.fire('mined', that);
           // make the drop at the center point of this tile if we can
-          if (args.genpickup) {
-            var dp = args.genpickup({
-              x: that.x + (tilesize / 2) - 8,
-              y: that.y + (tilesize / 2) - 8
-            });
-            dp.updaterect();
-            args.game.add(dp);
-          }
+          // if (args.genpickup) {
+          //   var dp = args.genpickup({
+          //     x: that.x + (tilesize / 2) - 8,
+          //     y: that.y + (tilesize / 2) - 8
+          //   });
+          //   dp.updaterect();
+          //   args.game.add(dp);
+          // }
         };
 
         that.healtick = function() {
