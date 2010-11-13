@@ -1,9 +1,7 @@
 # Overview #
 
-Just like Minecraft, but in 2D. And more stuff attacks. And it's all in HTML5.
+Imagine Tower Defense crossed with Minecraft, but in 2D. And more stuff attacks. And it's all in HTML5.
 
-## Control Scheme Idea ##
+[Check out the demo][demo].
 
-  * wasd to move
-  * wasd + ENTER to dig in that direction
-  * SHIFT + wasd stops movement, ENTER places block
+  [demo]: http://www.davidrhayes.com/minedefender/index.html
