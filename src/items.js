@@ -9,10 +9,11 @@
   var sentrygunitemimage = new Image();
   sentrygunitemimage.src = 'assets/images/sentrygunitem.png';
   
-  loki.define('tileutils', 'tiles', function(env) {
+  loki.define('tileutils', 'tiles', 'mob', function(env) {
     var tilesize = env.tilesize,
       totilepos = env.totilepos,
-      dirt = env.dirt;
+      dirt = env.dirt,
+      mob = env.mob;
     
     loki.modules.items = function(env) {
       // private shared ctor thing
@@ -32,7 +33,7 @@
       env.itemtypes = {
         DIRT: '1',
         SENTRYGUN: '2'
-      };
+      }; // item
 
       // given a tile position, return a boolean indicating whether we can place
       // a physical object there.
@@ -93,7 +94,51 @@
         }.ratelimit(250);
 
         return that;
-      } // sentrygun
+      }; // sentrygun
+      
+      env.pickup = function(args) {
+        var that = mob(args);
+        that.vel.y = -2;
+        that.solid = false;
+        that.bounce = 0.63;
+        that.created = new Date().getTime();
+        that.taken = false;
+      
+        var pickupcollide = function(collider) {
+          if (!collider.inventory) {
+            return;
+          };
+          if (that.taken) {
+            return;
+          }
+          that.taken = true;
+          collider.inventory.add(args.item);
+          that.killed = true;
+          // have to get the rect to remove from spatial hash
+          that.updaterect();
+          args.game.spatialhash.remove(this);
+          // stop colliding
+          return true;
+        };
+      
+        that.tick = function() {
+          mob.gravitytick.call(that);
+          // are we pickupable yet?
+          if (new Date().getTime() - that.created > 300) {
+            that.collide = pickupcollide;
+          }
+        };
+      
+        that.draw = function(drawthing) {
+          drawthing.sprite1.push(function(ctx) {
+            ctx.offset.x += that.x;
+            ctx.offset.y += that.y;
+            args.item.drawimage(ctx);
+          });
+        };
+      
+        return that;    
+      }; // pickup
     };
     
   });

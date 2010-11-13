@@ -5,7 +5,9 @@
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="../src/base.js"></script>
+		<script type="text/javascript" src="../src/utils.js"></script>
 		<script type="text/javascript" src="../src/tileutils.js"></script>
+		<script type="text/javascript" src="../src/mob.js"></script>
 		<script type="text/javascript" src="../src/components.js"></script>
 		<script type="text/javascript" src="../src/world.js"></script>
 		<script type="text/javascript" src="../src/tiles.js"></script>
@@ -114,6 +116,53 @@
 					var result = this.sg.place(0, 0);
 					ok(result, 'placed just fine');
 					result = this.sg.place(0, 0);
+				});
+				
+				module('pickup', {
+					setup: function() {
+						this.fakegame = new FakeGame();
+						var me = this;
+						loki.define('items', function(env) {
+							me.i = {
+								type: env.itemtypes.DIRT
+							};
+							me.p = env.pickup({
+								game: me.fakegame,
+								item: me.i
+							});
+						})
+					}
+				})
+				
+				test('ctor', function() {
+					equals(this.p.size.x, 16, 'p.size.x is 16');
+					equals(this.p.size.y, 16, 'p.size.y is 16');
+					equals(this.p.taken, false, 'not taken yet');
+				});
+				
+				test('pickup items', function() {
+					var me = this;
+					loki.define('items', function(env) {
+						// have to advance tick so we can pick up the pickup
+						me.p.created -= 5000;
+						me.p.tick();
+						var player = {
+							inventory: {
+								add: function(i) {
+									this.is.push(i);
+								},
+								is: []
+							}
+						};
+						me.p.collide(player);
+						// check that the item is added to the inventory
+						equals(player.inventory.is.length, 1, 'length of items');
+						var i = player.inventory.is[0];
+						equals(i.type, env.itemtypes.DIRT, 'item type is DIRT');
+						// collide again to prove it can't actually happen
+						me.p.collide(player);
+						equals(player.inventory.is.length, 1, 'length of items');
+					})
 				});
 			});
 		</script>
