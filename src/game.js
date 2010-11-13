@@ -25,17 +25,6 @@
       // tilegenerator utility function
       var maketile = function(tilename) {
         return function(args) {
-          // have to set the right item for drop
-          args = $.extend({}, args, {
-            genpickup: function(args) {
-              return env.pickup({
-                x: args.x,
-                y: args.y,
-                game: that,
-                item: env.dirtitem({game: that})
-              });
-            }
-          })
           return env[tilename](args);
         }
       }
@@ -55,6 +44,7 @@
         y: 0
       };
       that.updater = env.updater();
+      that.eventbus = env.eventer();
       that.things = [];
       that.addthings = [];
       that.mousemanager = env.mousemanager({game: that});
