@@ -20,15 +20,6 @@
       }
       return true;
     },
-    intersect: function(a1, a2, b1, b2) {
-      if (a2 < b1) {
-        return false;
-      }
-      if (a1 > b2) {
-        return false;
-      }
-      return true;
-    },
     // pass any object to this method and it will gain a damage method and
     // attributes suitable for tracking health
     damageable: function(thing, args) {
