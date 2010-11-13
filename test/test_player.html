@@ -4,69 +4,59 @@
 		<title>Player</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/base.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
+		<script type="text/javascript" src="../src/components.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
-		<script type="text/javascript" src="../src/keyboardmanager.js"></script>
-		<script type="text/javascript" src="../src/tile.js"></script>
-		<script type="text/javascript" src="../src/tilemap.js"></script>
-		<script type="text/javascript" src="../src/inventory.js"></script>
+		<script type="text/javascript" src="../src/tileutils.js"></script>
 		<script type="text/javascript" src="../src/player.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
 			$(document).ready(function() {
-				module('basics');
-				
-				test('ctor', function() {
-					equals(typeof player, 'function', 'player exists');
-					var args = {
-						game: new FakeGame()
-					};
-					var p = player(args);
-					equals(p.x, 0, 'initial x pos');
-					equals(p.y, 0, 'initial y pos');
-					equals(p.size.x, 16, 'initial x size');
-					equals(p.size.y, 20, 'initial y size');
-					equals(p.vel.x, 0, 'initial x velocity');
-					equals(p.vel.y, 0, 'initial y velocity');
-					ok(p.movestate, 'movestate');
-					ok(!p.movestate.mining, 'not mining by default');
-					ok(!p.movestate.wantstojump, 'not wantstojump by default');
-					ok(!p.movestate.placing, 'not placing by default');
-					ok(p.velocities, 'velocities');
-					equals(p.minedamage, 1, 'minedamage');
-					equals(p.bounce, 0, 'players do not bounce');
-					equals(p.friction, 1, 'players have max friction');
-					equals(p.solid, false, 'players are not solid, otherwise they push stuff around');
-					equals(p.health, 5, 'health');
-					equals(p.maxhealth, 5, 'maxhealth');
+				module('player', {
+					setup: function() {
+						var me = this;
+						this.fakegame = new FakeGame();
+						loki.define('player', function(env) {
+							me.p = env.player({game: me.fakegame});
+						})
+					}
 				});
 				
-				module('usage', {
-					setup: function() {
-						this.fakegame = new FakeGame();
-						var args = {
-							game: this.fakegame
-						};
-						this.p = player(args);
-					}
+				test('ctor', function() {
+					equals(this.p.x, 0, 'initial x pos');
+					equals(this.p.y, 0, 'initial y pos');
+					equals(this.p.size.x, 16, 'initial x size');
+					equals(this.p.size.y, 20, 'initial y size');
+					equals(this.p.vel.x, 0, 'initial x velocity');
+					equals(this.p.vel.y, 0, 'initial y velocity');
+					ok(this.p.movestate, 'movestate');
+					ok(!this.p.movestate.mining, 'not mining by default');
+					ok(!this.p.movestate.wantstojump, 'not wantstojump by default');
+					ok(!this.p.movestate.placing, 'not placing by default');
+					ok(this.p.velocities, 'velocities');
+					equals(this.p.minedamage, 1, 'minedamage');
+					equals(this.p.bounce, 0, 'players do not bounce');
+					equals(this.p.friction, 1, 'players have max friction');
+					equals(this.p.solid, false, 'players are not solid, otherwise they push stuff around');
+					equals(this.p.health, 5, 'health');
+					equals(this.p.maxhealth, 5, 'maxhealth');
 				});
 				
 				test('draw', function() {
 					var fakectx = new FakeCtx();
-					ok(typeof(this.p.draw) === 'function', 'draw function exists');
+					equals(typeof this.p.draw, 'function', 'draw exists');
 					var drawthing = {
 						sprite1: [],
 						hud: []
 					};
 					this.p.draw(drawthing);
 					drawthing.sprite1[0](fakectx);
-					equals(fakectx.fillRectArgs.length, 1, 'fillRect was called once');
-					var args = fakectx.fillRectArgs[0];
-					equals(args.frx, 0, 'fillRect x');
-					equals(args.fry, 0, 'fillRect y');
-					equals(args.frw, this.p.size.x + 1, 'fillRect w');
-					equals(args.frh, this.p.size.y + 1, 'fillRect h');
+					equals(fakectx.drawImageArgs.length, 1, 'drawImage was called once');
+					var args = fakectx.drawImageArgs[0];
+					equals(args.drx, 0, 'drawImage x');
+					equals(args.dry, 1, 'drawImage y');
 				});
 				
 				test('tick', function() {
