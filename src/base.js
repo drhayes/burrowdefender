@@ -31,7 +31,14 @@
 
         // initialize the modules
         for (i = 0; i < modules.length; i += 1) {
-          loki.modules[modules[i]](env);
+          var modulename = modules[i];
+          if (!loki.modules.hasOwnProperty(modulename)) {
+            throw {
+              name: 'Missing module',
+              message: 'Trying to import module: ' + modulename
+            };
+          };
+          loki.modules[modulename](env);
         };
       };
       
