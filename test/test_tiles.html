@@ -30,26 +30,26 @@
 					})
 				});
 				
-				// test('Dirt', function() {
-				// 	var me = this;
-				// 	loki.define('tiles', function(env) {
-				// 		checkexists(env.dirt, 'Dirt exists');
-				// 		var dirt = env.dirt({game: me.fakegame});
-				// 		ok(typeof(dirt.draw) == 'function', 'dirt draw exists');
-				// 		ok(dirt.diggable, 'dirt is diggable');
-				// 		dirt.draw(me.fakectx);
-				// 		equals(me.fakectx.drawImageArgs.length, 1, 'drawImage called');
-				// 		var args = me.fakectx.drawImageArgs[0];
-				// 		equals(args.drx, 0, 'drawImage x');
-				// 		equals(args.dry, 0, 'drawImage y');
-				// 		equals(me.fakectx.fillRectArgs.length, 1, 'fill called');
-				// 		args = me.fakectx.fillRectArgs[0];
-				// 		equals(args.frx, 0, 'fillRect x');
-				// 		equals(args.fry, 30, 'fillRect y');
-				// 		equals(args.frw, tile.tilesize, 'fillRect width');
-				// 		equals(args.frh, 3, 'fillRect height');
-				// 	})
-				// });
+				test('dirt', function() {
+					var me = this;
+					loki.define('tiles', 'tileutils', function(env) {
+						equals(typeof env.dirt, 'function', 'dirt exists');
+						var dirt = env.dirt({game: me.fakegame});
+						ok(typeof(dirt.draw) == 'function', 'dirt draw exists');
+						ok(dirt.diggable, 'dirt is diggable');
+						dirt.draw(me.fakectx);
+						equals(me.fakectx.drawImageArgs.length, 1, 'drawImage called');
+						var args = me.fakectx.drawImageArgs[0];
+						equals(args.drx, 0, 'drawImage x');
+						equals(args.dry, 0, 'drawImage y');
+						equals(me.fakectx.fillRectArgs.length, 1, 'fill called');
+						args = me.fakectx.fillRectArgs[0];
+						equals(args.frx, 0, 'fillRect x');
+						equals(args.fry, 30, 'fillRect y');
+						equals(args.frw, env.tilesize, 'fillRect width');
+						equals(args.frh, 3, 'fillRect height');
+					})
+				});
 				
 				// test('DirtWithGrass', function() {
 				// 	checkexists(tile.dirtwithgrass, 'DirtWithGrass exists');
