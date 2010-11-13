@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Tile Utils</title>
+		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/base.js"></script>
+		<script type="text/javascript" src="../src/tileutils.js"></script>
+		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<script>
+			$(document).ready(function() {
+				test('constants', function() {
+					loki.define('tileutils', function(env) {
+						equals(env.tilesize, 32, 'tilesize');
+					})
+				});
+				
+				test('totilepos', function() {
+					loki.define('tileutils', function(env) {
+						equals(typeof env.totilepos, 'function', 'totilepos');
+						var pos = env.totilepos(0, 0);
+						equals(pos.x, 0, 'converted (0,0) x position correctly');
+						equals(pos.y, 0, 'converted (0,0) y position correctly');
+						pos = env.totilepos(32, 0);
+						equals(pos.x, 1, 'converted (32,0) x position correctly');
+						equals(pos.y, 0, 'converted (32,0) y position correctly');
+						pos = env.totilepos(32, 1);
+						equals(pos.x, 1, 'converted (32,1) x position correctly');
+						equals(pos.y, 0, 'converted (32,1) y position correctly');
+						pos = env.totilepos(-1, -1);
+						equals(pos.x, -1, 'converted (-1, -1) x position correctly');
+						equals(pos.y, -1, 'converted (-1, -1) y position correctly');
+					})
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1 id="qunit-header">Constants Test</h1>
+		<h2 id="qunit-banner"></h2>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">test markup, will be hidden</div>
+	</body>
+</html>
