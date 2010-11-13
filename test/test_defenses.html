@@ -4,8 +4,9 @@
 		<title>Defenses</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/base.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
-		<script type="text/javascript" src="../src/tile.js"></script>
+		<script type="text/javascript" src="../src/tileutils.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
 		<script type="text/javascript" src="../src/defenses.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
@@ -16,11 +17,14 @@
 					setup: function() {
 						this.fakegame = new FakeGame();
 						this.fakectx = new FakeCtx();
-						this.b = defenses.bullet({
-							x: 0,
-							y: 0,
-							game: this.fakegame
-						});
+						var me = this;
+						loki.define('defenses', function(env) {
+							me.b = env.bullet({
+								x: 0,
+								y: 0,
+								game: me.fakegame
+							});
+						})
 					}
 				});
 				
@@ -78,11 +82,14 @@
 				module('sentrygun', {
 					setup: function() {
 						this.fakegame = new FakeGame();
-						this.sg = defenses.sentrygun({
-							x: 0,
-							y: 0,
-							game: this.fakegame
-						});
+						var me = this;
+						loki.define('defenses', function(env) {
+							me.sg = env.sentrygun({
+								x: 0,
+								y: 0,
+								game: me.fakegame
+							});
+						})
 					}
 				});
 				
@@ -125,6 +132,10 @@
 				});
 				
 				test('ai with target', function() {
+					var tilesize;
+					loki.define('tileutils', function(env) {
+						tilesize = env.tilesize;
+					})
 					expect(7);
 					equals(typeof this.sg.target, 'object', 'target attribute');
 					var sgx = this.sg.x;
@@ -133,10 +144,10 @@
 					var r2 = {x1: -10, y1: -10, x2: -5, y2: -5, enemy: true};
 					var r3 = {x1: -15, y1: -15, x2: -10, y2: -10, enemy: true};
 					this.fakegame.spatialhash.get = function(r) {
-						equals(r.x1, sgx - (tile.tilesize * 8), 'aim x1');
-						equals(r.y1, sgy - (tile.tilesize * 2), 'aim y1');
-						equals(r.x2, sgx + (tile.tilesize * 9), 'aim x2');
-						equals(r.y2, sgy + (tile.tilesize * 3), 'aim y2');
+						equals(r.x1, sgx - (tilesize * 8), 'aim x1');
+						equals(r.y1, sgy - (tilesize * 2), 'aim y1');
+						equals(r.x2, sgx + (tilesize * 9), 'aim x2');
+						equals(r.y2, sgy + (tilesize * 3), 'aim y2');
 						return [r1, r2, r3];
 					};
 					this.sg.ai();
@@ -193,7 +204,9 @@
 				module('other stuff');
 				
 				test('aim', function() {
-					equals(typeof defenses.aim, 'function', 'aim exists');
+					loki.define('defenses', function(env) {
+						equals(typeof env.aim, 'function', 'aim exists');
+					})
 				});
 			});
 		</script>
