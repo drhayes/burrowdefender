@@ -9,6 +9,8 @@
 		<script type="text/javascript" src="../src/components.js"></script>
 		<script type="text/javascript" src="../src/tileutils.js"></script>
 		<script type="text/javascript" src="../src/world.js"></script>
+		<script type="text/javascript" src="../src/utils.js"></script>
+		<script type="text/javascript" src="../src/mob.js"></script>
 		<script type="text/javascript" src="../src/tiles.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
@@ -19,6 +21,12 @@
 						this.fakegame = new FakeGame();
 						this.fakectx =  new FakeCtx();
 					}
+				});
+				
+				test('tilefrag', function() {
+					loki.define('tiles', function(env) {
+						equals(typeof env.tilefrag, 'function', 'tilefrag exists');
+					})
 				});
 				
 				test('dug', function() {

@@ -10,12 +10,46 @@
   var grassimage = new Image();
   grassimage.src = 'assets/images/grass.png'
   
-  loki.define('world', 'components', 'tileutils', function(env) {
+  loki.define('world', 'components', 'tileutils', 'mob', function(env) {
     var tilesize = env.tilesize,
       tile = env.tile,
-      damageable = env.damageable;
+      damageable = env.damageable,
+      mob = env.mob;
 
     loki.modules.tiles = function(env) {
+      // when a tile is dug, it produces lots of tiny fragments
+      env.tilefrag = function(args) {
+        var that = mob(args);
+        that.created = new Date().getTime();
+        that.size = {
+          x: 5,
+          y: 5
+        };
+        that.vel = {
+          x: Math.round(Math.random() * 4) - 2,
+          y: -1
+        };
+
+        that.tick = function() {
+          // under the effect of gravity
+          mob.gravitytick.call(this);
+          // disappears after a few seconds
+          var current = new Date().getTime();
+          if (current - that.created > 3000) {
+            that.killed = true;
+          }
+        };
+
+        that.draw = function(drawthing) {
+          drawthing.sprite2.push(function(ctx) {
+            ctx.fillStyle('rgb(192, 192, 192)');
+            ctx.fillRect(that.x, that.y, that.size.x, that.size.y);
+          });
+        };
+
+        return that;
+      }; // tilefrag
+
       // A dirt tile that has been dug
       env.dug = function(args) {
         var that = tile(args);
