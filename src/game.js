@@ -45,6 +45,7 @@
       };
       that.updater = env.updater();
       that.eventbus = env.eventer();
+      env.subscribeitemevents(that, that.eventbus);
       that.things = [];
       that.addthings = [];
       that.mousemanager = env.mousemanager({game: that});
