@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Components</title>
+		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/base.js"></script>
+		<script type="text/javascript" src="../src/components.js"></script>
+		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<script>
+			$(document).ready(function() {
+				test('damageable', function() {
+					loki.define('components', function(env) {
+						equals(typeof env.damageable, 'function', 'env.damageable exists');
+						var thing = {};
+						env.damageable(thing, {
+							health: 5
+						});
+						equals(typeof thing.damage, 'function', 'thing has a damage function');
+						equals(typeof thing.health, 'number', 'thing has health');
+						equals(typeof thing.maxhealth, 'number', 'thing has maxhealth');
+						equals(thing.health, 5, 'health is set to 5');
+						equals(thing.maxhealth, 5, 'maxhealth is set to 5');
+						thing.damage(2);
+						equals(thing.health, 3, 'thing.health decremented by damage call');
+						// reset to check for thrown
+						thing = {
+							vel: {
+								x: 0,
+								y: 0
+							}
+						};
+						env.damageable(thing, {
+							health: 10
+						});
+						equals(thing.health, 10, 'thing.health is 10');
+						thing.damage(2);
+						equals(thing.health, 8, 'thing.health decremented by damage call');
+						equals(thing.vel.x, -2, 'thing thrown in x by -4');
+						equals(thing.vel.y, -4, 'thing thrown in y by -7');
+						thing.damage(2, true);
+						equals(thing.vel.x, 2, 'thing thrown in x by 4');
+						thing = {};
+						env.damageable(thing, {
+							health: 5,
+							whendamaged: function(amt) {
+								thing.whenamt = amt;
+							}
+						});
+						thing.damage(2);
+						equals(thing.whenamt, 2, 'whendamaged called for bare thing');
+						thing = {
+							vel: {
+								x: 0,
+								y: 0
+							}
+						};
+						env.damageable(thing, {
+							health: 7,
+							whendamaged: function(amt) {
+								thing.whenamt = amt;
+							}
+						});
+						thing.damage(3);
+						equals(thing.whenamt, 3, 'whendamaged called for velocity thing');
+					})
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1 id="qunit-header">Components Test</h1>
+		<h2 id="qunit-banner"></h2>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">test markup, will be hidden</div>
+	</body>
+</html>
