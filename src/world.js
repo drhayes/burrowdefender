@@ -153,8 +153,6 @@
             var dp = args.genpickup({
               x: that.x + (tilesize / 2) - 8,
               y: that.y + (tilesize / 2) - 8
-              // game: args.game,
-              // item: item.dirtitem({game: args.game})
             });
             dp.updaterect();
             args.game.add(dp);

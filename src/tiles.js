@@ -14,7 +14,8 @@
     var tilesize = env.tilesize,
       tile = env.tile,
       damageable = env.damageable,
-      mob = env.mob;
+      mob = env.mob,
+      dirtitem = env.dirtitem;
 
     loki.modules.tiles = function(env) {
       // when a tile is dug, it produces lots of tiny fragments

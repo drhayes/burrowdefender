@@ -22,14 +22,28 @@
       that.height = that.canvas.height;
       that.tilemap = env.tilemap({game: that});
       that.spatialhash = env.spatialhash();
+      // tilegenerator utility function
+      var maketile = function(tilename) {
+        return function(args) {
+          // have to set the right item for drop
+          args = $.extend({}, args, {
+            genpickup: function(args) {
+              return env.pickup({
+                x: args.x,
+                y: args.y,
+                game: that,
+                item: env.dirtitem({game: that})
+              });
+            }
+          })
+          return env[tilename](args);
+        }
+      }
+
       that.tilegenerator = env.tilegenerator({
         game: that,
-        surfacetile: function(args) {
-          return env.dirtwithgrass(args);
-        },
-        firstgroundtile: function(args) {
-          return env.dirt(args);
-        }
+        surfacetile: maketile('dirtwithgrass'),
+        firstgroundtile: maketile('dirt')
       });
       that.keyboardmanager = env.keyboardmanager();
       that.playeroffset = {
