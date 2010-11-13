@@ -1,10 +1,11 @@
-// updater.js
+// system.js
 //
-// runs on a timer and updates stuff
+// Things that update, things that fire events.
 
 (function(global, $) {
-
-  var updater = function() {
+  
+  loki.modules.system = function(env) {
+    env.updater = function() {
       var that = {};
       that.processes = [];
       that.currentFrame = 0;
@@ -50,9 +51,7 @@
       };
       
       return that;
-    };
-
-  global.updater = updater;
+    }
+  }
   
-})(this, jQuery)
-
+}(this, jQuery));

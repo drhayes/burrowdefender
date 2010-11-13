@@ -1,27 +1,30 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>Updater</title>
+		<title>System</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
-		<script type="text/javascript" src="../src/updater.js"></script>
+		<script type="text/javascript" src="../src/base.js"></script>
+		<script type="text/javascript" src="../src/system.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
-		<script type="text/javascript" charset="utf-8">
+		<script>
 			$(document).ready(function() {
-				module('basics');
+				module('updater');
 				
-				test('ctor', function() {
-					ok(typeof(window.updater) !== 'undefined', 'updater');
-					var u = updater();
-					ok(u.processes, 'processes defined');
-					ok(typeof u.currentFrame !== 'undefined', 'currentFrame defined');
+				module('updater', {
+					setup: function() {
+						var me = this;
+						loki.define('system', function(env) {
+							me.u = env.updater();
+						});
+					}
 				});
 				
-				module('usage', {
-					setup: function() {
-						this.u = updater();
-					}
-				})
+				test('ctor', function() {
+					ok(this.u.processes, 'processes defined');
+					ok(typeof this.u.currentFrame !== 'undefined', 'currentFrame defined');
+				});
+
 				
 				test('add', function() {
 					ok(typeof(this.u.add) === 'function', 'is a function');
@@ -145,7 +148,7 @@
 		</script>
 	</head>
 	<body>
-		<h1 id="qunit-header">Updater Test</h1>
+		<h1 id="qunit-header">System Test</h1>
 		<h2 id="qunit-banner"></h2>
 		<h2 id="qunit-userAgent"></h2>
 		<ol id="qunit-tests"></ol>
