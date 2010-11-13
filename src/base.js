@@ -12,7 +12,7 @@
   
   // The function that creates modules within the game.
   loki.define = function() {
-    var that = {},
+    var env = {},
       args = Array.prototype.slice.call(arguments),
       callback = args.pop(),
       modules = (args[0] && typeof args[0] === 'string') ? args: args[0],
@@ -31,12 +31,12 @@
 
         // initialize the modules
         for (i = 0; i < modules.length; i += 1) {
-          loki.modules[modules[i]](that);
+          loki.modules[modules[i]](env);
         };
       };
       
       // call the callback
-      callback(that);
+      callback(env);
   };
   
   global.loki = loki;
