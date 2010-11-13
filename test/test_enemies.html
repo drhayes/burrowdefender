@@ -4,10 +4,10 @@
 		<title>Enemies</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/base.js"></script>
+		<script type="text/javascript" src="../src/components.js"></script>
+		<script type="text/javascript" src="../src/tileutils.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
-		<script type="text/javascript" src="../src/item.js"></script>
-		<script type="text/javascript" src="../src/pickup.js"></script>
-		<script type="text/javascript" src="../src/tile.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
 		<script type="text/javascript" src="../src/enemies.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
@@ -16,7 +16,9 @@
 			$(document).ready(function() {
 				
 				test('basics', function() {
-					equals(typeof zombie, 'function', 'zombie exists');
+					loki.define('enemies', function(env) {
+						equals(typeof env.zombie, 'function', 'zombie exists');
+					})
 				});
 				
 				module('zombie', {
@@ -26,10 +28,13 @@
 							x: 0,
 							y: 0
 						};
-						this.z = zombie({
-							game: this.fakegame,
-							x: 0,
-							y: 0,
+						var me = this;
+						loki.define('enemies', function(env) {
+							me.z = env.zombie({
+								game: me.fakegame,
+								x: 0,
+								y: 0,
+							});
 						});
 					}
 				});
