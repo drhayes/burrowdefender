@@ -24,10 +24,4 @@
     }
   }
   
-  global.utils = {
-    // pass any object to this method and it will gain a damage method and
-    // attributes suitable for tracking health
-    damageable: 
-  };
-  
 })(this, jQuery)
