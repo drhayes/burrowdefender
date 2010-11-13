@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Base</title>
+		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/base.js"></script>
+		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<script>
+			$(document).ready(function() {
+				module('loki');
+				
+				test('basics', function() {
+					expect(2);
+					equals(typeof loki, 'object', 'top-level loki object exists');
+					equals(typeof loki.modules, 'object', 'loki.modules');
+				});
+				
+				test('define some', function() {
+					loki.modules.thing = function(m) {
+						m.a = 1;
+						m.b = 2;
+						m.c = function() {};
+					};
+					loki.define('thing', function(m) {
+						equals(m.a, 1, 'm.a');
+						equals(m.b, 2, 'm.b');
+						equals(typeof m.c, 'function', 'm.c');
+					})
+				});
+				
+				test('all modules with *', function() {
+					expect(2);
+					loki.modules.one = function(m) {
+						m.one = true;
+					};
+					loki.modules.two = function(m) {
+						m.two = true;
+					};
+					loki.define('*', function(m) {
+						ok(m.one, 'm.one');
+						ok(m.two, 'm.two');
+					});
+				});
+				
+				test('all modules by default', function() {
+					expect(2);
+					loki.modules.one = function(m) {
+						m.one = true;
+					};
+					loki.modules.two = function(m) {
+						m.two = true;
+					};
+					loki.define(function(m) {
+						ok(m.one, 'm.one');
+						ok(m.two, 'm.two');
+					})
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1 id="qunit-header">Base Test</h1>
+		<h2 id="qunit-banner"></h2>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">test markup, will be hidden</div>
+	</body>
+</html>
