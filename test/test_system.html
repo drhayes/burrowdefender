@@ -9,8 +9,6 @@
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
 			$(document).ready(function() {
-				module('updater');
-				
 				module('updater', {
 					setup: function() {
 						var me = this;
@@ -130,9 +128,10 @@
 					expect(3);
 					ok(typeof(this.u.start) === 'function', 'is a function');
 					stop();
+					var me = this;
 					this.u.add(function() {
 						ok(true, 'should have been called');
-						ok(typeof(this.u.timer) !== 'undefined', 'stored timer');
+						ok(typeof(me.u.timer) !== 'undefined', 'stored timer');
 						start();
 					});
 					this.u.start();
@@ -143,6 +142,85 @@
 					this.u.timer = setTimeout(function() {}, 100);
 					this.u.stop();
 					ok(typeof this.u.timer === 'undefined', 'timer is gone now');
+				});
+				
+				module('eventer', {
+					setup: function() {
+						var me = this;
+						loki.define('system', function(env) {
+							me.e = env.eventer();
+						})
+					}
+				});
+				
+				test('subscribe validation', function() {
+					try {
+						this.e.subscribe(null, function() {});
+						ok(false, 'null event name');
+					}
+					catch (error) {
+						ok(true, 'null event name');
+					}
+					try {
+						this.e.subscribe('blah', null);
+						ok(false, 'null callback');
+					}
+					catch (error) {
+						ok(true, 'null callback');
+					}
+				});
+				
+				test('fire validation', function() {
+					try {
+						this.e.fire(null);
+						ok(false, 'null event name');
+					}
+					catch (error) {
+						ok(true, 'null event name');
+					}
+				});
+				
+				test('subscribe and fire one', function() {
+					var func1Called = false;
+					var func1 = function() {
+						func1Called = true;
+					}
+					var func2Called = false;
+					var func2 = function() {
+						func2Called = true;
+					}
+					this.e.subscribe('one', func1);
+					this.e.subscribe('two', func1);
+					this.e.subscribe('two', func2);
+					
+					ok(!func1Called, 'func1 not called');
+					ok(!func2Called, 'func2 not called');
+					this.e.fire('one');
+					ok(func1Called, 'func1 called');
+					ok(!func2Called, 'func2 not called');
+					
+					func1Called = false;
+					ok(!func1Called, 'func1 not called');
+					ok(!func2Called, 'func2 not called');
+					this.e.fire('two');
+					ok(func1Called, 'func1 called');
+					ok(func2Called, 'func2 called');
+					
+					this.e.fire('blah');
+				});
+				
+				test('fire with args', function() {
+					expect(3);
+					this.e.subscribe('one', function(args) {
+						ok(args.a === 'a', 'first arg');
+						ok(args.b === 'b', 'second arg');
+						ok(args.c === 'c', 'third arg');
+					})
+					this.e.fire('one', {
+						a: 'a',
+						b: 'b',
+						c: 'c'
+					})
 				});
 			});
 		</script>
