@@ -16,11 +16,29 @@
     var tilesize = env.tilesize,
       totilepos = env.totilepos,
       CHUNK_SCALAR = 30,
-      CHUNK_SIZE = tilesize * CHUNK_SCALAR;
+      CHUNK_SIZE = tilesize * CHUNK_SCALAR,
+      // spatialhash cell
+      cellsize = tilesize * 2;
 
     var genscalar = function(s) {
       return Math.floor(s / CHUNK_SIZE);
     }
+
+    var keyscalar = function(x) {
+      return Math.floor(x / cellsize);
+    }
+
+    var makerawkey = function(x, y) {
+      return x + ':' + y;
+    }
+
+    var makekey = function(x, y) {
+      return makerawkey(keyscalar(x), keyscalar(y));
+    };
+
+    var makeid = function() {
+      return Math.random() + ':' + Math.random() + ':' + Math.random();
+    };
 
     loki.modules.world = function(env) {
       // Procedurally generates the world the player can walk around on.
@@ -258,6 +276,91 @@
           y: nums[1]
         };
       };
+      
+      env.spatialhash = function() {
+        var that = {};
+        that.spacemap = {};
+
+        var innerget = function(key) {
+          if (that.spacemap.hasOwnProperty(key)) {
+            var l = [];
+            var cell = that.spacemap[key];
+            for (thing in cell) {
+              l.push(cell[thing]);
+            }
+            return l;
+          }
+          return [];
+        }
+
+        that.iterate = function(r, func) {
+          var kx1 = keyscalar(r.x1);
+          var ky1 = keyscalar(r.y1);
+          var kx2 = keyscalar(r.x2);
+          var ky2 = keyscalar(r.y2);
+          for (var i = kx1; i <= kx2; i++) {
+            for (var j = ky1; j <= ky2; j++) {
+              var key = makerawkey(i, j);
+              func.apply(this, [key, r]);
+            }
+          }
+        };
+
+        // Given in world coordinates.
+        that.get = function(r, vx, vy) {
+          var things = [];
+          var seenkeys = {};
+          var addemup = function(key, r) {
+            seenkeys[key] = true;
+            things = things.concat(innerget.apply(this, [key]));
+          };
+          that.iterate(r, function(key, r) {
+            addemup.apply(this, [key, r]);
+          });
+          // we must account for velocity
+          var rv = {
+            x1: r.x1 + vx,
+            y1: r.y1 + vy,
+            x2: r.x2 + vx,
+            y2: r.y2 + vy
+          };
+          that.iterate(rv, function(key, r) {
+            // dedupe on velocity check
+            if (seenkeys.hasOwnProperty(key)) {
+              return;
+            }
+            addemup.apply(this, [key, r]);
+          })
+          return things;
+        };
+
+        // Given a {x1,y1,x2,y2} rect, put it in the right place in the
+        // spatial hash. If it's a big rect, let it span buckets in the hash.
+        that.set = function(r) {
+          r.shid = makeid();
+          that.iterate(r, function(key, r) {
+            if (!that.spacemap.hasOwnProperty(key)) {
+              that.spacemap[key] = {};
+            }
+            that.spacemap[key][r.shid] = r;
+          });
+        };
+
+        that.remove = function(r) {
+          that.iterate(r, function(key, r) {
+            if (that.spacemap.hasOwnProperty(key)) {
+              var l = that.spacemap[key];
+              delete l[r.shid];
+            }
+          });
+        };
+
+        that.move = function() {
+
+        };
+
+        return that;
+      }; // spatialhash
     }; // world module
   });
   
