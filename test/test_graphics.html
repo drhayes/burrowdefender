@@ -1,28 +1,22 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>DrawContext</title>
+		<title>Graphics</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
-		<script type="text/javascript" src="../src/drawcontext.js"></script>
+		<script type="text/javascript" src="../src/base.js"></script>
+		<script type="text/javascript" src="../src/graphics.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
 			$(document).ready(function() {
-				module('basics');
-				
-				test('ctor', function() {
-					equals(typeof(window.drawcontext), 'function', 'DrawContext exists');
-					var dc = drawcontext();
-					equals(typeof(dc.fillStyle), 'function', 'fillStyle function');
-					equals(typeof(dc.fillRect), 'function', 'fillRect function');
-					equals(typeof(dc.drawImage), 'function', 'drawImage function');
-				});
-				
-				module('basic usage', {
+				module('drawcontext', {
 					setup: function() {
 						this.fakectx = new FakeCtx();
-						this.dc = drawcontext(this.fakectx);
+						var me = this;
+						loki.define('graphics', function(env) {
+							me.dc = env.drawcontext(me.fakectx);
+						})
 					}
 				});
 				
@@ -75,7 +69,7 @@
 		</script>
 	</head>
 	<body>
-		<h1 id="qunit-header">DrawContext Test</h1>
+		<h1 id="qunit-header">Graphics Test</h1>
 		<h2 id="qunit-banner"></h2>
 		<h2 id="qunit-userAgent"></h2>
 		<ol id="qunit-tests"></ol>
