@@ -3,18 +3,18 @@
 // All the things a player can pickup and use in the game.
 
 (function(global, $) {
-
-  var dirtitemimage = new Image();
-  dirtitemimage.src = 'assets/images/dirtitem.png';
-  var sentrygunitemimage = new Image();
-  sentrygunitemimage.src = 'assets/images/sentrygunitem.png';
   
-  loki.define('tileutils', 'tiles', 'mob', 'defenses', function(env) {
+  loki.define('assets', 'tileutils', 'tiles', 'mob', 'defenses', function(env) {
     var tilesize = env.tilesize,
       totilepos = env.totilepos,
       dirt = env.dirt,
       mob = env.mob,
-      sentrygun = env.sentrygun;
+      sentrygun = env.sentrygun,
+      imagemanager = env.imagemanager;
+      
+    // add tile images
+    imagemanager.add('dirtitem', 'assets/images/dirtitem.png');
+    imagemanager.add('sentrygun', 'assets/images/sentrygunitem.png');
     
     loki.modules.items = function(env) {
       // private shared ctor thing
@@ -49,7 +49,7 @@
         });
 
         that.drawimage = function(ctx) {
-          ctx.drawImage(dirtitemimage, 0, 0);
+          imagemanager.draw(ctx, 'dirtitem', 0, 0);
         };
 
         // x,y given in world coordinates. returns true if something was placed.
@@ -77,7 +77,7 @@
         });
 
         that.drawimage = function(ctx) {
-          ctx.drawImage(sentrygunitemimage, 0, 0);
+          imagemanager.draw(ctx, 'sentrygunitem', 0, 0);
         }
 
         that.place = function(x, y) {

@@ -54,13 +54,10 @@
 					}, 'cannot add after load');
 				});
 				
-				test('drawing before load is an error', function() {
+				test('drawing before load is a noop', function() {
 					this.im.add('dirt', '../assets/images/dirt.png');
-					var me = this;
 					var ctx = maketestcanvas();
-					raises(function() {
-						me.im.draw(ctx, 'dirt', 0, 0)
-					}, 'cannot draw before load');
+					this.im.draw(ctx, 'dirt', 0, 0)
 				});
 				
 				test('add by name and location', function() {

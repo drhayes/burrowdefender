@@ -14,37 +14,6 @@
     UP: 3
   };
   
-  var heartfullimage = new Image();
-  heartfullimage.src = 'assets/images/heartfull.png';
-  var heartemptyimage = new Image();
-  heartemptyimage.src = 'assets/images/heartempty.png';
-  var figures = new Image();
-  figures.src = 'assets/images/figures.png';
-  var figurer1 = new Image();
-  figurer1.src = 'assets/images/figurer1.png';
-  var figurer2 = new Image();
-  figurer2.src = 'assets/images/figurer2.png';
-  var figurer3 = new Image();
-  figurer3.src = 'assets/images/figurer3.png';
-  var figurer4 = new Image();
-  figurer4.src = 'assets/images/figurer4.png';
-  var figurer5 = new Image();
-  figurer5.src = 'assets/images/figurer5.png';
-  var figurel1 = new Image();
-  figurel1.src = 'assets/images/figurel1.png';
-  var figurel2 = new Image();
-  figurel2.src = 'assets/images/figurel2.png';
-  var figurel3 = new Image();
-  figurel3.src = 'assets/images/figurel3.png';
-  var figurel4 = new Image();
-  figurel4.src = 'assets/images/figurel4.png';
-  var figurel5 = new Image();
-  figurel5.src = 'assets/images/figurel5.png';
-  
-  var animationframesr = [figurer1, figurer2, figurer3, figurer4, figurer5];
-  var animationframesl = [figurel1, figurel2, figurel3, figurel4, figurel5];
-  var currentframe = 0;
-  
   var STOPFORCE = 0.2;
   
   // inventory constants
@@ -55,11 +24,18 @@
   var HEIGHT = 50;
   var MAXITEMS = 8;
   
-  loki.define('mob', 'tileutils', 'components', function(env) {
+  loki.define('assets', 'mob', 'tileutils', 'components', function(env) {
     var mob = env.mob,
       tilesize = env.tilesize,
       totilepos = env.totilepos,
-      damageable = env.damageable;
+      damageable = env.damageable,
+      imagemanager = env.imagemanager,
+      spritemanager = env.spritemanager;
+    
+    // add player images
+    imagemanager.add('heartfull', 'assets/images/heartfull.png');
+    imagemanager.add('heartempty', 'assets/images/heartempty.png');
+    imagemanager.add('player', 'assets/images/player.png');
       
     loki.modules.player = function(env) {
       
@@ -205,29 +181,19 @@
 
         that.draw = function(drawthing) {
           drawthing.sprite1.push(function(ctx) {
-            var imgtodraw = figures;
-            if (that.movestate.walking === walking.STANDING) {
-              currentframe = 0;
-            }
-            else if (that.movestate.walking === walking.LEFT) {
-              imgtodraw = animationframesl[Math.floor(currentframe / 3)];
-              currentframe = (currentframe + 1) % 15;
-            }
-            else if (that.movestate.walking === walking.RIGHT) {
-              imgtodraw = animationframesr[Math.floor(currentframe / 3)];
-              currentframe = (currentframe + 1) % 15;
-            };
-            ctx.drawImage(imgtodraw, that.x, that.y + 1);
+            ctx.fillStyle('hsl(120, 100%, 100%)');
+            ctx.fillRect(that.x, that.y, that.size.x, that.size.y);
           });
           drawthing.hud.push(function(ctx) {
             var startx = 10;
             var starty = 10;
             for (var i = 0; i < that.maxhealth; i++) {
-              var img = heartfullimage;
               if (that.health <= i) {
-                img = heartemptyimage;
+                imagemanager.draw(ctx, 'heartempty', startx + (18 * i), starty);
               }
-              ctx.drawImage(img, startx + (18 * i), starty);
+              else {
+                imagemanager.draw(ctx, 'heartfull', startx + (18 * i), starty);
+              }
             }
           });
           that.inventory.draw(drawthing);

@@ -38,9 +38,7 @@
       // draw a named loaded image
       draw: function(ctx, name, x, y) {
         if (!loaded) {
-          throw {
-            error: 'Cannot draw before load'
-          }
+          return;
         }
         ctx.drawImage(images[name], x, y);
       },

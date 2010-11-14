@@ -5,17 +5,17 @@
 
 (function(global, $) {
   
-  var dirtimage = new Image();
-  dirtimage.src = 'assets/images/dirt.png'
-  var grassimage = new Image();
-  grassimage.src = 'assets/images/grass.png'
-  
-  loki.define('world', 'components', 'tileutils', 'mob', function(env) {
+  loki.define('assets', 'world', 'components', 'tileutils', 'mob', function(env) {
     var tilesize = env.tilesize,
       tile = env.tile,
       damageable = env.damageable,
       mob = env.mob,
-      dirtitem = env.dirtitem;
+      dirtitem = env.dirtitem,
+      imagemanager = env.imagemanager;
+    
+    // load the tile images
+    imagemanager.add('dirt', 'assets/images/dirt.png');
+    imagemanager.add('grass', 'assets/images/grass.png');
 
     loki.modules.tiles = function(env) {
       // when a tile is dug, it produces lots of tiny fragments
@@ -82,7 +82,7 @@
         that.draw = function(ctx) {
           ctx.fillStyle('rgb(102,51,0)');
           ctx.fillRect(0, tilesize - 2, tilesize, 3);
-          ctx.drawImage(dirtimage, 0, 0);
+          imagemanager.draw(ctx, 'dirt', 0, 0);
           tile.drawdamage(ctx, that.health / that.maxhealth);
         };
       
@@ -96,8 +96,8 @@
         that.draw = function(ctx) {
           ctx.fillStyle('rgb(102,51,0)');
           ctx.fillRect(0, tilesize - 2, tilesize, 3);
-          ctx.drawImage(dirtimage, 0, 0);
-          ctx.drawImage(grassimage, 0, 0);
+          imagemanager.draw(ctx, 'dirt', 0, 0);
+          imagemanager.draw(ctx, 'grass', 0, 0);
           tile.drawdamage(ctx, that.health / that.maxhealth);
         };
       

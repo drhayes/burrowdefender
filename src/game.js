@@ -204,6 +204,9 @@
 
       return that;
     };
+    
+    // load the images
+    env.imagemanager.load();
 
     global.game = game;
   });

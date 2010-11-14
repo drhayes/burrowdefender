@@ -5,20 +5,19 @@
 
 (function(global, $) {
   
-  var cracks1image = new Image();
-  cracks1image.src = 'assets/images/cracks1.png';
-  var cracks2image = new Image();
-  cracks2image.src = 'assets/images/cracks2.png';
-  var cracks3image = new Image();
-  cracks3image.src = 'assets/images/cracks3.png';
-  
-  loki.define('tileutils', function(env) {
+  loki.define('assets', 'tileutils', function(env) {
     var tilesize = env.tilesize,
       totilepos = env.totilepos,
       CHUNK_SCALAR = 30,
       CHUNK_SIZE = tilesize * CHUNK_SCALAR,
       // spatialhash cell
-      cellsize = tilesize * 2;
+      cellsize = tilesize * 2,
+      imagemanager = env.imagemanager;
+    
+    // load tile images
+    imagemanager.add('cracks1', 'assets/images/cracks1.png');
+    imagemanager.add('cracks2', 'assets/images/cracks2.png');
+    imagemanager.add('cracks3', 'assets/images/cracks3.png');
 
     var genscalar = function(s) {
       return Math.floor(s / CHUNK_SIZE);
@@ -182,14 +181,14 @@
         if (percentage === 1) {
           return;
         };
-        var image = cracks1image;
+        var image = 'cracks1';
         if (percentage <= 0.3) {
-          image = cracks3image;
+          image = 'cracks3';
         }
         else if (percentage <= 0.6) {
-          image = cracks2image;
+          image = 'cracks2';
         }
-        ctx.drawImage(image, 0, 0);
+        imagemanager.draw(ctx, image, 0, 0);
       };
       
       env.tilemap = function(args) {
