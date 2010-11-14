@@ -5,9 +5,16 @@
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="../src/base.js"></script>
+		<script type="text/javascript" src="../src/assets.js"></script>
 		<script type="text/javascript" src="../src/graphics.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<style type="text/css">
+			canvas {
+				border: 1px solid #000;
+				background-color: #000;
+			}
+		</style>
 		<script>
 			$(document).ready(function() {
 				module('drawcontext', {
@@ -64,6 +71,42 @@
 					var args = this.fakectx.drawImageArgs[0];
 					equals(args.drx, 410, 'x');
 					equals(args.dry, 320, 'y');
+				});
+				
+				module('animation');
+				
+				test('ctor', function() {
+					loki.define('assets', 'graphics', function(env) {
+						env.imagemanager.add('player', '../assets/images/player.png');
+						env.imagemanager.load();
+						env.spritemanager.add('player', {x: 16, y: 20}, [
+							{x: 0, y: 60},
+							{x: 0, y: 39},
+							{x: 17, y: 39},
+							{x: 34, y: 39},
+							{x: 51, y: 39},
+							{x: 68, y: 39},
+							{x: 0, y: 18},
+							{x: 17, y: 18},
+							{x: 34, y: 18},
+							{x: 51, y: 18},
+							{x: 68, y: 18}
+						]);
+						var anim = env.animation({
+							name: 'player',
+						    frames: [6, 6, 7, 7, 8, 8, 9, 9, 10, 10]});
+						equals(anim.currentframe, 0, 'currentframe is 0');
+						var canvas = $('<canvas width=20 height=20></canvas>').
+						  appendTo($('body')).get(0);
+						var ctx = canvas.getContext('2d');
+						anim.draw(ctx, 0, 0);
+						equals(anim.currentframe, 1, 'currentframe advanced');
+						ctx.fillStyle = "hsl(120, 0%, 0%)";
+						setInterval(function() {
+							ctx.fillRect(0, 0, 20, 20);
+							anim.draw(ctx, 0, 0);
+						}, 33);
+					})
 				});
 			});
 		</script>
