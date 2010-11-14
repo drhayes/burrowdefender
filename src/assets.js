@@ -35,14 +35,20 @@
           images[load.name] = img;
         }
       },
-      // draw a loaded image
+      // draw a named loaded image
       draw: function(ctx, name, x, y) {
+        if (!loaded) {
+          throw {
+            error: 'Cannot draw before load'
+          }
+        }
         ctx.drawImage(images[name], x, y);
       },
       // for testing only!
       reset: function() {
         toload = [];
         loaded = false;
+        images = {};
       }
     };
   }())

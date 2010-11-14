@@ -54,6 +54,15 @@
 					}, 'cannot add after load');
 				});
 				
+				test('drawing before load is an error', function() {
+					this.im.add('player', '../assets/images/figurel1.png');
+					var me = this;
+					var ctx = maketestcanvas();
+					raises(function() {
+						me.im.draw(ctx, 'player', 0, 0)
+					}, 'cannot draw before load');
+				});
+				
 				test('add by name and location', function() {
 					this.im.add('player1', '../assets/images/figurel1.png');
 					this.im.add('player2', '../assets/images/figurel2.png');
