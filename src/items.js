@@ -14,7 +14,7 @@
       
     // add tile images
     imagemanager.add('dirtitem', 'assets/images/dirtitem.png');
-    imagemanager.add('sentrygun', 'assets/images/sentrygunitem.png');
+    imagemanager.add('sentrygunitem', 'assets/images/sentrygunitem.png');
     
     loki.modules.items = function(env) {
       // private shared ctor thing
