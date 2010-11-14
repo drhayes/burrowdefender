@@ -68,6 +68,10 @@
       },
       draw: function(ctx, name, frame, x, y) {
         var sprite = sprites[name];
+        // the images might not have loaded when adding sprites... check again to be sure
+        if (!sprite.image) {
+          sprite.image = im.get(name);
+        }
         var frame = sprite.frames[frame];
         ctx.drawImage(sprite.image, frame.x, frame.y, sprite.size.x, sprite.size.y, x, y, sprite.size.x, sprite.size.y);
       },

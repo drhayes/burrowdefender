@@ -24,18 +24,48 @@
   var HEIGHT = 50;
   var MAXITEMS = 8;
   
-  loki.define('assets', 'mob', 'tileutils', 'components', function(env) {
+  loki.define('assets', 'graphics', 'mob', 'tileutils', 'components', function(env) {
     var mob = env.mob,
       tilesize = env.tilesize,
       totilepos = env.totilepos,
       damageable = env.damageable,
       imagemanager = env.imagemanager,
-      spritemanager = env.spritemanager;
+      spritemanager = env.spritemanager,
+      animation = env.animation;
     
     // add player images
     imagemanager.add('heartfull', 'assets/images/heartfull.png');
     imagemanager.add('heartempty', 'assets/images/heartempty.png');
     imagemanager.add('player', 'assets/images/player.png');
+    
+    // define player sprite
+		spritemanager.add('player', {x: 16, y: 20}, [
+		  {x: 0, y: 60},
+			{x: 0, y: 39},
+			{x: 17, y: 39},
+			{x: 34, y: 39},
+			{x: 51, y: 39},
+			{x: 68, y: 39},
+			{x: 0, y: 18},
+			{x: 17, y: 18},
+			{x: 34, y: 18},
+			{x: 51, y: 18},
+			{x: 68, y: 18}
+		]);
+
+    // define player animations
+    var standing = animation({
+      name: 'player',
+      frames: [0]
+    });
+    var runningleft = animation({
+      name: 'player',
+      frames: [6, 6, 7, 7, 8, 8, 9, 9, 10, 10]
+    });
+    var runningright = animation({
+      name: 'player',
+      frames: [1, 1, 2, 2, 3, 3, 4, 4, 5, 5]
+    });
       
     loki.modules.player = function(env) {
       
@@ -181,8 +211,15 @@
 
         that.draw = function(drawthing) {
           drawthing.sprite1.push(function(ctx) {
-            ctx.fillStyle('hsl(120, 100%, 100%)');
-            ctx.fillRect(that.x, that.y, that.size.x, that.size.y);
+            if (that.movestate.walking === walking.LEFT) {
+              runningleft.draw(ctx, that.x, that.y);
+            }
+            else if (that.movestate.walking === walking.RIGHT) {
+              runningright.draw(ctx, that.x, that.y);
+            }
+            else {
+              standing.draw(ctx, that.x, that.y);
+            }
           });
           drawthing.hud.push(function(ctx) {
             var startx = 10;
