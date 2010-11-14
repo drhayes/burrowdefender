@@ -44,6 +44,9 @@
         }
         ctx.drawImage(images[name], x, y);
       },
+      get: function(name) {
+        return images[name];
+      },
       // for testing only!
       reset: function() {
         toload = [];
@@ -51,11 +54,37 @@
         images = {};
       }
     };
-  }())
+  }());
+  
+  var sm = (function() {
+    var sprites = {};
+    return {
+      add: function(name, size, frames) {
+        var img = im.get(name);
+        var sprite = {
+          image: img,
+          size: size,
+          frames: frames
+        };
+        sprites[name] = sprite;
+      },
+      draw: function(ctx, name, frame, x, y) {
+        var sprite = sprites[name];
+        var frame = sprite.frames[frame];
+        ctx.drawImage(sprite.image, frame.x, frame.y, sprite.size.x, sprite.size.y, x, y, sprite.size.x, sprite.size.y);
+      },
+      reset: function() {
+        sprites = {};
+      }
+    }
+  }());
   
   loki.modules.assets = function(env) {
     // the single imagemanager
     env.imagemanager = im;
+    
+    // the single spritemanager
+    env.spritemanager = sm;
   }
   
 }(this, jQuery));

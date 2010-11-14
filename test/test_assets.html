@@ -55,22 +55,60 @@
 				});
 				
 				test('drawing before load is an error', function() {
-					this.im.add('player', '../assets/images/figurel1.png');
+					this.im.add('dirt', '../assets/images/dirt.png');
 					var me = this;
 					var ctx = maketestcanvas();
 					raises(function() {
-						me.im.draw(ctx, 'player', 0, 0)
+						me.im.draw(ctx, 'dirt', 0, 0)
 					}, 'cannot draw before load');
 				});
 				
 				test('add by name and location', function() {
-					this.im.add('player1', '../assets/images/figurel1.png');
-					this.im.add('player2', '../assets/images/figurel2.png');
+					this.im.add('dirt1', '../assets/images/dirt.png');
+					this.im.add('dirt2', '../assets/images/dirt.png');
 					this.im.load();
 					var ctx1 = maketestcanvas();
-					this.im.draw(ctx1, 'player1', 0, 0);
+					this.im.draw(ctx1, 'dirt1', 0, 0);
 					var ctx2 = maketestcanvas();
-					this.im.draw(ctx2, 'player2', 10, 10);
+					this.im.draw(ctx2, 'dirt2', 10, 10);
+				});
+				
+				module('spritemanager', {
+					setup: function() {
+						var me = this;
+						loki.define('assets', function(env) {
+							me.im = env.imagemanager;
+							me.sm = env.spritemanager;
+						});
+					},
+					teardown: function() {
+						this.im.reset();
+						this.sm.reset();
+					}
+				});
+				
+				test('add and draw', function() {
+					this.im.add('player', '../assets/images/player.png');
+					this.im.load();
+					this.sm.add('player', {x: 16, y: 20}, [
+						{x: 0, y: 60},
+						{x: 0, y: 39},
+						{x: 17, y: 39},
+						{x: 34, y: 39},
+						{x: 51, y: 39},
+						{x: 68, y: 39},
+						{x: 0, y: 18},
+						{x: 17, y: 18},
+						{x: 34, y: 18},
+						{x: 51, y: 18},
+						{x: 68, y: 18}
+					]);
+					var ctx = maketestcanvas();
+					this.sm.draw(ctx, 'player', 0, 0, 0);
+					ctx = maketestcanvas();
+					this.sm.draw(ctx, 'player', 1, 6, 6);
+					ctx = maketestcanvas();
+					this.sm.draw(ctx, 'player', 2, 2, 2);
 				});
 			});
 		</script>
