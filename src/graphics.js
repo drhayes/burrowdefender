@@ -40,7 +40,14 @@
       }
 
       that.drawImage = function(img, x, y) {
-        ctx.drawImage(img, Math.round(x + that.offset.x), Math.round(y + that.offset.y));
+        var args = Array.prototype.slice.call(arguments);
+        if (args.length === 3) {
+          ctx.drawImage(args[0], Math.round(args[1] + that.offset.x), Math.round(args[2] + that.offset.y));
+        }
+        else if (args.length === 9) {
+          ctx.drawImage(args[0], args[1], args[2], args[3], args[4], Math.round(args[5] + offset.x),
+            Math.round(args[6] + offset.y), args[7], args[8]);
+        }
       };
 
       that.fillText = function(t, x, y, w) {
