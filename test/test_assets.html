@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Assets</title>
+		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="qunit.js"></script>
+		<script type="text/javascript" src="../src/base.js"></script>
+		<script type="text/javascript" src="../src/assets.js"></script>
+		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<style type="text/css">
+			canvas {
+				border: 1px solid #000;
+				background: #ccc;
+			}
+		</style>
+		<script>
+			$(document).ready(function() {
+				
+				// creates a test canvas and returns its 2d context
+				var maketestcanvas = function() {
+					var canvas = $('<canvas width=20 height=20></canvas>').
+					  appendTo($('body')).get(0);
+					return canvas.getContext('2d');
+				}
+				
+				module('imagemanager', {
+					setup: function() {
+						var me = this;
+						loki.define('assets', function(env) {
+							me.im = env.imagemanager;
+						})
+					},
+					teardown : function() {
+						this.im.reset();
+					}
+				});
+				
+				test('ctor', function() {
+					ok(this.im, 'imagemanager exists');
+					var me = this;
+					loki.define('assets', function(env) {
+						same(me.im, env.imagemanager, 'imagemanager is singleton');
+					});
+					equals(typeof this.im.add, 'function', 'add exists');
+					equals(typeof this.im.load, 'function', 'load exists');
+					equals(typeof this.im.draw, 'function', 'draw exists');
+				});
+				
+				test('loading removes ability to add', function() {
+					this.im.load();
+					var me = this;
+					raises(function() {
+						me.im.add();
+					}, 'cannot add after load');
+				});
+				
+				test('add by name and location', function() {
+					this.im.add('player1', '../assets/images/figurel1.png');
+					this.im.add('player2', '../assets/images/figurel2.png');
+					this.im.load();
+					var ctx1 = maketestcanvas();
+					this.im.draw(ctx1, 'player1', 0, 0);
+					var ctx2 = maketestcanvas();
+					this.im.draw(ctx2, 'player2', 10, 10);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1 id="qunit-header">Assets Test</h1>
+		<h2 id="qunit-banner"></h2>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">test markup, will be hidden</div>
+	</body>
+</html>
