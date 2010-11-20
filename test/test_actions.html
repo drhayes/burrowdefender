@@ -20,6 +20,8 @@
 						equals(typeof a.execute, 'function', 'execute is a method');
 						equals(typeof a.completed, 'boolean', 'completed exists');
 						ok(!a.completed, 'not completed by default');
+						equals(typeof a.interrupt, 'boolean', 'interrupt exists');
+						ok(!a.interrupt, 'not interrupt action by default');
 						equals(typeof a.candoboth, 'function', 'candoboth exists');
 						ok(a.candoboth(), 'default candoboth always returns true');
 					})
@@ -125,6 +127,9 @@
 					equals(this.executed1, 3, 'a1 completed');
 					equals(this.executed2, 1, 'a2 was run once now that a1 is out of the way');
 					equals(executed3, 3, 'a3 was run three times');
+				});
+				
+				test('execute with interrupting action', function() {
 				});
 			});
 		</script>

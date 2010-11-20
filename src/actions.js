@@ -13,6 +13,7 @@
         var that = {};
         that.priority = 0;
         that.completed = false;
+        that.interrupt = false;
         that.execute = function() {};
         that.candoboth = function() {
           return true;
