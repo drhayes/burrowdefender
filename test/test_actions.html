@@ -16,7 +16,7 @@
 					loki.define('actions', function(env) {
 						var a = env.action();
 						ok(a, 'something came back');
-						equals(0, a.priority, 'default priority');
+						equals(a.priority, 0, 'default priority');
 						equals(typeof a.execute, 'function', 'execute is a method');
 						equals(typeof a.completed, 'boolean', 'completed exists');
 						ok(!a.completed, 'not completed by default');
@@ -54,8 +54,8 @@
 					this.am.add(this.a1);
 					this.am.add(this.a2);
 					this.am.execute();
-					equals(1, this.executed1, 'executed1 once');
-					equals(1, this.executed2, 'executed2 once');
+					equals(this.executed1, 1, 'executed1 once');
+					equals(this.executed2, 1, 'executed2 once');
 				});
 				
 				test('execute with completed actions', function() {
@@ -63,34 +63,68 @@
 					this.am.add(this.a1);
 					this.am.add(this.a2);
 					this.am.execute();
-					equals(1, this.executed1, 'executed once');
-					equals(1, this.executed2, 'executed once');
+					equals(this.executed1, 1, 'executed once');
+					equals(this.executed2, 1, 'executed once');
 					this.a1.completed = true;
 					this.am.execute();
-					equals(1, this.executed1, 'still only executed once because completed');
-					equals(2, this.executed2, 'executed twice, not complete');
+					equals(this.executed1, 1, 'still only executed once because completed');
+					equals(this.executed2, 2, 'executed twice, not complete');
 					this.am.execute();
-					equals(1, this.executed1, 'executed once');
-					equals(3, this.executed2, 'three times');
+					equals(this.executed1, 1, 'executed once');
+					equals(this.executed2, 3, 'three times');
 					this.a1.completed = false;
 					this.a2.completed = true;
 					this.am.execute();
-					equals(1, this.executed1, 'still only executed once because removed from active list');
-					equals(3, this.executed2, 'executed twice and complete');
+					equals(this.executed1, 1, 'still only executed once because removed from active list');
+					equals(this.executed2, 3, 'executed twice and complete');
 				});
 				
 				test('execute enqueues', function() {
 					this.am.add(this.a1);
 					this.am.execute();
-					equals(1, this.executed1, 'a1 executed once');
+					equals(this.executed1, 1, 'a1 executed once');
 					this.am.add(this.a2);
 					this.am.execute();
-					equals(2, this.executed1, 'a1 executed twice');
-					equals(1, this.executed2, 'a2 executed once');
+					equals(this.executed1, 2, 'a1 executed twice');
+					equals(this.executed2, 1, 'a2 executed once');
 				});
 				
 				test('execute will not enqueue if cannot do both', function() {
-					
+					var me = this;
+					this.a1.candoboth = function(a) {
+						return a !== me.a2;
+					}
+					var executed3 = 0;
+					var a3 = {
+						priority: 100,
+						execute: function() {
+							executed3++;
+						},
+						candoboth: function() {
+							return true;
+						}
+					};
+					this.am.add(this.a1);
+					this.am.execute();
+					equals(this.executed1, 1, 'a1 ran once');
+					this.am.add(this.a2);
+					this.am.execute();
+					equals(this.executed1, 2, 'a1 ran twice');
+					equals(this.executed2, 0, 'a2 did not run');
+					this.am.add(a3);
+					this.am.execute();
+					equals(this.executed1, 3, 'a1 ran again');
+					equals(this.executed2, 0, 'a2 did not run again');
+					equals(executed3, 1, 'a3 was run once');
+					this.a1.completed = true;
+					this.am.execute();
+					equals(this.executed1, 3, 'a1 completed');
+					equals(this.executed2, 0, 'a2 did not run yet again');
+					equals(executed3, 2, 'a3 was run twice');
+					this.am.execute();
+					equals(this.executed1, 3, 'a1 completed');
+					equals(this.executed2, 1, 'a2 was run once now that a1 is out of the way');
+					equals(executed3, 3, 'a3 was run three times');
 				});
 			});
 		</script>
