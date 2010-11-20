@@ -5,6 +5,8 @@
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="../src/base.js"></script>
+		<script type="text/javascript" src="../src/utils.js"></script>
+		<script type="text/javascript" src="../src/actions.js"></script>
 		<script type="text/javascript" src="../src/components.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
@@ -64,6 +66,30 @@
 						thing.damage(3);
 						equals(thing.whenamt, 3, 'whendamaged called for velocity thing');
 					})
+				});
+				
+				test('actionable', function() {
+					loki.define('actions', 'components', function(env) {
+						equals(typeof env.actionable, 'function', 'actionable exists');
+						var thing = {};
+						env.actionable(thing);
+						equals(typeof thing.addaction, 'function', 'addaction exists');
+						equals(typeof thing.executeactions, 'function', 'executeactions exists');
+						var a = env.action();
+						var ticked = false;
+						var catpantsed = false;
+						a.tick = function() {
+							ticked = true;
+						};
+						a.catpants = function() {
+							catpantsed = true;
+						}
+						thing.addaction(a);
+						thing.executeactions();
+						ok(ticked, 'ticked!');
+						thing.executeactions('catpants');
+						ok(catpantsed, 'catpantsed!');
+					});
 				});
 			});
 		</script>
