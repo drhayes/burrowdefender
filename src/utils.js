@@ -21,7 +21,25 @@
         return false;
       }
       return true;
-    }
+    };
+    
+    // acts like a list, but keeps objects sorted by their 'priority' attributes.
+    env.pqueue = function() {
+      var that = [];
+      
+      var oldpush = that.push;
+      
+      that.push = function(o) {
+        var l = oldpush.call(that, o);
+        // now sort by priority
+        that.sort(function(a, b) {
+          return a.priority - b.priority;
+        });
+        return l;
+      }
+
+      return that;
+    };
   }
   
 })(this, jQuery)

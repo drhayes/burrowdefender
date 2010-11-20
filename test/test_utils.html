@@ -24,6 +24,37 @@
 					})
 				});
 				
+				test('pqueue', function() {
+					loki.define('utils', function(env) {
+						var pq = env.pqueue();
+						equals(0, pq.length, 'length of 0');
+						var o1 = {
+							priority: 100
+						};
+						var o2 = {
+							priority: 50
+						};
+						var o3 = {
+							priority: 25
+						};
+						var l = pq.push(o1);
+						equals(1, pq.length, 'length of 1');
+						equals(1, l, 'length returned');
+						equals(o1, pq[0], 'o1 is at 0');
+						l = pq.push(o2);
+						equals(2, pq.length, 'length of 2');
+						equals(2, l, 'length returned');
+						equals(o2, pq[0], 'o2 is at 0');
+						equals(o1, pq[1], 'o1 is at 1');
+						l = pq.push(o3);
+						equals(3, pq.length, 'length of 3');
+						equals(3, l, 'length returned');
+						equals(o3, pq[0], 'o3 is at 0');
+						equals(o2, pq[1], 'o2 is at 1');
+						equals(o1, pq[2], 'o3 is at 2');
+					})
+				});
+				
 			});
 		</script>
 	</head>
