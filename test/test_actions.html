@@ -17,7 +17,7 @@
 						var a = env.action();
 						ok(a, 'something came back');
 						equals(a.priority, 0, 'default priority');
-						equals(typeof a.execute, 'function', 'execute is a method');
+						equals(typeof a.tick, 'function', 'tick is a method');
 						equals(typeof a.completed, 'boolean', 'completed exists');
 						ok(!a.completed, 'not completed by default');
 						equals(typeof a.interrupt, 'boolean', 'interrupt exists');
@@ -34,12 +34,12 @@
 							me.am = env.actionmanager();
 							me.a1 = env.action();
 							me.executed1 = 0;
-							me.a1.execute = function() {
+							me.a1.tick = function() {
 								me.executed1++;
 							}
 							me.a2 = env.action();
 							me.executed2 = 0;
-							me.a2.execute = function() {
+							me.a2.tick = function() {
 								me.executed2++;
 							}
 						});
@@ -58,6 +58,18 @@
 					this.am.execute();
 					equals(this.executed1, 1, 'executed1 once');
 					equals(this.executed2, 1, 'executed2 once');
+				});
+				
+				test('execute calls whatever method we want', function() {
+					var catpantsed = false;
+					this.a1.catpants = function() {
+						catpantsed = true;
+					}
+					this.am.add(this.a1);
+					this.am.execute('catpants');
+					ok(catpantsed, 'called catpants');
+					// doesn't blow up if method does not exist
+					this.am.execute('doggiehat');
 				});
 				
 				test('execute with completed actions', function() {
@@ -99,7 +111,7 @@
 					var executed3 = 0;
 					var a3 = {
 						priority: 100,
-						execute: function() {
+						tick: function() {
 							executed3++;
 						},
 						candoboth: function() {

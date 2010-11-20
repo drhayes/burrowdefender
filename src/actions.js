@@ -14,7 +14,7 @@
         that.priority = 0;
         that.completed = false;
         that.interrupt = false;
-        that.execute = function() {};
+        that.tick = function() {};
         that.candoboth = function() {
           return true;
         }
@@ -31,13 +31,15 @@
           queue.push(a);
         };
         
-        that.execute = function() {
+        that.execute = function(funcname) {
           var i = 0,
             j = 0,
             queuelength = queue.length,
             activeaction,
             offset = 0,
             queuecopy = queue.slice(0);
+          // if we weren't given a funcname, assume 'tick'
+          funcname = funcname || 'tick';
           // do we have any interrupts?
           for (i = 0; i < queuelength; i++) {
             var action = queuecopy[i];
@@ -77,8 +79,8 @@
             if (action.completed) {
               active.splice(i + 1, 1);
             }
-            else {
-              action.execute();
+            else if (action.hasOwnProperty(funcname)) {
+              action[funcname]();
             }
           }
         };
