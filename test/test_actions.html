@@ -5,6 +5,7 @@
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="../src/base.js"></script>
+		<script type="text/javascript" src="../src/utils.js"></script>
 		<script type="text/javascript" src="../src/actions.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
@@ -20,7 +21,32 @@
 				
 				test('ctor', function() {
 					ok(this.am, 'actionmanager exists');
+					equals(typeof this.am.add, 'function', 'add function');
+					equals(typeof this.am.execute, 'function', 'execute function');
 				});
+				
+				test('execute enqueued action', function() {
+					var me = this;
+					var executed1 = 0;
+					var executed2 = 0;
+					var a1 = {
+						priority: 0,
+						execute: function() {
+							executed1++;
+						}
+					};
+					var a2 = {
+						priority: 0,
+						execute: function() {
+							executed2++;
+						}
+					}
+					this.am.add(a1);
+					this.am.add(a2);
+					this.am.execute();
+					equals(1, executed1, 'executed1 once');
+					equals(1, executed2, 'executed2 once');
+				});				
 			});
 		</script>
 	</head>
