@@ -8,6 +8,15 @@
     var pqueue = env.pqueue;
     
     loki.modules.actions = function(env) {
+      // creates a basic action that doesn't do anything but act as a good default
+      env.action = function() {
+        var that = {};
+        that.priority = 0;
+        that.completed = false;
+        that.execute = function() {};
+        return that;
+      };
+      
       env.actionmanager = function() {
         var that = {};
         var active = pqueue();
@@ -24,7 +33,7 @@
         };
 
         return that;
-      }
+      };
     };
   });
   

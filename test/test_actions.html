@@ -10,6 +10,19 @@
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
 			$(document).ready(function() {
+				module('action');
+				
+				test('ctor', function() {
+					loki.define('actions', function(env) {
+						var a = env.action();
+						ok(a, 'something came back');
+						equals(0, a.priority, 'default priority');
+						equals(typeof a.execute, 'function', 'execute is a method');
+						equals(typeof a.completed, 'boolean', 'completed exists');
+						ok(!a.completed, 'not completed by default');
+					})
+				});
+				
 				module('actionmanager', {
 					setup: function() {
 						var me = this;
@@ -26,7 +39,6 @@
 				});
 				
 				test('execute enqueued action', function() {
-					var me = this;
 					var executed1 = 0;
 					var executed2 = 0;
 					var a1 = {
@@ -46,7 +58,26 @@
 					this.am.execute();
 					equals(1, executed1, 'executed1 once');
 					equals(1, executed2, 'executed2 once');
-				});				
+				});
+				
+				test('execute with completed action', function() {
+					var executed = 0;
+					var a = {
+						priority: 0,
+						execute: function() {
+							executed++;
+						}
+					};
+					this.am.add(a);
+					this.am.execute();
+					equals(1, executed, 'executed once');
+					a.completed = true;
+					this.am.execute();
+					equals(1, executed, 'still only executed once because completed');
+					a.completed = false;
+					this.am.execute();
+					equals(1, executed, 'still only executed once because removed from active list');
+				});
 			});
 		</script>
 	</head>
