@@ -35,7 +35,8 @@
           if (!loki.modules.hasOwnProperty(modulename)) {
             throw {
               name: 'Missing module',
-              message: 'Trying to import module: ' + modulename
+              message: 'Trying to import module: ' + modulename,
+              toString: function() { return this.message; }
             };
           };
           loki.modules[modulename](env);
