@@ -9,6 +9,7 @@
   loki.modules.input = function(env) {
     env.keyboardmanager = function() {
       var that = {};
+      var callback;
     
       // This object maps keyCode values to key names for common nonprinting
       // function keys. IE and Firefox use mostly compatible keycodes for these.
@@ -74,8 +75,15 @@
           // the handler function (if present)
           if (keyname) {
             that.keymap[keyname] = val;
+            if (val && callback) {
+              callback(that);
+            }
           }
-      }
+      };
+      
+      that.register = function(cb) {
+        callback = cb;
+      };
       
       return that;
     } // keyboardmanager

@@ -65,6 +65,20 @@
 					ok(!this.keyman.keymap['w'], 'w is not pressed anymore');
 				});
 				
+				test('callback', function() {
+					expect(2);
+					equals(typeof this.keyman.register, 'function', 'register exists');
+					var called = false;
+					var me = this;
+					this.keyman.register(function(k) {
+						same(k, me.keyman, 'passed in keyboardmanager instance');
+					});
+					this.keyman.dispatch({
+						type: 'keydown',
+						keyCode: 87 // w
+					});
+				});
+				
 				module('mousemanager', {
 					setup: function() {
 						var me = this;
