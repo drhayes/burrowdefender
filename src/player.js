@@ -40,17 +40,19 @@
     
     // define player sprite
 		spritemanager.add('player', {x: 16, y: 20}, [
-		  {x: 0, y: 60},
-			{x: 0, y: 39},
+		  {x: 0, y: 60}, // standing
+			{x: 0, y: 39}, // running right
 			{x: 17, y: 39},
 			{x: 34, y: 39},
 			{x: 51, y: 39},
 			{x: 68, y: 39},
-			{x: 0, y: 18},
+			{x: 0, y: 18}, // running left
 			{x: 17, y: 18},
 			{x: 34, y: 18},
 			{x: 51, y: 18},
-			{x: 68, y: 18}
+			{x: 68, y: 18},
+			{x: 17, y: 60}, // falling right
+			{x: 34, y: 60} // falling left
 		]);
 
     // define player animations
@@ -65,6 +67,10 @@
     var runningright = animation({
       name: 'player',
       frames: [1, 1, 2, 2, 3, 3, 4, 4, 5, 5]
+    });
+    var falling = animation({
+      name: 'player',
+      frames: [11]
     });
       
     loki.modules.player = function(env) {
@@ -211,7 +217,10 @@
 
         that.draw = function(drawthing) {
           drawthing.sprite1.push(function(ctx) {
-            if (that.movestate.walking === walking.LEFT) {
+            if (that.movestate.standing === false) {
+              falling.draw(ctx, that.x, that.y);
+            }
+            else if (that.movestate.walking === walking.LEFT) {
               runningleft.draw(ctx, that.x, that.y);
             }
             else if (that.movestate.walking === walking.RIGHT) {
