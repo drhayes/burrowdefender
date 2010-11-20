@@ -32,14 +32,33 @@
         };
         
         that.execute = function() {
-          // add actions from the queue
-          var queuecopy = queue.slice(0);
-          var offset = 0;
-          for (var i = 0, queuelength = queuecopy.length; i < queuelength; i++) {
+          var i = 0,
+            j = 0,
+            queuelength = queue.length,
+            activeaction,
+            offset = 0,
+            queuecopy = queue.slice(0);
+          // do we have any interrupts?
+          for (i = 0; i < queuelength; i++) {
+            var action = queuecopy[i];
+            if (action.interrupt) {
+              // dump the active actions and run this one now
+              active = pqueue();
+              active.push(action);
+              // pull it from the queue as well
+              queue.splice(i - offset, 1);
+              offset++;
+            }
+          }
+          // get a clean copy of the queue for this one
+          queuecopy = queue.slice(0);
+          queuelength = queue.length;
+          offset = 0;
+          for (i = 0; i < queuelength; i++) {
             var action = queuecopy[i];
             // can this action combine with the actives?
             var addit = true;
-            for (var j = active.length - 1, activeaction; activeaction = active[j--];) {
+            for (j = active.length - 1; activeaction = active[j--];) {
               addit &= activeaction.candoboth(action);
             }
             // if this action can't combine, skip it for now

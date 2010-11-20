@@ -130,6 +130,14 @@
 				});
 				
 				test('execute with interrupting action', function() {
+					this.am.add(this.a1);
+					this.am.execute();
+					equals(this.executed1, 1, 'a1 ran once');
+					this.a2.interrupt = true;
+					this.am.add(this.a2);
+					this.am.execute();
+					equals(this.executed1, 1, 'a1 did not run again');
+					equals(this.executed2, 1, 'a2 ran as interrupt');
 				});
 			});
 		</script>
