@@ -14,6 +14,9 @@
         that.priority = 0;
         that.completed = false;
         that.execute = function() {};
+        that.candoboth = function() {
+          return true;
+        }
         return that;
       };
       
@@ -26,9 +29,16 @@
         };
         
         that.execute = function() {
+          // copy the active list as we might have to remove completed actions
+          var activecopy = active.slice(0);
           // execute the active actions
-          for (var i = active.length - 1, action; action = active[i--];) {
-            action.execute();
+          for (var i = activecopy.length - 1, action; action = activecopy[i--];) {
+            if (action.completed) {
+              active.splice(i + 1, 1);
+            }
+            else {
+              action.execute();
+            }
           }
         };
 
