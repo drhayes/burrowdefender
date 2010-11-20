@@ -45,8 +45,9 @@
           am.add(action);
         };
         
-        thing.executeactions = function(funcname) {
-          am.execute(funcname);
+        thing.executeactions = function() {
+          var args = Array.prototype.slice.call(arguments, 0);
+          am.execute.apply(am, args);
         };
       }
     };

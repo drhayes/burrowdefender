@@ -70,6 +70,7 @@
 				
 				test('actionable', function() {
 					loki.define('actions', 'components', function(env) {
+						expect(7);
 						equals(typeof env.actionable, 'function', 'actionable exists');
 						var thing = {};
 						env.actionable(thing);
@@ -89,6 +90,11 @@
 						ok(ticked, 'ticked!');
 						thing.executeactions('catpants');
 						ok(catpantsed, 'catpantsed!');
+						a.blah = function(a, b) {
+							equals(a, 'a', 'a');
+							equals(b, 'b', 'b');
+						};
+						thing.executeactions('blah', 'a', 'b')
 					});
 				});
 			});
