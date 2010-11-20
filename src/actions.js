@@ -37,7 +37,8 @@
             queuelength = queue.length,
             activeaction,
             offset = 0,
-            queuecopy = queue.slice(0);
+            queuecopy = queue.slice(0),
+            args = Array.prototype.slice.call(arguments, 1);
           // if we weren't given a funcname, assume 'tick'
           funcname = funcname || 'tick';
           // do we have any interrupts?
@@ -80,7 +81,8 @@
               active.splice(i + 1, 1);
             }
             else if (action.hasOwnProperty(funcname)) {
-              action[funcname]();
+              var func = action[funcname];
+              func.apply(action, args);
             }
           }
         };

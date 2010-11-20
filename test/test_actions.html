@@ -72,6 +72,17 @@
 					this.am.execute('doggiehat');
 				});
 				
+				test('execute passes arguments', function() {
+					expect(3);
+					this.a1.dothing = function(a, b, c) {
+						equals(a, 'a', 'a');
+						equals(b, 'b', 'b');
+						equals(c, 'c', 'c');
+					}
+					this.am.add(this.a1);
+					this.am.execute('dothing', 'a', 'b', 'c');
+				});
+				
 				test('execute with completed actions', function() {
 					this.a2.priority = 100;
 					this.am.add(this.a1);
