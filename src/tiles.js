@@ -59,7 +59,7 @@
 
         that.draw = function(ctx) {
           ctx.fillStyle = 'rgb(40, 15, 0)';
-          ctx.fillRect(0, 0, tilesize, tilesize + 1);
+          ctx.fillRect(0, 0, tilesize + 1, tilesize + 1);
         };
 
         return that;

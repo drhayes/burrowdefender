@@ -125,9 +125,6 @@
         that.halfheight = (that.y2 - that.y1) / 2;
         that.halfx = that.halfwidth + that.x1;
         that.halfy = that.halfheight + that.y1;
-        that.draw = function(x, y, ctx) {
-          // this version doesn't do anything
-        };
 
         that.mine = function() {
           if (!that.diggable) {
