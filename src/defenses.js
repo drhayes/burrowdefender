@@ -10,7 +10,8 @@
       mob = env.mob,
       imagemanager = env.imagemanager,
       BARRELOFFSETX = 9,
-      BARRELOFFSETY = 8;
+      BARRELOFFSETY = 8,
+      MAXAMMO = 14;
 
     // sentry gun images
     imagemanager.add('sentrygundefense', 'assets/images/sentrygundefense.png');
@@ -84,6 +85,7 @@
         that.solid = false;
         that.bounce = 0.4;
         that.target = null;
+        that.ammo = MAXAMMO;
         that.aimvelocity = {
           x: 1,
           y: 0
@@ -122,6 +124,7 @@
             }
           });
           args.game.add(b);
+          that.ammo -= 1;
         }.ratelimit(350);
       
         that.tick = function() {
@@ -140,6 +143,8 @@
           }
           // if we have a target, fire at it
           that.fire();
+          // if we are out of ammo, we are killed
+          that.killed = that.ammo <= 0;
         }
       
         that.draw = function(drawthing) {
@@ -147,7 +152,10 @@
             imagemanager.draw(ctx, 'sentrygundefense', that.x, that.y);
           }); // sprite1
           drawthing.sprite2.push(function(ctx) {
-            // save the context
+            // draw the ammo meter
+            ctx.fillStyle = 'hsl(120, 100%, 50%)';
+            ctx.fillRect(that.x, that.y - 6, that.size.x * that.ammo / MAXAMMO, 4);
+            // save the context for barrel rotation
             ctx.save();
             // translate the context so rotations will originate at the right place in the barrel
             ctx.translate(that.x + 8, that.y + 8);
@@ -155,7 +163,7 @@
             var a = Math.atan(that.aimvelocity.y / that.aimvelocity.x);
             ctx.rotate(a);
             imagemanager.draw(ctx, 'sentrygunbarrel', -8, -8);
-            // restore the context
+            // restore the context from barrel rotation
             ctx.restore();            
           }); // sprite2
         };

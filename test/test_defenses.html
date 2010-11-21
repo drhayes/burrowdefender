@@ -6,6 +6,7 @@
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="../src/base.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
+		<script type="text/javascript" src="../src/assets.js"></script>
 		<script type="text/javascript" src="../src/tileutils.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
 		<script type="text/javascript" src="../src/defenses.js"></script>
@@ -81,6 +82,7 @@
 					equals(this.sg.size.x, 16, 'size.x');
 					equals(this.sg.size.y, 16, 'size.y');
 					equals(this.sg.bounce, 0.4, 'bounce');
+					equals(this.sg.ammo, 14, 'ammo');
 					equals(typeof this.sg.solid, 'boolean', 'solid is a boolean');
 					ok(!this.sg.solid, '!solid');
 				});
@@ -154,7 +156,7 @@
 				});
 				
 				test('fire with target', function() {
-					expect(3);
+					expect(4);
 					this.sg.target = {
 						x: -10,
 						y: -20
@@ -165,7 +167,9 @@
 						equals(typeof t.x, 'number', 't.y');
 						ok(t.vel, 't.vel');
 					};
+					var ammo = this.sg.ammo;
 					this.sg.fire();
+					equals(this.sg.ammo, ammo - 1, 'ammo should be consumed');
 				});
 				
 				test('fire with target rate-limited', function() {
@@ -182,6 +186,14 @@
 						ok(false, 'add should not be called');
 					};
 					this.sg.fire();
+				});
+				
+				test('no ammo equals killed', function() {
+					// not testing ai, so stub it out
+					this.sg.ai = function() {};
+					this.sg.ammo = 0;
+					this.sg.tick();
+					ok(this.sg.killed, 'killed for having no ammo');
 				});
 				
 				module('other stuff');
