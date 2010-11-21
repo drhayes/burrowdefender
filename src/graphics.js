@@ -17,6 +17,26 @@
           x: 0,
           y: 0
         };
+        
+        that.beginPath = function() {
+          ctx.beginPath();
+        };
+        
+        that.closePath = function() {
+          ctx.closePath();
+        };
+        
+        that.moveTo = function(x, y) {
+          ctx.moveTo(x + that.offset.x, y + that.offset.y);
+        };
+        
+        that.lineTo = function(x, y) {
+          ctx.lineTo(x + that.offset.x, y + that.offset.y);
+        }
+        
+        that.stroke = function() {
+          ctx.stroke();
+        };
 
         that.fillStyle = function(fill) {
           ctx.fillStyle = fill;

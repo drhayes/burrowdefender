@@ -15,7 +15,8 @@
           x: 4,
           y: 4
         };
-        var that = mob(args);
+        var that = mob(args),
+          oldx, oldy;
 
         // bullets are not solid
         that.solid = false;
@@ -25,8 +26,12 @@
 
         that.draw = function(drawthing) {
           drawthing.sprite1.push(function(ctx) {
-            ctx.fillStyle('hsl(120, 100%, 100%)');
-            ctx.fillRect(that.x, that.y, 4, 4);
+            ctx.lineWidth(2);
+            ctx.strokeStyle('hsl(120, 100%, 100%)');
+            ctx.beginPath();
+            ctx.moveTo(oldx, oldy);
+            ctx.lineTo(that.x, that.y);
+            ctx.stroke();
           });
         };
 
@@ -43,6 +48,8 @@
 
         // kill the bullet after a second or so
         that.tick = function() {
+          oldx = that.x;
+          oldy = that.y;
           var current = new Date().getTime();
           if (current - that.created > 1500) {
             that.killed = true;
