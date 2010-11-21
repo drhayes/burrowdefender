@@ -147,19 +147,16 @@
               ctx.strokeRect(r.x1, r.y1, r.x2 - r.x1, r.y2 - r.y1);
               // now draw the icon, if we have one...
               if (that.things.hasOwnProperty(i)) {
-                var oldoffset = ctx.offset;
                 var invitem = that.things[i];
                 var drawimage = invitem.instance.drawimage;
-                ctx.offset = {
-                  x: ctx.offset.x + r.x1 + (r.width / 2) - 8,
-                  y: ctx.offset.y + r.y1 + (r.height / 2) - 16,
-                }
+                ctx.save();
+                ctx.translate(r.x1 + (r.width / 2) - 8, r.y1 + (r.height / 2) - 16);
                 drawimage(ctx);
                 // how many do we have? and center that text
                 var countstr = '' + invitem.count;
                 var textwidth = ctx.measureText(countstr);
                 ctx.fillText(countstr, -(textwidth.width / 2) + 7, 32);
-                ctx.offset = oldoffset;
+                ctx.restore();
               }
             }
           });

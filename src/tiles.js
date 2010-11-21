@@ -58,7 +58,7 @@
         that.solid = false;
 
         that.draw = function(ctx) {
-          ctx.fillStyle('rgb(40, 15, 0)');
+          ctx.fillStyle = 'rgb(40, 15, 0)';
           ctx.fillRect(0, 0, tilesize, tilesize + 1);
         };
 

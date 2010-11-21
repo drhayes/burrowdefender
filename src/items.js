@@ -135,9 +135,10 @@
       
         that.draw = function(drawthing) {
           drawthing.sprite1.push(function(ctx) {
-            ctx.offset.x += that.x;
-            ctx.offset.y += that.y;
+            ctx.save();
+            ctx.translate(that.x, that.y);
             args.item.drawimage(ctx);
+            ctx.restore();
           });
         };
       
