@@ -130,11 +130,14 @@
         }
         $.each(drawthings, function(i, thing) {
           // reset the context offset
-          that.ctx.offset = {
-            x: offsetx,
-            y: offsety
-          }
+          that.ctx.save();
+          that.ctx.translate(offsetx, offsety);
+          // that.ctx.offset = {
+          //   x: offsetx,
+          //   y: offsety
+          // }
           thing(that.ctx);
+          that.ctx.restore();
         });
       };
 
@@ -167,6 +170,7 @@
       });
 
       that.clearbackground = function(ctx) {
+        ctx.translate(0, 0);
         ctx.offset = {
           x: 0,
           y: 0

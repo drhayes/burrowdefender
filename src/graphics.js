@@ -18,6 +18,22 @@
           y: 0
         };
         
+        that.save = function() {
+          ctx.save();
+        };
+        
+        that.restore = function() {
+          ctx.restore();
+        };
+        
+        that.translate = function(x, y) {
+          ctx.translate(x, y);
+        };
+        
+        that.rotate = function(a) {
+          ctx.rotate(a);
+        };
+        
         that.beginPath = function() {
           ctx.beginPath();
         };

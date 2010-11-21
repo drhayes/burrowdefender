@@ -232,10 +232,12 @@
         // the offsets are given in pixels and are optional.
         that.draw = function(ctx) {
           iterateviewabletiles(function(sometile, tilex, tiley) {
-            ctx.offset = {
-              x: tilex - args.game.worldoffset.x,
-              y: tiley - args.game.worldoffset.y
-            };
+            ctx.save();
+            ctx.translate(tilex - args.game.worldoffset.x, tiley - args.game.worldoffset.y);
+            // ctx.offset = {
+            //   x: tilex - args.game.worldoffset.x,
+            //   y: tiley - args.game.worldoffset.y
+            // };
             sometile.draw(ctx);
           });
         };
