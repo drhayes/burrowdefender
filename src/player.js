@@ -24,11 +24,12 @@
   var HEIGHT = 50;
   var MAXITEMS = 8;
   
-  loki.define('assets', 'graphics', 'mob', 'tileutils', 'components', function(env) {
+  loki.define('actions', 'assets', 'graphics', 'mob', 'tileutils', 'components', function(env) {
     var mob = env.mob,
       tilesize = env.tilesize,
       totilepos = env.totilepos,
       damageable = env.damageable,
+      actionable = env.actionable,
       imagemanager = env.imagemanager,
       spritemanager = env.spritemanager,
       animation = env.animation;
@@ -185,6 +186,13 @@
         return that;
       }; // inventory
       
+      // expects the following args:
+      // * player - the player whose action this is
+      // * keyboardmanager - the keyboardmanager to read commands from
+      env.moveaction = function(args) {
+        
+      }; // moveaction
+      
       env.player = function(args) {
         // player derives from mob
         var that = mob(args);
@@ -212,6 +220,9 @@
           }
         });
         that.delicious = true;
+        
+        // player is actionable
+        actionable(that);
 
         that.inventory = env.inventory();
 

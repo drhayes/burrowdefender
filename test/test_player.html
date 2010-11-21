@@ -8,10 +8,14 @@
 		<script type="text/javascript" src="../src/assets.js"></script>
 		<script type="text/javascript" src="../src/graphics.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
+		<script type="text/javascript" src="../src/actions.js"></script>
 		<script type="text/javascript" src="../src/components.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
 		<script type="text/javascript" src="../src/tileutils.js"></script>
 		<script type="text/javascript" src="../src/player.js"></script>
+		<script type="text/javascript" src="../src/world.js"></script>
+		<script type="text/javascript" src="../src/tiles.js"></script>
+		<script type="text/javascript" src="../src/defenses.js"></script>
 		<script type="text/javascript" src="../src/items.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
@@ -113,23 +117,45 @@
 				});
 				
 				test('add dirtitems', function() {
-					var i1 = item.dirtitem({game: this.fakegame});
-					var i2 = item.dirtitem({game: this.fakegame});
-					this.inv.add(i1);
-					this.inv.add(i2);
-					var is = this.inv.things['1'];
-					equals(is.count, 2, 'two things');
+					var me = this;
+					loki.define('items', function(env) {
+						var i1 = env.dirtitem({game: me.fakegame});
+						var i2 = env.dirtitem({game: me.fakegame});
+						me.inv.add(i1);
+						me.inv.add(i2);
+						var is = me.inv.things['1'];
+						equals(is.count, 2, 'two things');						
+					})
 				});
 				
 				test('add dirtitems and sentryguns', function() {
-					var i1 = item.dirtitem({game: this.fakegame});
-					var i2 = item.sentrygunitem({game: this.fakegame});
-					this.inv.add(i1);
-					this.inv.add(i2);
-					var is = this.inv.things['1'];
-					equals(is.count, 1, 'one dirt item picked up');
-					is = this.inv.things[2];
-					equals(is.count, 1, 'one sentry gun picked up');
+					var me = this;
+					loki.define('items', function(env) {
+						var i1 = env.dirtitem({game: me.fakegame});
+						var i2 = env.sentrygunitem({game: me.fakegame});
+						me.inv.add(i1);
+						me.inv.add(i2);
+						var is = me.inv.things['1'];
+						equals(is.count, 1, 'one dirt item picked up');
+						is = me.inv.things[2];
+						equals(is.count, 1, 'one sentry gun picked up');
+					})
+				});
+				
+				module('moveaction', {
+					setup: function() {
+						var me = this;
+						loki.define('player', function(env) {
+							me.ma = env.moveaction({
+								player: {},
+								keyboardmanager: {}
+							});
+						});
+					}
+				});
+				
+				test('ctor', function() {
+					ok(this.ma, 'ctor brings something back');
 				});
 
 				module('player', {
@@ -163,18 +189,7 @@
 				});
 				
 				test('draw', function() {
-					var fakectx = new FakeCtx();
 					equals(typeof this.p.draw, 'function', 'draw exists');
-					var drawthing = {
-						sprite1: [],
-						hud: []
-					};
-					this.p.draw(drawthing);
-					drawthing.sprite1[0](fakectx);
-					equals(fakectx.drawImageArgs.length, 1, 'drawImage was called once');
-					var args = fakectx.drawImageArgs[0];
-					equals(args.drx, 0, 'drawImage x');
-					equals(args.dry, 1, 'drawImage y');
 				});
 				
 				test('tick', function() {
