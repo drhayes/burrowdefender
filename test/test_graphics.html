@@ -17,62 +17,6 @@
 		</style>
 		<script>
 			$(document).ready(function() {
-				module('drawcontext', {
-					setup: function() {
-						this.fakectx = new FakeCtx();
-						var me = this;
-						loki.define('graphics', function(env) {
-							me.dc = env.drawcontext(me.fakectx);
-						})
-					}
-				});
-				
-				test('fillStyle', function() {
-					this.dc.fillStyle('new');
-					equals(this.fakectx.fillStyle, 'new', 'fill style set');
-				});
-				
-				test('fillRect', function() {
-					this.dc.fillRect(1.2, 2.1, 3.2, 4.4);
-					equals(this.fakectx.fillRectArgs.length, 1, 'fillRect called');
-					var args = this.fakectx.fillRectArgs[0];
-					equals(args.frx, 1, 'x');
-					equals(args.fry, 2, 'y');
-					equals(args.frw, 3, 'w');
-					equals(args.frh, 4, 'h');
-				});
-				
-				test('drawImage', function() {
-					var image = {};
-					// context rounds arguments
-					this.dc.drawImage(image, 6.2, 7.1);
-					equals(this.fakectx.drawImageArgs.length, 1, 'drawImage called');
-					var args = this.fakectx.drawImageArgs[0];
-					same(args.img, image, 'image');
-					equals(args.drx, 6, 'x');
-					equals(args.dry, 7, 'y');
-				});
-				
-				test('fillRect with offsets', function() {
-					this.dc.offset.x = 200;
-					this.dc.offset.y = 100;
-					this.dc.fillRect(0, 0, 32, 32);
-					var args = this.fakectx.fillRectArgs[0];
-					equals(args.frx, 200, 'x');
-					equals(args.fry, 100, 'y');
-					equals(args.frw, 32, 'w');
-					equals(args.frh, 32, 'h');
-				});
-				
-				test('drawImage with offsets', function() {
-					this.dc.offset.x = 400;
-					this.dc.offset.y = 300;
-					this.dc.drawImage({}, 10, 20);
-					var args = this.fakectx.drawImageArgs[0];
-					equals(args.drx, 410, 'x');
-					equals(args.dry, 320, 'y');
-				});
-				
 				module('animation');
 				
 				test('ctor', function() {
