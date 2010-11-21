@@ -153,8 +153,9 @@
             // save the context
             ctx.save();
             // translate the context so rotations will originate at the right place in the barrel
+            ctx.translate(that.x + 8, that.y + 8);
             ctx.rotate(rotation);
-            imagemanager.draw(ctx, 'sentrygunbarrel', that.x, that.y);
+            imagemanager.draw(ctx, 'sentrygunbarrel', -8, -8);
             // restore the context
             ctx.restore();            
           }); // sprite2
