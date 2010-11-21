@@ -12,7 +12,9 @@
       BARRELOFFSETX = 9,
       BARRELOFFSETY = 8;
 
+    // sentry gun images
     imagemanager.add('sentrygundefense', 'assets/images/sentrygundefense.png');
+    imagemanager.add('sentrygunbarrel', 'assets/images/sentrygunbarrel.png');
 
     loki.modules.defenses = function(env) {
       env.bullet = function(args) {
@@ -86,6 +88,8 @@
           x: 1,
           y: 0
         };
+        
+        var rotation = 0;
       
         that.ai = function() {
           // find an enemy to target
@@ -123,6 +127,7 @@
         }.ratelimit(350);
       
         that.tick = function() {
+          rotation = (rotation + 0.01) % (Math.PI * 0.25);
           mob.gravitytick.call(that);
           // update the ai
           that.ai();
@@ -143,20 +148,16 @@
         that.draw = function(drawthing) {
           drawthing.sprite1.push(function(ctx) {
             imagemanager.draw(ctx, 'sentrygundefense', that.x, that.y);
-            // draw the barrel
-            ctx.lineWidth(3);
-            ctx.fillStyle('hsl(231, 29%, 49%)');
-            ctx.strokeStyle('hsl(0, 0%, 0%)');
-            var x1 = that.x + that.aimvelocity.x + BARRELOFFSETX;
-            var y1 = that.y + that.aimvelocity.y + BARRELOFFSETY;
-            var x2 = that.x + (that.aimvelocity.x * 14) + BARRELOFFSETX;
-            var y2 = that.y + (that.aimvelocity.y * 14) + BARRELOFFSETY;
-            ctx.beginPath();
-            ctx.moveTo(x1, y1);
-            ctx.lineTo(x2, y2);
-            // ctx.closePath();
-            ctx.stroke();
-          })
+          }); // sprite1
+          drawthing.sprite2.push(function(ctx) {
+            // save the context
+            ctx.save();
+            // translate the context so rotations will originate at the right place in the barrel
+            ctx.rotate(rotation);
+            imagemanager.draw(ctx, 'sentrygunbarrel', that.x, that.y);
+            // restore the context
+            ctx.restore();            
+          }); // sprite2
         };
       
         return that;
