@@ -74,7 +74,7 @@
       that.update = function() {
         // update the offsets
         that.worldoffset = {
-          x: that.player.x - that.playeroffset.x,
+          x: Math.round(that.player.x - that.playeroffset.x),
           y: that.player.y - that.playeroffset.y
         };
         // update the tilemap

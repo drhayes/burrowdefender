@@ -81,7 +81,7 @@
       
         that.draw = function(ctx) {
           ctx.fillStyle = 'rgb(102,51,0)';
-          ctx.fillRect(0, tilesize - 2, tilesize + 3, 3);
+          ctx.fillRect(0, tilesize - 2, tilesize, 3);
           imagemanager.draw(ctx, 'dirt', 0, 0);
           tile.drawdamage(ctx, that.health / that.maxhealth);
         };
