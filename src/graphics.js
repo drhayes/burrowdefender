@@ -37,6 +37,10 @@
         that.stroke = function() {
           ctx.stroke();
         };
+        
+        that.fill = function() {
+          ctx.fill();
+        };
 
         that.fillStyle = function(fill) {
           ctx.fillStyle = fill;

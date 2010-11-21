@@ -4,11 +4,16 @@
 
 (function(global, $) {
   
-  loki.define('mob', 'tileutils', function(env) {
+  loki.define('assets', 'mob', 'tileutils', function(env) {
     var tilesize = env.tilesize,
       totilepos = env.totilepos,
-      mob = env.mob;
-      
+      mob = env.mob,
+      imagemanager = env.imagemanager,
+      BARRELOFFSETX = 9,
+      BARRELOFFSETY = 8;
+
+    imagemanager.add('sentrygundefense', 'assets/images/sentrygundefense.png');
+
     loki.modules.defenses = function(env) {
       env.bullet = function(args) {
         args.size = {
@@ -77,6 +82,10 @@
         that.solid = false;
         that.bounce = 0.4;
         that.target = null;
+        that.aimvelocity = {
+          x: 1,
+          y: 0
+        };
       
         that.ai = function() {
           // find an enemy to target
@@ -101,20 +110,13 @@
             return;
           };
           // create bullet
-          var aimvelocity = env.aim({
-            x: that.x,
-            y: that.y
-          }, {
-            x: that.target.x,
-            y: that.target.y
-          });
           var b = env.bullet({
             game: args.game,
-            x: that.x,
-            y: that.y,
+            x: that.x + BARRELOFFSETX,
+            y: that.y + BARRELOFFSETY,
             vel: {
-              x: aimvelocity.x * 5,
-              y: aimvelocity.y * 5
+              x: that.aimvelocity.x * 5,
+              y: that.aimvelocity.y * 5
             }
           });
           args.game.add(b);
@@ -124,15 +126,36 @@
           mob.gravitytick.call(that);
           // update the ai
           that.ai();
+          // if we have a target, update the aimvelocity
+          if (that.target) {
+            that.aimvelocity = env.aim({
+              x: that.x,
+              y: that.y
+            }, {
+              x: that.target.x,
+              y: that.target.y
+            });
+          }
           // if we have a target, fire at it
           that.fire();
         }
       
         that.draw = function(drawthing) {
           drawthing.sprite1.push(function(ctx) {
-            ctx.strokeStyle('hsl(120, 0%, 30%)');
-            ctx.lineWidth(5);
-            ctx.strokeRect(that.x, that.y, that.size.x, that.size.y);
+            imagemanager.draw(ctx, 'sentrygundefense', that.x, that.y);
+            // draw the barrel
+            ctx.lineWidth(3);
+            ctx.fillStyle('hsl(231, 29%, 49%)');
+            ctx.strokeStyle('hsl(0, 0%, 0%)');
+            var x1 = that.x + that.aimvelocity.x + BARRELOFFSETX;
+            var y1 = that.y + that.aimvelocity.y + BARRELOFFSETY;
+            var x2 = that.x + (that.aimvelocity.x * 14) + BARRELOFFSETX;
+            var y2 = that.y + (that.aimvelocity.y * 14) + BARRELOFFSETY;
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            // ctx.closePath();
+            ctx.stroke();
           })
         };
       
