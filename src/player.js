@@ -189,12 +189,131 @@
       
       // expects the following args:
       // * player - the player whose action this is
-      // * keyboardmanager - the keyboardmanager to read commands from
+      // * game - the game where this is taking place
       env.moveaction = function(args) {
         var player = args.player,
-          keyman = args.keyboardmanager,
+          keyman = args.game.keyboardmanager,
+          tilemap = args.game.tilemap,
           that = action();
-        that.tick = function() {};
+        that.readkeyboard = function() {
+          if (keyman.keymap['shift']) {
+            player.movestate.mining = true;
+          }
+          else {
+            player.movestate.mining = false;
+          };
+          if (keyman.keymap['space']) {
+            player.movestate.wantstojump = true;
+          }
+          else {
+            player.movestate.wantstojump = false;
+          };
+          if (keyman.keymap['z']) {
+            player.movestate.placing = true;
+          }
+          else {
+            player.movestate.placing = false;
+          }
+          // this order is probably pretty important.
+          // don't want down to be the one that wins out.
+          if (keyman.keymap['s'] || keyman.keymap['down']) {
+            player.movestate.walking = walking.DOWN;
+          }
+          else if (keyman.keymap['a'] || keyman.keymap['left']) {
+            player.movestate.walking = walking.LEFT;
+          }
+          else if (keyman.keymap['d'] || keyman.keymap['right']) {
+            player.movestate.walking = walking.RIGHT;
+          }
+          else if (keyman.keymap['w'] || keyman.keymap['up']) {
+            player.movestate.walking = walking.UP;
+          }
+          else {
+            player.movestate.walking = walking.STANDING;
+          };
+          // set the currently selected thing in inventory
+          for (var i = 1; i <= 8; i++) {
+            if (keyman.keymap['' + i]) {
+              player.inventory.sel = i;
+            }
+          }
+        }; // readkeyboard
+        var tileposindirection = function() {
+    			// respect player's center of mass
+    			var tilepos = totilepos(player.x + player.size.x / 2, player.y + player.size.y / 2);
+    			if (player.movestate.walking === walking.LEFT) {
+    				tilepos.x -= 1;
+    			}
+    			else if (player.movestate.walking === walking.RIGHT) {
+    				tilepos.x += 1;
+    			}
+    			else if (player.movestate.walking === walking.UP) {
+    				tilepos.y -= 1;
+    			}
+    			else if (player.movestate.walking === walking.DOWN) {
+    				tilepos.y += 1;
+    			}
+    			return tilepos;
+        }; // tileposindirection
+    		that.mine = function() {
+    			if (player.movestate.mining) {
+    				// convert player's current walking direction to tile
+    				var tilepos = tileposindirection();
+    				// is it a diggable tile?
+    				var digtile = tilemap.get(tilepos.x, tilepos.y);
+    				if (digtile && typeof digtile.damage === 'function') {
+    				  digtile.damage(player.minedamage);
+    				}
+    			}
+    		}; // mine
+    		that.walk = function() {
+    			if (player.movestate.walking === walking.LEFT && !player.movestate.placing) {
+    			  player.vel.x = player.velocities.walkleft;
+    			}
+    			else if (player.movestate.walking === walking.RIGHT && !player.movestate.placing) {
+    			  player.vel.x = player.velocities.walkright;
+    			}
+    			else {
+    			  if (player.vel.x < 0) {
+    			    player.vel.x = Math.min(0, player.vel.x + STOPFORCE);
+    			  }
+    			  else {
+    			    player.vel.x = Math.max(0, player.vel.x - STOPFORCE);
+    			  }
+    			}
+    			if (player.movestate.wantstojump) {
+    				player.jump();
+    			}
+    		}; // mine
+    		that.place = function() {
+    		  if (!player.movestate.placing || player.movestate.walking === walking.STANDING) {
+    		    return;
+    		  }
+    		  var i = player.inventory.getsel();
+    		  // do we have anything to drop?
+    		  if (i === null) {
+    		    return;
+    		  };
+    		  // we have something to drop... place it
+    			// convert player's current walking direction to tile
+    			var tilepos = tileposindirection();
+    		  var result = i.place(tilepos.x * tilesize, tilepos.y * tilesize);
+    		  // did it actually get placed?
+    		  if (!result) {
+    		    return;
+    		  }
+    		  player.inventory.dropsel();
+    		}; // place
+        that.tick = function() {
+    			// read the state of the keyboard
+    			that.readkeyboard();
+    			// are we mining?
+    			that.mine();
+    			// walk somewhere
+    			that.walk();
+    			// placing anything?
+    			that.place();
+        };
         that.draw = function(drawthing) {
           drawthing.sprite1.push(function(ctx) {
             if (player.movestate.standing === false) {
@@ -247,7 +366,7 @@
         // add default moveaction
         var moveaction = env.moveaction({
           player: that,
-          keyboardmanager: args.game.keyboardmanager
+          game: args.game
         });
         that.addaction(moveaction);
 
@@ -272,133 +391,12 @@
           that.inventory.draw(drawthing);
         };
 
-        that.readkeyboard = function() {
-          var keyman = args.game.keyboardmanager;
-          if (keyman.keymap['shift']) {
-            that.movestate.mining = true;
-          }
-          else {
-            that.movestate.mining = false;
-          };
-          if (keyman.keymap['space']) {
-            that.movestate.wantstojump = true;
-          }
-          else {
-            that.movestate.wantstojump = false;
-          };
-          if (keyman.keymap['z']) {
-            that.movestate.placing = true;
-          }
-          else {
-            that.movestate.placing = false;
-          }
-          // this order is probably pretty important.
-          // don't want down to be the one that wins out.
-          if (keyman.keymap['s'] || keyman.keymap['down']) {
-            that.movestate.walking = walking.DOWN;
-          }
-          else if (keyman.keymap['a'] || keyman.keymap['left']) {
-            that.movestate.walking = walking.LEFT;
-          }
-          else if (keyman.keymap['d'] || keyman.keymap['right']) {
-            that.movestate.walking = walking.RIGHT;
-          }
-          else if (keyman.keymap['w'] || keyman.keymap['up']) {
-            that.movestate.walking = walking.UP;
-          }
-          else {
-            that.movestate.walking = walking.STANDING;
-          };
-          // set the currently selected thing in inventory
-          for (var i = 1; i <= 8; i++) {
-            if (keyman.keymap['' + i]) {
-              that.inventory.sel = i;
-            }
-          }
-        };
-
-        var tileposindirection = function() {
-    			// respect player's center of mass
-    			var tilepos = totilepos(that.x + that.size.x / 2, that.y + that.size.y / 2);
-    			if (that.movestate.walking === walking.LEFT) {
-    				tilepos.x -= 1;
-    			}
-    			else if (that.movestate.walking === walking.RIGHT) {
-    				tilepos.x += 1;
-    			}
-    			else if (that.movestate.walking === walking.UP) {
-    				tilepos.y -= 1;
-    			}
-    			else if (that.movestate.walking === walking.DOWN) {
-    				tilepos.y += 1;
-    			}
-    			return tilepos;
-        }
-
-    		that.mine = function() {
-    			if (that.movestate.mining) {
-    				// convert player's current walking direction to tile
-    				var tilepos = tileposindirection();
-    				// is it a diggable tile?
-    				var digtile = args.game.tilemap.get(tilepos.x, tilepos.y);
-    				if (digtile && typeof digtile.damage === 'function') {
-    				  digtile.damage(that.minedamage);
-    				}
-    			}
-    		};
-
-    		that.walk = function() {
-    			if (that.movestate.walking === walking.LEFT && !that.movestate.placing) {
-    			  that.vel.x = that.velocities.walkleft;
-    			}
-    			else if (that.movestate.walking === walking.RIGHT && !that.movestate.placing) {
-    			  that.vel.x = that.velocities.walkright;
-    			}
-    			else {
-    			  if (that.vel.x < 0) {
-    			    that.vel.x = Math.min(0, that.vel.x + STOPFORCE);
-    			  }
-    			  else {
-    			    that.vel.x = Math.max(0, that.vel.x - STOPFORCE);
-    			  }
-    			}
-    			if (that.movestate.wantstojump) {
-    				that.jump();
-    			}
-    		};
-
-    		that.place = function() {
-    		  if (!that.movestate.placing || that.movestate.walking === walking.STANDING) {
-    		    return;
-    		  }
-    		  var i = that.inventory.getsel();
-    		  // do we have anything to drop?
-    		  if (i === null) {
-    		    return;
-    		  };
-    		  // we have something to drop... place it
-    			// convert player's current walking direction to tile
-    			var tilepos = tileposindirection();
-    		  var result = i.place(tilepos.x * tilesize, tilepos.y * tilesize);
-    		  // did it actually get placed?
-    		  if (!result) {
-    		    return;
-    		  }
-    		  that.inventory.dropsel();
-    		}
-
     		// update the player every tick
     		that.tick = function() {
     		// gravity has to have some effect here...
     			mob.gravitytick.call(this);
-    			// read the state of the keyboard
-    			that.readkeyboard();
-    			// are we mining?
-    			that.mine();
-    			// walk somewhere
-    			that.walk();
-    			// placing anything?
-    			that.place();
+    			// tick the current action
+    			that.executeactions('tick');
     		};
 
     		return that;
