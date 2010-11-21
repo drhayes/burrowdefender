@@ -38,7 +38,7 @@
 
         that.draw = function(drawthing) {
           drawthing.sprite1.push(function(ctx) {
-            ctx.fillStyle('hsl(95, 35%, 33%)');
+            ctx.fillStyle = 'hsl(95, 35%, 33%)';
             ctx.fillRect(that.x, that.y, that.size.x + 1, that.size.y + 1);
           });
         };

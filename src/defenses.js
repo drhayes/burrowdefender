@@ -33,8 +33,8 @@
 
         that.draw = function(drawthing) {
           drawthing.sprite1.push(function(ctx) {
-            ctx.lineWidth(2);
-            ctx.strokeStyle('hsl(120, 100%, 100%)');
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'hsl(120, 100%, 100%)';
             ctx.beginPath();
             ctx.moveTo(oldx, oldy);
             ctx.lineTo(that.x, that.y);
@@ -88,8 +88,6 @@
           x: 1,
           y: 0
         };
-        
-        var rotation = 0;
       
         that.ai = function() {
           // find an enemy to target
@@ -127,7 +125,6 @@
         }.ratelimit(350);
       
         that.tick = function() {
-          rotation = (rotation + 0.01) % (Math.PI * 0.25);
           mob.gravitytick.call(that);
           // update the ai
           that.ai();
@@ -154,7 +151,9 @@
             ctx.save();
             // translate the context so rotations will originate at the right place in the barrel
             ctx.translate(that.x + 8, that.y + 8);
-            ctx.rotate(rotation);
+            // change where we're aiming into a radian
+            var a = Math.atan(that.aimvelocity.y / that.aimvelocity.x);
+            ctx.rotate(a);
             imagemanager.draw(ctx, 'sentrygunbarrel', -8, -8);
             // restore the context
             ctx.restore();            
