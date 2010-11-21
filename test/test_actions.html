@@ -27,6 +27,15 @@
 					})
 				});
 				
+				test('candoboth defaults to false for self', function() {
+					loki.define('actions', function(env) {
+						var a = env.action();
+						var b = env.action();
+						ok(!a.candoboth(a), 'false for self');
+						ok(a.candoboth(b), 'true for anyone else');
+					})
+				});
+				
 				module('actionmanager', {
 					setup: function() {
 						var me = this;

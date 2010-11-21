@@ -15,8 +15,8 @@
         that.completed = false;
         that.interrupt = false;
         that.tick = function() {};
-        that.candoboth = function() {
-          return true;
+        that.candoboth = function(action) {
+          return action !== that;
         }
         return that;
       };
