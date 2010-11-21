@@ -254,7 +254,9 @@
         that.inventory = env.inventory();
 
         that.draw = function(drawthing) {
+          // draw the player's current action
           that.executeactions('draw', drawthing);
+          // draw the health bar
           drawthing.hud.push(function(ctx) {
             var startx = 10;
             var starty = 10;
