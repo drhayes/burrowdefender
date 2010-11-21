@@ -43,7 +43,7 @@
           drawthing.hud.push(function(ctx) {
             var rect = that.reticlerect();
             var style = that.canact ? 'hsla(120, 80%, 50%, 0.9)' : 'hsla(120, 0%, 50%, 0.9)';
-            ctx.strokeStyle(style);
+            ctx.strokeStyle = style;
             ctx.strokeRect(rect.x1, rect.y1, rect.x2 - rect.x1, rect.y2 - rect.y1);
           })
         };

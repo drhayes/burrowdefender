@@ -233,12 +233,9 @@
         that.draw = function(ctx) {
           iterateviewabletiles(function(sometile, tilex, tiley) {
             ctx.save();
-            ctx.translate(tilex - args.game.worldoffset.x, tiley - args.game.worldoffset.y);
-            // ctx.offset = {
-            //   x: tilex - args.game.worldoffset.x,
-            //   y: tiley - args.game.worldoffset.y
-            // };
+            ctx.translate(tilex, tiley);
             sometile.draw(ctx);
+            ctx.restore();
           });
         };
 

@@ -1,6 +1,9 @@
 // Some fake things that we can use in our testing.
 
 var FakeCtx = function() {
+  this.translate = function() {};
+  this.save = function() {};
+  this.restore = function() {};
   this.fillStyleArgs = [];
   this.fillStyle = function(style) {
     this.fillStyleArgs.push(style);

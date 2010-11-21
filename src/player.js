@@ -133,17 +133,16 @@
         that.draw = function(drawthing) {
           drawthing.hud.push(function(ctx) {
             // draw the background
-            ctx.fillStyle('hsla(120, 0%, 0%, 0.3)');
+            ctx.fillStyle = 'hsla(120, 0%, 0%, 0.3)';
             ctx.fillRect(that.x1, that.y1, WIDTH, HEIGHT);
             // draw the itemrects...
-            ctx.strokeStyle();
-            ctx.lineWidth(2);
-            ctx.fillStyle('hsla(120, 100%, 100%, 1.0)');
-            ctx.font('15px Impact');
+            ctx.lineWidth = 2;
+            ctx.fillStyle = 'hsla(120, 100%, 100%, 1.0)';
+            ctx.font = '15px Impact';
             var unselstyle = 'hsla(120, 10%, 50%, 0.6)';
             var selstyle = 'hsla(120, 80%, 50%, 0.6)';
             for (var i = 1; i <= 8; i++) {
-              ctx.strokeStyle(i === that.sel ? selstyle : unselstyle);
+              ctx.strokeStyle = (i === that.sel ? selstyle : unselstyle);
               var r = that.itemrect(i);
               ctx.strokeRect(r.x1, r.y1, r.x2 - r.x1, r.y2 - r.y1);
               // now draw the icon, if we have one...

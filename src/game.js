@@ -17,7 +17,7 @@
     var game = function(canvasid) {
       var that = {};
       that.canvas = $(canvasid)[0];
-      that.ctx = env.drawcontext(that.canvas.getContext('2d'));
+      that.ctx = that.canvas.getContext('2d');
       that.width = that.canvas.width;
       that.height = that.canvas.height;
       that.tilemap = env.tilemap({game: that});
@@ -128,17 +128,12 @@
           offsetx = 0;
           offsety = 0;
         }
+        that.ctx.save();
+        that.ctx.translate(offsetx, offsety);
         $.each(drawthings, function(i, thing) {
-          // reset the context offset
-          that.ctx.save();
-          that.ctx.translate(offsetx, offsety);
-          // that.ctx.offset = {
-          //   x: offsetx,
-          //   y: offsety
-          // }
           thing(that.ctx);
-          that.ctx.restore();
         });
+        that.ctx.restore();
       };
 
       that.draw = function() {
@@ -170,13 +165,11 @@
       });
 
       that.clearbackground = function(ctx) {
-        ctx.translate(0, 0);
-        ctx.offset = {
-          x: 0,
-          y: 0
-        };
-        ctx.fillStyle('hsl(230, 100%, 60%)');
+        // we don't want the offset given to this function, so...
+        ctx.restore();
+        ctx.fillStyle = 'hsl(230, 100%, 60%)';
   			ctx.fillRect(0, 0, that.width, that.height);
+  			ctx.save();
       };
 
       that.drawtiles = function(ctx) {
