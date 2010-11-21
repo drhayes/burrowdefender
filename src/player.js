@@ -32,7 +32,8 @@
       actionable = env.actionable,
       imagemanager = env.imagemanager,
       spritemanager = env.spritemanager,
-      animation = env.animation;
+      animation = env.animation,
+      action = env.action;
     
     // add player images
     imagemanager.add('heartfull', 'assets/images/heartfull.png');
@@ -190,7 +191,8 @@
       // * player - the player whose action this is
       // * keyboardmanager - the keyboardmanager to read commands from
       env.moveaction = function(args) {
-        
+        var that = action();
+        return that;
       }; // moveaction
       
       env.player = function(args) {
@@ -223,6 +225,9 @@
         
         // player is actionable
         actionable(that);
+        // add default moveaction
+        var moveaction = env.moveaction(that, args.game.keyboardmanager);
+        that.addaction(moveaction);
 
         that.inventory = env.inventory();
 

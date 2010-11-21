@@ -186,6 +186,8 @@
 					equals(this.p.solid, false, 'players are not solid, otherwise they push stuff around');
 					equals(this.p.health, 5, 'health');
 					equals(this.p.maxhealth, 5, 'maxhealth');
+					equals(typeof this.p.addaction, 'function', 'addaction exists');
+					equals(typeof this.p.executeactions, 'function', 'executeactions exists');
 				});
 				
 				test('draw', function() {
