@@ -145,10 +145,12 @@
 				module('moveaction', {
 					setup: function() {
 						var me = this;
+						this.fakegame = new FakeGame();
 						loki.define('player', function(env) {
+							me.p = env.player({game: me.fakegame});
 							me.ma = env.moveaction({
-								player: {},
-								keyboardmanager: {}
+								player: me.p,
+								game: me.fakegame
 							});
 						});
 					}
@@ -158,6 +160,199 @@
 					ok(this.ma, 'ctor brings something back');
 					equals(typeof this.ma.tick, 'function', 'tick exists');
 					equals(typeof this.ma.draw, 'function', 'draw exists');
+					equals(typeof this.ma.readkeyboard, 'function', 'readkeyboard exists');
+					equals(typeof this.ma.mine, 'function', 'mine exists');
+					equals(typeof this.ma.walk, 'function', 'walk exists');
+					equals(typeof this.ma.place, 'function', 'place exists');
+				});
+				
+				test('tick', function() {
+					expect(5);
+					ok(typeof(this.ma.tick) === 'function', 'tick exists');
+					this.ma.readkeyboard = function() {
+						ok(true, 'readkeyboard');
+					};
+					this.ma.mine = function() {
+						ok(true, 'mine');
+					}
+					this.ma.walk = function() {
+						ok(true, 'walk');
+					}
+					this.ma.place = function() {
+						ok(true, 'place');
+					}
+					this.ma.tick();
+				});
+				
+				test('readkeyboard', function() {
+					var me = this;
+					var setkey = function(key, value) {
+						me.fakegame.keyboardmanager.keymap[key] = value;
+					}
+					ok(this.p.movestate.hasOwnProperty('mining'), 'p.movestate.mining');
+					ok(this.p.movestate.hasOwnProperty('wantstojump'), 'p.movestate.wantstojump');
+					ok(this.p.movestate.hasOwnProperty('walking'), 'p.movestate.walking');
+					equals(this.p.movestate.mining, false, 'not mining');
+					setkey('shift', true);
+					this.ma.readkeyboard();
+					equals(this.p.movestate.mining, true, 'mining now');
+					equals(this.p.movestate.wantstojump, false, 'not wants to jump');
+					setkey('space', true);
+					this.ma.readkeyboard();
+					equals(this.p.movestate.wantstojump, true, 'wants to jump now');
+					equals(this.p.movestate.walking, 0, 'walking is set to STANDING');
+					setkey('space', false);
+					setkey('w', true);
+					this.ma.readkeyboard();
+					equals(this.p.movestate.walking, 3, 'walking is set to UP');
+					setkey('w', false);
+					setkey('a', true);
+					this.ma.readkeyboard();
+					equals(this.p.movestate.walking, -1, 'walking is set to LEFT');
+					setkey('a', false);
+					setkey('d', true);
+					this.ma.readkeyboard();
+					equals(this.p.movestate.walking, 1, 'walking is set to RIGHT');
+					setkey('a', false);
+					setkey('d', false);
+					this.ma.readkeyboard();
+					equals(this.p.movestate.walking, 0, 'walking is set to STANDING');
+					setkey('s', true);
+					this.ma.readkeyboard();
+					equals(this.p.movestate.walking, 2, 'walking is set to DOWN');
+				});
+				
+				test('mine', function() {
+					// set up the fake tilemap
+					this.fakegame.tilemap = {
+						get: function(x, y) {
+							this.gx = x;
+							this.gy = y;
+							return this.faketile;
+						},
+						faketile: {
+							damage: function() {
+								this.mined = true;
+							}
+						}
+					};
+					// we are mining to the left
+					this.p.movestate.mining = true;
+					this.p.movestate.walking = -1;
+					equals(this.p.x, 0, 'player is at x 0');
+					equals(this.p.y, 0, 'player is at y 0');
+					this.ma.mine();
+					equals(this.fakegame.tilemap.gx, -1, 'mining x -1');
+					equals(this.fakegame.tilemap.gy, 0, 'mining y 0');
+					ok(this.fakegame.tilemap.faketile.mined, 'was mined');
+					this.fakegame.tilemap.faketile.dug = false;
+				});
+				
+				test('walk', function() {
+					expect(7)
+					equals(this.p.vel.x, 0, 'vel.x === 0');
+					this.p.movestate.walking = -1;
+					this.ma.walk();
+					equals(this.p.vel.x, -2, 'vel.x === -2');
+					this.p.movestate.walking = 0;
+					this.ma.walk();
+					// this is due to the not walking anymore slowdown...
+					equals(this.p.vel.x, -1.8, 'vel.x === -1.8');
+					this.p.movestate.walking = 1;
+					this.ma.walk();
+					equals(this.p.vel.x, 2, 'vel.x === 2');
+					this.p.movestate.walking = 0;
+					this.p.movestate.wantstojump = true;
+					this.p.jump = function() {
+						ok(true, 'jump was called');
+					}
+					this.ma.walk();
+					// don't walk when placing
+					this.p.vel.x = 0;
+					this.p.movestate.placing = true;
+					this.p.movestate.walking = -1;
+					this.p.movestate.wantstojump = false;
+					this.ma.walk();
+					equals(this.p.vel.x, 0, 'vel.x === 0 when placing');
+					// if we were walking, we want to slow down the same way we were, though...
+					this.p.vel.x = -2;
+					this.ma.walk();
+					equals(this.p.vel.x, -1.8, 'still slowing down');
+				});
+				
+				test('place but not placing', function() {
+					this.p.movestate.placing = false;
+					var getselcalled = false;
+					this.p.inventory.getsel = function() {
+						getselcalled = true;
+					}
+					this.ma.place();
+					ok(!getselcalled, 'inventory.getsel not called');
+				});
+				
+				test('place with no direction', function() {
+					this.p.movestate.walking = 0;
+					this.p.movestate.placing = true;
+					var getselcalled = false;
+					this.p.inventory.getsel = function() {
+						getselcalled = true;
+					}
+					this.ma.place();
+					ok(!getselcalled, 'inventory.getsel was not called');
+				});
+				
+				test('place with no inventory', function() {
+					this.p.movestate.walking = -1;
+					this.p.movestate.placing = true;
+					var getselcalled = false;
+					this.p.inventory.getsel = function() {
+						getselcalled = true;
+						return null;
+					};
+					this.ma.place();
+					ok(getselcalled, 'dropselcalled but returns null');
+				});
+				
+				test('place with left direction and with inventory and unsuccessful place', function() {
+					expect(3)
+					this.p.movestate.walking = -1;
+					this.p.movestate.placing = true;
+					var fakeitem = {
+						place: function(x, y) {
+							equals(x, -32, 'place x');
+							equals(y, 0, 'place y');
+							return false;
+						}
+					}
+					this.p.inventory.getsel = function() {
+						ok(true, 'inventory getsel called');
+						return fakeitem;
+					};
+					this.p.inventory.dropsel = function() {
+						ok(true, 'inventory dropsel called');
+					}
+					this.ma.place();
+				});
+				
+				test('place with left direction and with inventory and successful place', function() {
+					expect(4)
+					this.p.movestate.walking = -1;
+					this.p.movestate.placing = true;
+					var fakeitem = {
+						place: function(x, y) {
+							equals(x, -32, 'place x');
+							equals(y, 0, 'place y');
+							return true;
+						}
+					}
+					this.p.inventory.getsel = function() {
+						ok(true, 'inventory getsel called');
+						return fakeitem;
+					};
+					this.p.inventory.dropsel = function() {
+						ok(true, 'inventory dropsel called');
+					}
+					this.ma.place();
 				});
 
 				module('player', {
@@ -197,196 +392,7 @@
 				});
 				
 				test('tick', function() {
-					expect(5);
-					ok(typeof(this.p.tick) === 'function', 'tick exists');
-					this.p.readkeyboard = function() {
-						ok(true, 'readkeyboard');
-					};
-					this.p.mine = function() {
-						ok(true, 'mine');
-					}
-					this.p.walk = function() {
-						ok(true, 'walk');
-					}
-					this.p.place = function() {
-						ok(true, 'place');
-					}
-					this.p.tick();
-				});
-				
-				test('readkeyboard', function() {
-					var me = this;
-					var setkey = function(key, value) {
-						me.fakegame.keyboardmanager.keymap[key] = value;
-					}
-					ok(typeof(this.p.readkeyboard) === 'function', 'readkeyboard exists');
-					ok(this.p.movestate.hasOwnProperty('mining'), 'p.movestate.mining');
-					ok(this.p.movestate.hasOwnProperty('wantstojump'), 'p.movestate.wantstojump');
-					ok(this.p.movestate.hasOwnProperty('walking'), 'p.movestate.walking');
-					equals(this.p.movestate.mining, false, 'not mining');
-					setkey('shift', true);
-					this.p.readkeyboard();
-					equals(this.p.movestate.mining, true, 'mining now');
-					equals(this.p.movestate.wantstojump, false, 'not wants to jump');
-					setkey('space', true);
-					this.p.readkeyboard();
-					equals(this.p.movestate.wantstojump, true, 'wants to jump now');
-					equals(this.p.movestate.walking, 0, 'walking is set to STANDING');
-					setkey('space', false);
-					setkey('w', true);
-					this.p.readkeyboard();
-					equals(this.p.movestate.walking, 3, 'walking is set to UP');
-					setkey('w', false);
-					setkey('a', true);
-					this.p.readkeyboard();
-					equals(this.p.movestate.walking, -1, 'walking is set to LEFT');
-					setkey('a', false);
-					setkey('d', true);
-					this.p.readkeyboard();
-					equals(this.p.movestate.walking, 1, 'walking is set to RIGHT');
-					setkey('a', false);
-					setkey('d', false);
-					this.p.readkeyboard();
-					equals(this.p.movestate.walking, 0, 'walking is set to STANDING');
-					setkey('s', true);
-					this.p.readkeyboard();
-					equals(this.p.movestate.walking, 2, 'walking is set to DOWN');
-				});
-				
-				test('mine', function() {
-					ok(typeof(this.p.mine) === 'function', 'mine exists');
-					// set up the fake tilemap
-					this.fakegame.tilemap = {
-						get: function(x, y) {
-							this.gx = x;
-							this.gy = y;
-							return this.faketile;
-						},
-						faketile: {
-							damage: function() {
-								this.mined = true;
-							}
-						}
-					};
-					// we are mining to the left
-					this.p.movestate.mining = true;
-					this.p.movestate.walking = -1;
-					equals(this.p.x, 0, 'player is at x 0');
-					equals(this.p.y, 0, 'player is at y 0');
-					this.p.mine();
-					equals(this.fakegame.tilemap.gx, -1, 'mining x -1');
-					equals(this.fakegame.tilemap.gy, 0, 'mining y 0');
-					ok(this.fakegame.tilemap.faketile.mined, 'was mined');
-					this.fakegame.tilemap.faketile.dug = false;
-				});
-				
-				test('walk', function() {
-					expect(8)
-					ok(typeof(this.p.walk) === 'function', 'walk exists');
-					equals(this.p.vel.x, 0, 'vel.x === 0');
-					this.p.movestate.walking = -1;
-					this.p.walk();
-					equals(this.p.vel.x, -2, 'vel.x === -2');
-					this.p.movestate.walking = 0;
-					this.p.walk();
-					// this is due to the not walking anymore slowdown...
-					equals(this.p.vel.x, -1.8, 'vel.x === -1.8');
-					this.p.movestate.walking = 1;
-					this.p.walk();
-					equals(this.p.vel.x, 2, 'vel.x === 2');
-					this.p.movestate.walking = 0;
-					this.p.movestate.wantstojump = true;
-					this.p.jump = function() {
-						ok(true, 'jump was called');
-					}
-					this.p.walk();
-					// don't walk when placing
-					this.p.vel.x = 0;
-					this.p.movestate.placing = true;
-					this.p.movestate.walking = -1;
-					this.p.movestate.wantstojump = false;
-					this.p.walk();
-					equals(this.p.vel.x, 0, 'vel.x === 0 when placing');
-					// if we were walking, we want to slow down the same way we were, though...
-					this.p.vel.x = -2;
-					this.p.walk();
-					equals(this.p.vel.x, -1.8, 'still slowing down');
-				});
-				
-				test('place but not placing', function() {
-					equals(typeof this.p.place, 'function', 'place exists');
-					this.p.movestate.placing = false;
-					var getselcalled = false;
-					this.p.inventory.getsel = function() {
-						getselcalled = true;
-					}
-					this.p.place();
-					ok(!getselcalled, 'inventory.getsel not called');
-				});
-				
-				test('place with no direction', function() {
-					this.p.movestate.walking = 0;
-					this.p.movestate.placing = true;
-					var getselcalled = false;
-					this.p.inventory.getsel = function() {
-						getselcalled = true;
-					}
-					this.p.place();
-					ok(!getselcalled, 'inventory.getsel was not called');
-				});
-				
-				test('place with no inventory', function() {
-					this.p.movestate.walking = -1;
-					this.p.movestate.placing = true;
-					var getselcalled = false;
-					this.p.inventory.getsel = function() {
-						getselcalled = true;
-						return null;
-					};
-					this.p.place();
-					ok(getselcalled, 'dropselcalled but returns null');
-				});
-				
-				test('place with left direction and with inventory and unsuccessful place', function() {
-					expect(3)
-					this.p.movestate.walking = -1;
-					this.p.movestate.placing = true;
-					var fakeitem = {
-						place: function(x, y) {
-							equals(x, -32, 'place x');
-							equals(y, 0, 'place y');
-							return false;
-						}
-					}
-					this.p.inventory.getsel = function() {
-						ok(true, 'inventory getsel called');
-						return fakeitem;
-					};
-					this.p.inventory.dropsel = function() {
-						ok(true, 'inventory dropsel called');
-					}
-					this.p.place();
-				});
-				
-				test('place with left direction and with inventory and successful place', function() {
-					expect(4)
-					this.p.movestate.walking = -1;
-					this.p.movestate.placing = true;
-					var fakeitem = {
-						place: function(x, y) {
-							equals(x, -32, 'place x');
-							equals(y, 0, 'place y');
-							return true;
-						}
-					}
-					this.p.inventory.getsel = function() {
-						ok(true, 'inventory getsel called');
-						return fakeitem;
-					};
-					this.p.inventory.dropsel = function() {
-						ok(true, 'inventory dropsel called');
-					}
-					this.p.place();
+					equals(typeof this.p.tick, 'function', 'tick exists');
 				});
 				
 				test('damage', function() {

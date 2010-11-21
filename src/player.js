@@ -192,8 +192,8 @@
       // * game - the game where this is taking place
       env.moveaction = function(args) {
         var player = args.player,
+          game = args.game,
           keyman = args.game.keyboardmanager,
-          tilemap = args.game.tilemap,
           that = action();
         that.readkeyboard = function() {
           if (keyman.keymap['shift']) {
@@ -260,7 +260,7 @@
     				// convert player's current walking direction to tile
     				var tilepos = tileposindirection();
     				// is it a diggable tile?
-    				var digtile = tilemap.get(tilepos.x, tilepos.y);
+    				var digtile = game.tilemap.get(tilepos.x, tilepos.y);
     				if (digtile && typeof digtile.damage === 'function') {
     				  digtile.damage(player.minedamage);
     				}
