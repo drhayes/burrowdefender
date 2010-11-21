@@ -156,6 +156,8 @@
 				
 				test('ctor', function() {
 					ok(this.ma, 'ctor brings something back');
+					equals(typeof this.ma.tick, 'function', 'tick exists');
+					equals(typeof this.ma.draw, 'function', 'draw exists');
 				});
 
 				module('player', {

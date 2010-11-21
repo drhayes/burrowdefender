@@ -191,7 +191,26 @@
       // * player - the player whose action this is
       // * keyboardmanager - the keyboardmanager to read commands from
       env.moveaction = function(args) {
-        var that = action();
+        var player = args.player,
+          keyman = args.keyboardmanager,
+          that = action();
+        that.tick = function() {};
+        that.draw = function(drawthing) {
+          drawthing.sprite1.push(function(ctx) {
+            if (player.movestate.standing === false) {
+              falling.draw(ctx, player.x, player.y);
+            }
+            else if (player.movestate.walking === walking.LEFT) {
+              runningleft.draw(ctx, player.x, player.y);
+            }
+            else if (player.movestate.walking === walking.RIGHT) {
+              runningright.draw(ctx, player.x, player.y);
+            }
+            else {
+              standing.draw(ctx, player.x, player.y);
+            }
+          });
+        };
         return that;
       }; // moveaction
       
@@ -226,26 +245,16 @@
         // player is actionable
         actionable(that);
         // add default moveaction
-        var moveaction = env.moveaction(that, args.game.keyboardmanager);
+        var moveaction = env.moveaction({
+          player: that,
+          keyboardmanager: args.game.keyboardmanager
+        });
         that.addaction(moveaction);
 
         that.inventory = env.inventory();
 
         that.draw = function(drawthing) {
-          drawthing.sprite1.push(function(ctx) {
-            if (that.movestate.standing === false) {
-              falling.draw(ctx, that.x, that.y);
-            }
-            else if (that.movestate.walking === walking.LEFT) {
-              runningleft.draw(ctx, that.x, that.y);
-            }
-            else if (that.movestate.walking === walking.RIGHT) {
-              runningright.draw(ctx, that.x, that.y);
-            }
-            else {
-              standing.draw(ctx, that.x, that.y);
-            }
-          });
+          that.executeactions('draw', drawthing);
           drawthing.hud.push(function(ctx) {
             var startx = 10;
             var starty = 10;
