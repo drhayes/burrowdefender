@@ -89,6 +89,10 @@
         that.y2 = CANVAS_HEIGHT - PADDING;
         that.things = {};
         that.sel = 1;
+        
+        var getthingbytype = function(type) {
+          return that.things[typemap[type]];
+        }
 
         that.add = function(thing) {
           // make sure thing has a type attribute
@@ -121,6 +125,27 @@
           };
           that.things[index].count += 1;
         };
+        
+        that.remove = function(type, count) {
+          count = count || 1;
+          if (!typemap.hasOwnProperty(type)) {
+            throw {
+              message: 'Nothing of that type in inventory!'
+            };
+          }
+          var thing = getthingbytype(type);
+          if (thing.count < count) {
+            throw {
+              message: 'Tried to remove too much!'
+            }
+          };
+          thing.count -= count;
+          if (thing.count === 0) {
+            // if we're out at that slot, remove the counter object...
+            delete that.things[typemap[type]];
+            delete typemap[type];
+          }
+        }
 
         that.getsel = function() {
           var t = that.things[that.sel];
@@ -201,8 +226,7 @@
             return false;
           }
           // do we have the required count?
-          var index = typemap[type];
-          return that.things[typemap[type]].count >= count;
+          return getthingbytype(type).count >= count;
         }; // hasitem
 
         return that;

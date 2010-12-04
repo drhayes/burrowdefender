@@ -183,6 +183,43 @@
 					ok(this.inv.hasitem(THING2.type, 3), 'has 3 THING2s');
 				});
 				
+				test('remove throws when nothing of that type in inventory', function() {
+					equals(typeof this.inv.remove, 'function', 'remove exists');
+					var me = this;
+					raises(function() {
+						me.inv.remove(THING1.type);
+					}, 'should raise with no THING1s');
+				});
+				
+				test('remove decrements item', function() {
+					this.inv.add(THING1);
+					this.inv.add(THING1);
+					this.inv.remove(THING1.type);
+					equals(this.inv.things['1'].count, 1, 'has one THING1');
+				});
+				
+				test('removing last thing sets things map correctly', function() {
+					this.inv.add(THING1);
+					this.inv.remove(THING1.type);
+					equals(this.inv.things['1'], undefined, 'slot 1 has been deleted');
+				});
+				
+				test('remove specific count', function() {
+					this.inv.add(THING1);
+					this.inv.add(THING1);
+					this.inv.add(THING1);
+					this.inv.remove(THING1.type, 2);
+					equals(this.inv.things['1'].count, 1, 'removed two THING1s');
+				});
+				
+				test('trying to remove too much throws', function() {
+					this.inv.add(THING1);
+					var me = this;
+					raises(function() {
+						me.inv.remove(THING1.type, 2);
+					}, 'tried to remove too much');
+				});
+				
 				module('moveaction', {
 					setup: function() {
 						var me = this;
