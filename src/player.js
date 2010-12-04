@@ -104,7 +104,8 @@
           }
           // find the index for this thing
           var index = 1;
-          var key = thing.type;
+          // I pray the following doesn't bite me in the ass later...
+          var key = JSON.stringify(thing.type);
           if (typemap.hasOwnProperty(key)) {
             index = typemap[key];
           }
