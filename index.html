@@ -43,6 +43,25 @@
 			margin-right: auto;
 			display: block;
 		}
+		
+		#surroundcanvas {
+			padding: 0;
+			position: relative;
+			width: 600px;
+			height: 500px;
+		}
+		
+		.gameui {
+			font: impact, arial, sans-serif;
+			color: #fff;
+			background-color:#000;
+		}
+		
+		#craftbutton {
+			position: absolute;
+			right: 5px;
+			top: 5px;
+		}
 	</style>
 </head>
 <body>
@@ -60,7 +79,9 @@
 		<button id="addgunpickup">Add Sentry Gun Pickup</button>
 		<p id="debug"></p>
 	</div>
-	<canvas id="drawme" width="600" height="500"></canvas>
+	<div id="surroundcanvas">
+		<canvas id="drawme" width="600" height="500"></canvas>
+	</div>
 	<script type="text/javascript">
 		var g = game('#drawme');
 		$(document).ready(function() {

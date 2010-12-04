@@ -50,6 +50,7 @@
       that.addthings = [];
       that.mousemanager = env.mousemanager({game: that});
       that.mininginterface = env.mininginterface({game: that});
+      that.craftinginterface = env.craftinginterface({game: that});
 
       // temporary tile generation
   		that.tilegenerator.generate(31 * env.tilesize, 0);

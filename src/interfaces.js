@@ -94,6 +94,19 @@
 
         return that;
       }; // mininginterface
+      
+      env.craftinginterface = function(args) {
+        var that = {};
+        
+        // add a Craft button to the game interface
+        $('<button class="gameui" id="craftbutton">Craft</button>')
+          .click(function() {
+            alert('click!')
+          })
+          .insertAfter(args.game.canvas);
+        
+        return that;
+      }; // craftinginterface
     };
     
   })
