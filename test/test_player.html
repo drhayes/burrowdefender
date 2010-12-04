@@ -166,6 +166,14 @@
 					});
 				});
 				
+				test('hasitem', function() {
+					equals(typeof this.inv.hasitem, 'function', 'hasitem exists');
+					ok(!this.inv.hasitem(THING1.type), 'has 0 THING1s');
+					this.inv.add(THING1);
+					ok(this.inv.hasitem(THING1.type), 'has 1 THING');
+					ok(!this.inv.hasitem(THING1.type, 2), 'does not have 2 THING1s');
+				});
+				
 				module('moveaction', {
 					setup: function() {
 						var me = this;

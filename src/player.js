@@ -174,7 +174,7 @@
               }
             }
           });
-        };
+        }; // draw
 
         // for the ith item, return a rectangle of the space it occupies when
         // drawing it. items are currently 16x16 so this should be bigger...
@@ -192,7 +192,16 @@
           rect.width = rect.x2 - rect.x1;
           rect.height = rect.y2 - rect.y1;
           return rect;
-        };
+        }; // itemrect
+        
+        that.hasitem = function(type, count) {
+          count = count || 1;
+          // do we even have one of those?
+          if (!typemap.hasOwnProperty(type)) {
+            return false;
+          }
+          return true;
+        }; // hasitem
 
         return that;
       }; // inventory
