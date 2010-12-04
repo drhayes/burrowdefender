@@ -80,7 +80,7 @@
       // maintains a 1-based map of things the player is carrying. this maps neatly
       // to the scheme of getting the player to press number keys to specify
       // a particular spot in the player's inventory.
-      env.inventory = function(options) {
+      env.inventory = function() {
         var that = {},
           typemap = {};
         that.x1 = PADDING;
