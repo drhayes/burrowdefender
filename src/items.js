@@ -169,7 +169,20 @@
       //   * count - the count of that item type necessary to complete this
       //     this recipe
       env.recipe = function(ingredients) {
+        var that = {};
         
+        // given an inventory, can this recipe be crafted?
+        that.cancraft = function(inv) {
+          for (var i = ingredients.length, ing; i !== 0; i--) {
+            ing = ingredients[i - 1]
+            if (!inv.hasitem(ing.type, ing.count)) {
+              return false;
+            }
+          }
+          return true;
+        };
+        
+        return that;
       }
     }; // items module
     

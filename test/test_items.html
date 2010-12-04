@@ -7,6 +7,7 @@
 		<script type="text/javascript" src="../src/base.js"></script>
 		<script type="text/javascript" src="../src/system.js"></script>
 		<script type="text/javascript" src="../src/assets.js"></script>
+		<script type="text/javascript" src="../src/graphics.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
 		<script type="text/javascript" src="../src/actions.js"></script>
 		<script type="text/javascript" src="../src/tileutils.js"></script>
@@ -16,6 +17,7 @@
 		<script type="text/javascript" src="../src/tiles.js"></script>
 		<script type="text/javascript" src="../src/defenses.js"></script>
 		<script type="text/javascript" src="../src/items.js"></script>
+		<script type="text/javascript" src="../src/player.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
@@ -196,6 +198,33 @@
 				test('ctor', function() {
 					loki.define('items', function(env) {
 						equals(typeof env.recipe, 'function', 'recipe exists');
+					});
+				});
+				
+				var THING1 = {
+					type: -1
+				};
+				var THING2 = {
+					type: -2
+				};
+				var THING3 = {
+					type: -3
+				};
+				
+				test('cancraft', function() {
+					loki.define('items', 'player', function(env) {
+						var inv = env.inventory();
+						var rec = env.recipe([
+								{type: THING1.type, count: 5}
+							]);
+						equals(typeof rec.cancraft, 'function', 'cancraft exists');
+						ok(!rec.cancraft(inv), 'cannot craft with this inventory');
+						inv.add(THING1);
+						inv.add(THING1);
+						inv.add(THING1);
+						inv.add(THING1);
+						inv.add(THING1);
+						ok(rec.cancraft(inv), 'can craft now that it has 5 THING1s');
 					});
 				});
 			});
