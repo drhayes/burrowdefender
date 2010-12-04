@@ -215,8 +215,8 @@
 					loki.define('items', 'player', function(env) {
 						var inv = env.inventory();
 						var rec = env.recipe([
-								{type: THING1.type, count: 5}
-							]);
+							{type: THING1.type, count: 5}
+						]);
 						equals(typeof rec.cancraft, 'function', 'cancraft exists');
 						ok(!rec.cancraft(inv), 'cannot craft with this inventory');
 						inv.add(THING1);
@@ -225,6 +225,39 @@
 						inv.add(THING1);
 						inv.add(THING1);
 						ok(rec.cancraft(inv), 'can craft now that it has 5 THING1s');
+					});
+				});
+				
+				test('craft', function() {
+					var me = this;
+					loki.define('items', 'player', function(env) {
+						var inv = env.inventory();
+						var itemtocraft;
+						var rec = env.recipe([
+							{type: THING1.type, count: 3},
+							{type: THING2.type, count: 1}
+						], function() {
+							itemtocraft = env.dirtitem({game: me.fakegame});
+							return itemtocraft;
+						});
+						equals(typeof rec.craft, 'function', 'craft exists');
+						raises(function() {
+							rec.craft(inv);
+						}, 'cannot craft it yet');
+						// add more than we need... makes the later count check easier
+						inv.add(THING1);
+						inv.add(THING1);
+						inv.add(THING1);
+						inv.add(THING1);
+						inv.add(THING2);
+						inv.add(THING2);
+						var thing = rec.craft(inv);
+						ok(thing, 'got a thing back');
+						ok(itemtocraft, 'itemtocraft has been set');
+						same(thing, itemtocraft, 'it is the thing we expected');
+						// check that recipe removed from inventory...
+						equals(inv.things['1'].count, 1, 'one THING1 left');
+						equals(inv.things['2'].count, 1, 'one THING2 left');
 					});
 				});
 			});
