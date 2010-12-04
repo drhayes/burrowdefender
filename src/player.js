@@ -81,7 +81,8 @@
       // to the scheme of getting the player to press number keys to specify
       // a particular spot in the player's inventory.
       env.inventory = function(options) {
-        var that = {};
+        var that = {},
+          typemap = {};
         that.x1 = PADDING;
         that.y1 = CANVAS_HEIGHT - PADDING - HEIGHT;
         that.x2 = PADDING + WIDTH;
@@ -90,13 +91,24 @@
         that.sel = 1;
 
         that.add = function(thing) {
+          // make sure thing has a type attribute
+          if (!thing.hasOwnProperty('type')) {
+            throw {
+              message: "Item must have type attribute"
+            };
+          }
           // find the index for this thing
           var index = 1;
           var key = thing.type || thing.toString();
-          for (var i = 1; i <= MAXITEMS; i++) {
-            if (!that.things.hasOwnProperty(i) || that.things[i].key === key) {
-              index = i;
-              break;
+          if (typemap.hasOwnProperty(key)) {
+            index = typemap[key];
+          }
+          else {
+            for (var i = 1; i <= MAXITEMS; i++) {
+              if (!that.things.hasOwnProperty(i) || that.things[i].key === key) {
+                index = i;
+                break;
+              }
             }
           }
           if (!that.things.hasOwnProperty(index)) {
@@ -105,6 +117,7 @@
               instance: thing,
               count: 0
             };
+            typemap[key] = index;
           };
           that.things[index].count += 1;
         };
@@ -126,6 +139,7 @@
           if (t.count === 0) {
             // if we're out at that slot, remove the counter object...
             delete that.things[that.sel];
+            delete typemap[t.key];
           }
           return t.instance;
         }

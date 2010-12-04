@@ -30,9 +30,15 @@
 					}
 				});
 				
-				var THING1 = 1;
-				var THING2 = 2;
-				var THING3 = 3;
+				var THING1 = {
+					type: -1
+				};
+				var THING2 = {
+					type: -2
+				};
+				var THING3 = {
+					type: -3
+				};
 				
 				test('add one type of thing', function() {
 					this.inv.add(THING1);
@@ -140,6 +146,24 @@
 						is = me.inv.things[2];
 						equals(is.count, 1, 'one sentry gun picked up');
 					})
+				});
+				
+				test('add one, add another, run out of first, add second', function() {
+					var me = this;
+					loki.define('items', function(env) {
+						var i1 = env.dirtitem({game: me.fakegame});
+						var i2 = env.sentrygunitem({game: me.fakegame});
+						var i3 = env.sentrygunitem({game: me.fakegame});
+						me.inv.add(i1);
+						me.inv.add(i2);
+						me.inv.sel = 1;
+						me.inv.dropsel();
+						me.inv.add(i3);
+						equals(me.inv.things['1'], undefined, 'should not be anything in slot 1');
+						equals(me.inv.things['2'].count, 2, 'two things in slot 2');
+						me.inv.add(i1);
+						equals(me.inv.things['1'].count, 1, 'one thing in slot 1');
+					});
 				});
 				
 				module('moveaction', {
