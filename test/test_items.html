@@ -8,6 +8,7 @@
 		<script type="text/javascript" src="../src/system.js"></script>
 		<script type="text/javascript" src="../src/assets.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
+		<script type="text/javascript" src="../src/actions.js"></script>
 		<script type="text/javascript" src="../src/tileutils.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
 		<script type="text/javascript" src="../src/components.js"></script>
@@ -61,11 +62,7 @@
 				});
 				
 				test('drawImage', function() {
-					this.di.drawimage(this.fakectx);
-					equals(this.fakectx.drawImageArgs.length, 1, 'drawImage called');
-					var args = this.fakectx.drawImageArgs[0];
-					equals(args.drx, 0, 'drawImage x');
-					equals(args.dry, 0, 'drawImage y');
+					equals(typeof this.di.drawimage, 'function', 'drawimage exists');
 				});
 				
 				test('place with no tile in the way', function() {
@@ -187,6 +184,18 @@
 						// collide again to prove it can't actually happen
 						me.p.collide(player);
 						equals(player.inventory.is.length, 1, 'length of items');
+					})
+				});
+				
+				module('recipe', {
+					setup: function() {
+						this.fakegame = new FakeGame();
+					}
+				});
+				
+				test('ctor', function() {
+					loki.define('items', function(env) {
+						equals(typeof env.recipe, 'function', 'recipe exists');
 					})
 				});
 			});

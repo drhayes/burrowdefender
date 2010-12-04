@@ -159,9 +159,20 @@
           // add to the game
           game.add(pickup);
         });
-      };
-    };
+      }; // subscribeitemevents
+      
+      // A transformation that takes ingredients and produces other items.
+      // Args:
+      // * ingredients - a list of objects specifying what is necessary to
+      //   make this recipe:
+      //   * type - an item type
+      //   * count - the count of that item type necessary to complete this
+      //     this recipe
+      env.recipe = function(ingredients) {
+        
+      }
+    }; // items module
     
-  });
+  }); // loki.define
   
 }(this, jQuery))
