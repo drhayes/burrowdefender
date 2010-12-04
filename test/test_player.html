@@ -172,6 +172,15 @@
 					this.inv.add(THING1);
 					ok(this.inv.hasitem(THING1.type), 'has 1 THING');
 					ok(!this.inv.hasitem(THING1.type, 2), 'does not have 2 THING1s');
+					this.inv.add(THING1);
+					ok(this.inv.hasitem(THING1.type, 2), 'has 2 THING1s');
+					ok(!this.inv.hasitem(THING2.type, 3), 'does not have 3 THING2s');
+					this.inv.add(THING2);
+					ok(!this.inv.hasitem(THING2.type, 3), 'does not have 3 THING2s');
+					this.inv.add(THING2);
+					ok(!this.inv.hasitem(THING2.type, 3), 'does not have 3 THING2s');
+					this.inv.add(THING2);
+					ok(this.inv.hasitem(THING2.type, 3), 'has 3 THING2s');
 				});
 				
 				module('moveaction', {

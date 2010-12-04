@@ -200,7 +200,9 @@
           if (!typemap.hasOwnProperty(type)) {
             return false;
           }
-          return true;
+          // do we have the required count?
+          var index = typemap[type];
+          return that.things[typemap[type]].count >= count;
         }; // hasitem
 
         return that;
