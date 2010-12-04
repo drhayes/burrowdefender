@@ -94,6 +94,7 @@
           return that.things[typemap[type]];
         }
 
+        // TODO: does not handle a full inventory yet
         that.add = function(thing) {
           // make sure thing has a type attribute
           if (!thing.hasOwnProperty('type')) {
@@ -103,11 +104,12 @@
           }
           // find the index for this thing
           var index = 1;
-          var key = thing.type || thing.toString();
+          var key = thing.type;
           if (typemap.hasOwnProperty(key)) {
             index = typemap[key];
           }
           else {
+            // find an open slot
             for (var i = 1; i <= MAXITEMS; i++) {
               if (!that.things.hasOwnProperty(i) || that.things[i].key === key) {
                 index = i;
@@ -160,12 +162,7 @@
           if (typeof t === 'undefined') {
             return null;
           };
-          t.count--;
-          if (t.count === 0) {
-            // if we're out at that slot, remove the counter object...
-            delete that.things[that.sel];
-            delete typemap[t.key];
-          }
+          that.remove(t.key);
           return t.instance;
         }
 
