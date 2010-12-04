@@ -25,8 +25,8 @@
 				test('types', function() {
 					loki.define('items', function(env) {
 						equals(typeof env.itemtypes, 'object', 'item.types');
-						equals(env.itemtypes.DIRT, '1', 'the type of dirt');
-						equals(env.itemtypes.SENTRYGUN, '2', 'the type of sentry guns');
+						ok(env.itemtypes.hasOwnProperty('DIRT'), 'the type of dirt');
+						ok(env.itemtypes.hasOwnProperty('SENTRYGUN'), 'the type of sentry guns');
 					})
 				});
 				
@@ -182,7 +182,7 @@
 						// check that the item is added to the inventory
 						equals(player.inventory.is.length, 1, 'length of items');
 						var i = player.inventory.is[0];
-						equals(i.type, env.itemtypes.DIRT, 'item type is DIRT');
+						equals(i.type.key, env.itemtypes.DIRT.key, 'item type is DIRT');
 						// collide again to prove it can't actually happen
 						me.p.collide(player);
 						equals(player.inventory.is.length, 1, 'length of items');

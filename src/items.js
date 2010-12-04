@@ -22,7 +22,9 @@
         var that = {};
         that.type = args.type;
 
-        that.drawimage = function(ctx) {};
+        that.drawimage = function(ctx) {
+          imagemanager.draw(ctx, that.type.imagename, 0, 0);
+        };
 
         // called when this item is placed back in the world... x,y is given
         // in world coordinates
@@ -32,8 +34,14 @@
       };
 
       env.itemtypes = {
-        DIRT: '1',
-        SENTRYGUN: '2'
+        DIRT: {
+          key: 0,
+          imagename: 'dirtitem'
+        },
+        SENTRYGUN: {
+          key: 1,
+          imagename: 'sentrygunitem'
+        }
       }; // item
 
       // given a tile position, return a boolean indicating whether we can place
@@ -47,10 +55,6 @@
         var that = item({
           type: env.itemtypes.DIRT
         });
-
-        that.drawimage = function(ctx) {
-          imagemanager.draw(ctx, 'dirtitem', 0, 0);
-        };
 
         // x,y given in world coordinates. returns true if something was placed.
         that.place = function(x, y) {
@@ -75,10 +79,6 @@
         var that = item({
           type: env.itemtypes.SENTRYGUN
         });
-
-        that.drawimage = function(ctx) {
-          imagemanager.draw(ctx, 'sentrygunitem', 0, 0);
-        }
 
         that.place = function(x, y) {
           var tilepos = totilepos(x, y);
