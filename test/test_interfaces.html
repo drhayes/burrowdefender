@@ -256,6 +256,11 @@
 					equals(craftscreen.get().length, 1, 'craft screen exists');
 					equals(craftscreen.css('display'), 'none', 'hidden by default');
 				});
+				
+				test('docraft shows the craft screen', function() {
+					this.ci.docraft();
+					equals($('#craftscreen').css('display'), 'block', 'screen is showing now');
+				});
 			});
 		</script>
 	</head>

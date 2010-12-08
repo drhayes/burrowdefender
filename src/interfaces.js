@@ -98,7 +98,9 @@
       env.craftinginterface = function(args) {
         var that = {};
         
-        that.docraft = function() {};
+        that.docraft = function() {
+          $('#craftscreen').toggle();
+        };
         
         // add a Craft button to the game interface
         $('<button class="gameui" id="craftbutton">Craft</button>')
@@ -106,8 +108,11 @@
             that.docraft();
           })
           .insertAfter(args.game.canvas);
-          
-        $('<table id="craftscreen"></table>')
+        
+        // add a craft screen
+        // craft screen is a table with three columns: ingredients, result,
+        // and a craft button
+        $('<div id="craftscreen"><table><thead><tr><td>Ingredients</td><td>Result</td><td></td></tr></thead><tbody></tbody></table></div>')
           .hide()
           .insertAfter(args.game.canvas);
         
