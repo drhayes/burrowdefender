@@ -250,6 +250,12 @@
 					};
 					craftbutton.click();
 				});
+				
+				test('creates hidden craft screen on instantiation', function() {
+					var craftscreen = $('#craftscreen');
+					equals(craftscreen.get().length, 1, 'craft screen exists');
+					equals(craftscreen.css('display'), 'none', 'hidden by default');
+				});
 			});
 		</script>
 	</head>

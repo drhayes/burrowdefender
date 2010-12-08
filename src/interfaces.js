@@ -106,6 +106,10 @@
             that.docraft();
           })
           .insertAfter(args.game.canvas);
+          
+        $('<table id="craftscreen"></table>')
+          .hide()
+          .insertAfter(args.game.canvas);
         
         return that;
       }; // craftinginterface
