@@ -249,6 +249,7 @@
 						var ci = env.craftinginterface({game: me.fakegame});
 						ok(ci, 'got something back');
 						equals(typeof ci.docraft, 'function', 'docraft exists');
+						equals(typeof ci.makerow, 'function', 'makerow exists');
 					})
 				});
 				
@@ -282,6 +283,16 @@
 						var ci = env.craftinginterface({game: me.fakegame});
 						ci.docraft();
 						equals($('#craftscreen').css('display'), 'block', 'screen is showing now');
+					})
+				});
+				
+				test('makerow for a recipe', function() {
+					var me = this;
+					loki.define('interfaces', 'items', function(env) {
+						var recipe = env.recipe([
+							{type: env.itemtypes.DIRT, count: 5}
+						]);
+						var ci = env.craftinginterface({game: me.fakegame});
 					})
 				});
 				
