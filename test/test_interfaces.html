@@ -225,10 +225,6 @@
 						// make a fake canvas place for testing additions
 						this.fakecanvas = $('<div></div>').appendTo('#testcanvas')
 						this.fakegame.canvas = $(this.fakecanvas);
-						var me = this;
-						loki.define('interfaces', function(env) {
-							me.ci = env.craftinginterface({game: me.fakegame});
-						});
 					},
 					teardown: function() {
 						// clear our test canvas
@@ -237,29 +233,45 @@
 				});
 				
 				test('ctor', function() {
-					ok(this.ci, 'got something back');
-					equals(typeof this.ci.docraft, 'function', 'docraft exists');
+					var me = this;
+					loki.define('interfaces', function(env) {
+						var ci = env.craftinginterface({game: me.fakegame});
+						ok(ci, 'got something back');
+						equals(typeof ci.docraft, 'function', 'docraft exists');
+					})
 				});
 				
 				test('adds Craft button on instantiation that calls docraft', function() {
 					expect(2);
-					var craftbutton = $('#craftbutton');
-					equals(craftbutton.get().length, 1, 'craft button exists');
-					this.ci.docraft = function() {
-						ok(true, 'docraft called');
-					};
-					craftbutton.click();
+					var me = this;
+					loki.define('interfaces', function(env) {
+						var ci = env.craftinginterface({game: me.fakegame});
+						var craftbutton = $('#craftbutton');
+						equals(craftbutton.get().length, 1, 'craft button exists');
+						ci.docraft = function() {
+							ok(true, 'docraft called');
+						};
+						craftbutton.click();
+					});
 				});
 				
 				test('creates hidden craft screen on instantiation', function() {
-					var craftscreen = $('#craftscreen');
-					equals(craftscreen.get().length, 1, 'craft screen exists');
-					equals(craftscreen.css('display'), 'none', 'hidden by default');
+					var me = this;
+					loki.define('interfaces', function(env) {
+						var ci = env.craftinginterface({game: me.fakegame});
+						var craftscreen = $('#craftscreen');
+						equals(craftscreen.get().length, 1, 'craft screen exists');
+						equals(craftscreen.css('display'), 'none', 'hidden by default');
+					})
 				});
 				
 				test('docraft shows the craft screen', function() {
-					this.ci.docraft();
-					equals($('#craftscreen').css('display'), 'block', 'screen is showing now');
+					var me = this;
+					loki.define('interfaces', function(env) {
+						var ci = env.craftinginterface({game: me.fakegame});
+						ci.docraft();
+						equals($('#craftscreen').css('display'), 'block', 'screen is showing now');
+					})
 				});
 			});
 		</script>
