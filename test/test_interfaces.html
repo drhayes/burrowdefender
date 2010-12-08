@@ -222,15 +222,33 @@
 				module('craftinginterface', {
 					setup: function() {
 						this.fakegame = new FakeGame();
+						// make a fake canvas place for testing additions
+						this.fakecanvas = $('<div></div>').appendTo('#testcanvas')
+						this.fakegame.canvas = $(this.fakecanvas);
 						var me = this;
 						loki.define('interfaces', function(env) {
 							me.ci = env.craftinginterface({game: me.fakegame});
 						});
+					},
+					teardown: function() {
+						// clear our test canvas
+						$('#testcanvas').html('');
 					}
 				});
 				
 				test('ctor', function() {
 					ok(this.ci, 'got something back');
+					equals(typeof this.ci.docraft, 'function', 'docraft exists');
+				});
+				
+				test('adds Craft button on instantiation that calls docraft', function() {
+					expect(2);
+					var craftbutton = $('#craftbutton');
+					equals(craftbutton.get().length, 1, 'craft button exists');
+					this.ci.docraft = function() {
+						ok(true, 'docraft called');
+					};
+					craftbutton.click();
 				});
 			});
 		</script>
@@ -241,5 +259,6 @@
 		<h2 id="qunit-userAgent"></h2>
 		<ol id="qunit-tests"></ol>
 		<div id="qunit-fixture">test markup, will be hidden</div>
+		<div id="testcanvas"></div>
 	</body>
 </html>

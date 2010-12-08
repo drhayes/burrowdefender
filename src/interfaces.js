@@ -98,10 +98,12 @@
       env.craftinginterface = function(args) {
         var that = {};
         
+        that.docraft = function() {};
+        
         // add a Craft button to the game interface
         $('<button class="gameui" id="craftbutton">Craft</button>')
           .click(function() {
-            alert('click!')
+            that.docraft();
           })
           .insertAfter(args.game.canvas);
         
