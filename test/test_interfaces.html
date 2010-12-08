@@ -7,6 +7,17 @@
 		<script type="text/javascript" src="../src/base.js"></script>
 		<script type="text/javascript" src="../src/tileutils.js"></script>
 		<script type="text/javascript" src="../src/interfaces.js"></script>
+		<script type="text/javascript" src="../src/system.js"></script>
+		<script type="text/javascript" src="../src/assets.js"></script>
+		<script type="text/javascript" src="../src/graphics.js"></script>
+		<script type="text/javascript" src="../src/utils.js"></script>
+		<script type="text/javascript" src="../src/actions.js"></script>
+		<script type="text/javascript" src="../src/mob.js"></script>
+		<script type="text/javascript" src="../src/components.js"></script>
+		<script type="text/javascript" src="../src/world.js"></script>
+		<script type="text/javascript" src="../src/tiles.js"></script>
+		<script type="text/javascript" src="../src/defenses.js"></script>
+		<script type="text/javascript" src="../src/items.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
@@ -271,6 +282,27 @@
 						var ci = env.craftinginterface({game: me.fakegame});
 						ci.docraft();
 						equals($('#craftscreen').css('display'), 'block', 'screen is showing now');
+					})
+				});
+				
+				test('makes one row for each recipe', function() {
+					var me = this;
+					loki.define('interfaces', 'items', function(env) {
+						var recipe = env.recipe;
+						var itemtypes = env.itemtypes;
+						var ci = env.craftinginterface({
+							game: me.fakegame,
+							recipes: [
+								recipe([
+									{type: itemtypes.DIRT, count: 4}
+								]),
+								recipe([
+									{type: itemtypes.DIRT, count: 6}
+								])
+							]
+						});
+						var screenbodyrows = $('#craftscreen tbody tr');
+						equals(screenbodyrows.get().length, 2, 'two rows for two recipes');
 					})
 				});
 			});

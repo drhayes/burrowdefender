@@ -102,6 +102,12 @@
           $('#craftscreen').toggle();
         };
         
+        // returns the HTML necessary to make a row corresponding to
+        // the given recipe.
+        that.makerow = function(recipe) {
+          return '<tr></tr>';
+        }
+        
         // add a Craft button to the game interface
         $('<button class="gameui" id="craftbutton">Craft</button>')
           .click(function() {
@@ -115,6 +121,15 @@
         $('<div id="craftscreen"><table><thead><tr><td>Ingredients</td><td>Result</td><td></td></tr></thead><tbody></tbody></table></div>')
           .hide()
           .insertAfter(args.game.canvas);
+
+        // insert a row for each recipe
+        if (args.recipes && args.recipes.length) {
+          var screenbody = $('#craftscreen tbody');
+          for (var i = 0; i < args.recipes.length; i++) {
+            var recipehtml = that.makerow(args.recipes[i]);
+            $(recipehtml).appendTo(screenbody);
+          }
+        }
         
         return that;
       }; // craftinginterface
