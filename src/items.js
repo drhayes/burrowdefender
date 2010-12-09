@@ -154,15 +154,15 @@
         DIRT: {
           key: 0,
           imagename: 'dirtitem',
-          create: function() {
-            return env.dirtitem();
+          create: function(args) {
+            return env.dirtitem(args);
           }
         },
         SENTRYGUN: {
           key: 1,
           imagename: 'sentrygunitem',
-          create: function() {
-            return env.sentrygunitem();
+          create: function(args) {
+            return env.sentrygunitem(args);
           }
         }
       }; // itemtypes
@@ -196,7 +196,7 @@
             ing = ingredients[i - 1];
             inv.remove(ing.type, ing.count);
           }
-          return resulttype.create();
+          return resulttype.create({game: game});
         }; // craft
         
         return that;
