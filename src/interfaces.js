@@ -118,8 +118,9 @@
           }
           firstcell.push('</td>');
           // second cell is the result
+          var secondcell = '<td><img src="' + im.get(recipe.resulttype.imagename).src + '"></td>';
           // third cell is the craft button
-          return '<tr>' + firstcell.join('') + '</tr>';
+          return '<tr>' + firstcell.join('') + secondcell + '</tr>';
         }
         
         // add a Craft button to the game interface
