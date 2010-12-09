@@ -202,13 +202,22 @@
 				});
 				
 				var THING1 = {
-					type: -1
+					type: -1,
+					create: function() {
+						return 'THING1';
+					}
 				};
 				var THING2 = {
-					type: -2
+					type: -2,
+					create: function() {
+						return 'THING2';
+					}
 				};
 				var THING3 = {
-					type: -3
+					type: -3,
+					create: function() {
+						return 'THING3';
+					}
 				};
 				
 				test('cancraft', function() {
@@ -236,10 +245,7 @@
 						var rec = env.recipe([
 							{type: THING1.type, count: 3},
 							{type: THING2.type, count: 1}
-						], function() {
-							itemtocraft = env.dirtitem({game: me.fakegame});
-							return itemtocraft;
-						});
+						], env.itemtypes.DIRT);
 						equals(typeof rec.craft, 'function', 'craft exists');
 						raises(function() {
 							rec.craft(inv);
@@ -253,8 +259,6 @@
 						inv.add(THING2);
 						var thing = rec.craft(inv);
 						ok(thing, 'got a thing back');
-						ok(itemtocraft, 'itemtocraft has been set');
-						same(thing, itemtocraft, 'it is the thing we expected');
 						// check that recipe removed from inventory...
 						equals(inv.things['1'].count, 1, 'one THING1 left');
 						equals(inv.things['2'].count, 1, 'one THING2 left');

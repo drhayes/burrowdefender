@@ -33,17 +33,6 @@
         return that;
       };
 
-      env.itemtypes = {
-        DIRT: {
-          key: 0,
-          imagename: 'dirtitem'
-        },
-        SENTRYGUN: {
-          key: 1,
-          imagename: 'sentrygunitem'
-        }
-      }; // item
-
       // given a tile position, return a boolean indicating whether we can place
       // a physical object there.
       var isvalidtileforplace = function(game, tilepos) {
@@ -161,6 +150,23 @@
         });
       }; // subscribeitemevents
       
+      env.itemtypes = {
+        DIRT: {
+          key: 0,
+          imagename: 'dirtitem',
+          create: function() {
+            return env.dirtitem();
+          }
+        },
+        SENTRYGUN: {
+          key: 1,
+          imagename: 'sentrygunitem',
+          create: function() {
+            return env.sentrygunitem();
+          }
+        }
+      }; // itemtypes
+      
       // A transformation that takes ingredients and produces other items.
       // Args:
       // * ingredients - a list of objects specifying what is necessary to
@@ -168,9 +174,11 @@
       //   * type - an item type
       //   * count - the count of that item type necessary to complete this
       //     this recipe
-      env.recipe = function(ingredients, makeitem) {
+      // * resulttype - the item type this recipe creates
+      env.recipe = function(ingredients, resulttype) {
         var that = {};
         that.ingredients = ingredients;
+        that.resulttype = resulttype;
         
         // given an inventory, can this recipe be crafted?
         that.cancraft = function(inv) {
@@ -183,12 +191,12 @@
           return true;
         }; // cancraft
         
-        that.craft = function(inv) {
+        that.craft = function(inv, game) {
           for (var i = ingredients.length, ing; i !== 0; i--) {
             ing = ingredients[i - 1];
             inv.remove(ing.type, ing.count);
           }
-          return makeitem();
+          return resulttype.create();
         }; // craft
         
         return that;
