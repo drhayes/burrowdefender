@@ -171,7 +171,8 @@
                 return;
               }
               var item = recipe.craft(args.game.player.inventory, args.game);
-              console.log(item);
+              // add the item to the player's inventory...
+              args.game.player.inventory.add(item);
             }
           }
         });
