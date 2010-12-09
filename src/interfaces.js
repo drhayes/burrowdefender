@@ -124,19 +124,26 @@
           return '<tr>' + firstcell.join('') + secondcell + thirdcell + '</tr>';
         }
         
+        // add a craft screen
+        // craft screen is a table with three columns: ingredients, result,
+        // and a craft button
+        $('<div id="craftscreen"><table><thead><tr><td>Ingredients</td><td>Result</td>' +
+          '<td></td></tr></thead><tbody></tbody></table>' +
+          '<button id="donebutton" class="gameui">Done</button>' +
+          '</div>')
+          .hide()
+          .insertAfter(args.game.canvas);
+        
         // add a Craft button to the game interface
         $('<button class="gameui" id="craftbutton">Craft</button>')
           .click(function() {
             that.docraft();
           })
           .insertAfter(args.game.canvas);
-
-        // add a craft screen
-        // craft screen is a table with three columns: ingredients, result,
-        // and a craft button
-        $('<div id="craftscreen"><table><thead><tr><td>Ingredients</td><td>Result</td><td></td></tr></thead><tbody></tbody></table></div>')
-          .hide()
-          .insertAfter(args.game.canvas);
+          
+        $('#donebutton').click(function() {
+          that.docraft();
+        });
 
         // insert a row for each recipe
         if (args.recipes && args.recipes.length) {
