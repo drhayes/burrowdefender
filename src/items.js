@@ -170,6 +170,7 @@
       //     this recipe
       env.recipe = function(ingredients, makeitem) {
         var that = {};
+        that.ingredients = ingredients;
         
         // given an inventory, can this recipe be crafted?
         that.cancraft = function(inv) {

@@ -4,9 +4,10 @@
 
 (function(global, $) {
   
-  loki.define('tileutils', function(env) {
+  loki.define('tileutils', 'assets', function(env) {
     var tilesize = env.tilesize,
-      totilepos = env.totilepos;
+      totilepos = env.totilepos,
+      im = env.imagemanager;
     
     loki.modules.interfaces = function(env) {
       env.mininginterface = function(args) {
@@ -105,7 +106,20 @@
         // returns the HTML necessary to make a row corresponding to
         // the given recipe.
         that.makerow = function(recipe) {
-          return '<tr></tr>';
+          // create first cell's image tag and numeric label
+          var firstcell = [];
+          firstcell.push('<td>');
+          for (var i = 0; i < recipe.ingredients.length; i++) {
+            var ing = recipe.ingredients[i];
+            firstcell.push('<img src="' + im.get(ing.type.imagename).src + '">');
+            firstcell.push('&times; ');
+            firstcell.push(ing.count);
+            firstcell.push('<br>');
+          }
+          firstcell.push('</td>');
+          // second cell is the result
+          // third cell is the craft button
+          return '<tr>' + firstcell.join('') + '</tr>';
         }
         
         // add a Craft button to the game interface

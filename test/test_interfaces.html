@@ -5,10 +5,10 @@
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="../src/base.js"></script>
+		<script type="text/javascript" src="../src/assets.js"></script>
 		<script type="text/javascript" src="../src/tileutils.js"></script>
 		<script type="text/javascript" src="../src/interfaces.js"></script>
 		<script type="text/javascript" src="../src/system.js"></script>
-		<script type="text/javascript" src="../src/assets.js"></script>
 		<script type="text/javascript" src="../src/graphics.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
 		<script type="text/javascript" src="../src/actions.js"></script>
@@ -21,6 +21,11 @@
 		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
 		<script>
+			loki.define('assets', function(env) {
+				// load the imagemanager images for testing...
+				env.imagemanager.load('../');
+			});
+			
 			$(document).ready(function() {
 				module('mininginterface', {
 					setup: function() {
@@ -288,11 +293,24 @@
 				
 				test('makerow for a recipe', function() {
 					var me = this;
-					loki.define('interfaces', 'items', function(env) {
+					loki.define('interfaces', 'items', 'assets', function(env) {
 						var recipe = env.recipe([
-							{type: env.itemtypes.DIRT, count: 5}
+							{type: env.itemtypes.DIRT, count: 5},
+							{type: env.itemtypes.SENTRYGUN, count: 2}
 						]);
 						var ci = env.craftinginterface({game: me.fakegame});
+						var result = ci.makerow(recipe);
+						console.log(result);
+						ok(result, 'got something back');
+						var row = $(result);
+						row.appendTo($('body'));
+						// check each cell
+						var ingredients = row.find('td').get(0);
+						ok(ingredients, 'found first cell');
+						equals($(ingredients).find('img').length, 2, 'there are two image tags');
+						var expected_image_url = env.imagemanager.get(env.itemtypes.DIRT.imagename).src;
+						var images = $(ingredients).find('img');
+						equals(images.get(0).src, expected_image_url, 'dirt image url set');
 					})
 				});
 				

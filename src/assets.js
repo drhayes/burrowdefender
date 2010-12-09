@@ -8,7 +8,8 @@
   var im = (function() {
     var toload = [],
       loaded = false,
-      images = {};
+      images = {},
+      image_counter = 0;
     return {
       // adds an image to the image manager. once the images are loaded, adding
       // another image is an error.
@@ -24,14 +25,18 @@
         });
       },
       // loads all the added images at once
-      load: function() {
+      load: function(prefix) {
+        prefix = prefix || '';
         var load, img;
         loaded = true;
         var i = toload.length;
         while (i--) {
           load = toload[i];
           img = new Image();
-          img.src = load.src;
+          img.onload = function() {
+            image_counter++;
+          }
+          img.src = prefix + load.src;
           images[load.name] = img;
         }
       },
@@ -43,6 +48,9 @@
         ctx.drawImage(images[name], x, y);
       },
       get: function(name) {
+        if (image_counter !== toload.length) {
+          console.log('not done loading images! ' + name);
+        }
         return images[name];
       },
       // for testing only!
