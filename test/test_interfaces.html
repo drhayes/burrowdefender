@@ -319,6 +319,10 @@
 						expected_image_url = env.imagemanager.get(env.itemtypes.SENTRYGUN.imagename).src;
 						images = $(resulttype).find('img');
 						equals(images.get(0).src, expected_image_url, 'sentry gun url set');
+						// check the third cell
+						var craftbutton = row.find('td').get(2);
+						ok(craftbutton, 'found third cell');
+						equals($(craftbutton).find('button').length, 1, 'found a button');
 					})
 				});
 				
