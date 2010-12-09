@@ -90,8 +90,8 @@
         that.things = {};
         that.sel = 1;
         
-        var getthingbytype = function(type) {
-          return that.things[typemap[type]];
+        var getthingbytype = function(key) {
+          return that.things[typemap[key]];
         }
 
         // TODO: does not handle a full inventory yet
@@ -131,12 +131,13 @@
         
         that.remove = function(type, count) {
           count = count || 1;
-          if (!typemap.hasOwnProperty(type)) {
+          var key = JSON.stringify(type);
+          if (!typemap.hasOwnProperty(key)) {
             throw {
               message: 'Nothing of that type in inventory!'
             };
           }
-          var thing = getthingbytype(type);
+          var thing = getthingbytype(key);
           if (thing.count < count) {
             throw {
               message: 'Tried to remove too much!'
@@ -145,8 +146,8 @@
           thing.count -= count;
           if (thing.count === 0) {
             // if we're out at that slot, remove the counter object...
-            delete that.things[typemap[type]];
-            delete typemap[type];
+            delete that.things[typemap[key]];
+            delete typemap[key];
           }
         }
 
@@ -163,7 +164,7 @@
           if (typeof t === 'undefined') {
             return null;
           };
-          that.remove(t.key);
+          that.remove(t.instance.type);
           return t.instance;
         }
 
@@ -220,11 +221,12 @@
         that.hasitem = function(type, count) {
           count = count || 1;
           // do we even have one of those?
-          if (!typemap.hasOwnProperty(type)) {
+          var key = JSON.stringify(type);
+          if (!typemap.hasOwnProperty(key)) {
             return false;
           }
           // do we have the required count?
-          return getthingbytype(type).count >= count;
+          return getthingbytype(key).count >= count;
         }; // hasitem
 
         return that;

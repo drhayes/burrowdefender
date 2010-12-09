@@ -184,6 +184,7 @@
         that.cancraft = function(inv) {
           for (var i = ingredients.length, ing; i !== 0; i--) {
             ing = ingredients[i - 1]
+            console.log(ing.type);
             if (!inv.hasitem(ing.type, ing.count)) {
               return false;
             }
