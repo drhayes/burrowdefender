@@ -133,7 +133,7 @@
         // and a craft button
         $('<div id="craftscreen"><table><thead><tr><td>To make...</td><td>You need...</td>' +
           '<td></td></tr></thead><tbody></tbody></table>' +
-          '<button id="donebutton" class="gameui">Done</button>' +
+          '<div class="maxcenter"><button id="donebutton" class="gameui">Done</button></div>' +
           '</div>')
           .hide()
           .insertAfter(args.game.canvas);
