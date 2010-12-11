@@ -66,7 +66,10 @@
 
       // methods
       that.start = function() {
-        that.updater.start();
+        // wait for images to load...
+        env.imagemanager.readywait(function() {
+          that.updater.start();
+        });
       };
 
       // Whatever this thing is, add it to the appropriate update buckets. If it

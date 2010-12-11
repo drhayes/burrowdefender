@@ -40,6 +40,19 @@
           images[load.name] = img;
         }
       },
+      readywait: function(callback) {
+        var l = toload.length;
+        // busy wait while images are loading...
+        var loader;
+        loader = setInterval(function() {
+          if (image_counter >= l) {
+            // stop the timer
+            clearInterval(loader);
+            // call the callback
+            callback();
+          }
+        }, 100); // retry every 100 ms...
+      },
       // draw a named loaded image
       draw: function(ctx, name, x, y) {
         if (!loaded) {
@@ -48,9 +61,6 @@
         ctx.drawImage(images[name], x, y);
       },
       get: function(name) {
-        if (image_counter !== toload.length) {
-          console.log('not done loading images! ' + name);
-        }
         return images[name];
       },
       // for testing only!
