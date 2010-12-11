@@ -304,21 +304,21 @@
 						var row = $(result);
 						row.appendTo($('body'));
 						// check the first cell
-						var ingredients = row.find('td').get(0);
-						ok(ingredients, 'found first cell');
+						var resulttype = row.find('td').get(0);
+						ok(resulttype, 'found first cell');
+						equals($(resulttype).find('img').length, 1, 'there is one image');
+						expected_image_url = env.imagemanager.get(env.itemtypes.SENTRYGUN.imagename).src;
+						images = $(resulttype).find('img');
+						equals(images.get(0).src, expected_image_url, 'sentry gun url set');
+						// check the second cell
+						var ingredients = row.find('td').get(1);
+						ok(ingredients, 'found second cell');
 						equals($(ingredients).find('img').length, 2, 'there are two image tags');
 						var expected_image_url = env.imagemanager.get(env.itemtypes.DIRT.imagename).src;
 						var images = $(ingredients).find('img');
 						equals(images.get(0).src, expected_image_url, 'dirt image url set');
 						expected_image_url = env.imagemanager.get(env.itemtypes.SENTRYGUN.imagename).src;
 						equals(images.get(1).src, expected_image_url, 'sentry gun image url set');
-						// check the second cell
-						var resulttype = row.find('td').get(1);
-						ok(resulttype, 'found second cell');
-						equals($(resulttype).find('img').length, 1, 'there is one image');
-						expected_image_url = env.imagemanager.get(env.itemtypes.SENTRYGUN.imagename).src;
-						images = $(resulttype).find('img');
-						equals(images.get(0).src, expected_image_url, 'sentry gun url set');
 						// check the third cell
 						var craftbutton = row.find('td').get(2);
 						ok(craftbutton, 'found third cell');

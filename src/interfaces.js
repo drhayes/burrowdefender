@@ -110,28 +110,28 @@
         // the given recipe.
         that.makerow = function(recipe, index) {
           index = index || 0;
-          // create first cell's image tag and numeric label
-          var firstcell = [];
-          firstcell.push('<td>');
+          // first cell is the result
+          var firstcell = '<td><img src="' + im.get(recipe.resulttype.imagename).src + '"></td>';
+          // create second cell's image tag and numeric label
+          var secondcell = [];
+          secondcell.push('<td>');
           for (var i = 0; i < recipe.ingredients.length; i++) {
             var ing = recipe.ingredients[i];
-            firstcell.push('<img src="' + im.get(ing.type.imagename).src + '">');
-            firstcell.push('&times; ');
-            firstcell.push(ing.count);
-            firstcell.push('<br>');
+            secondcell.push('<img src="' + im.get(ing.type.imagename).src + '">');
+            secondcell.push(' &times; ');
+            secondcell.push(ing.count);
+            secondcell.push('<br>');
           }
-          firstcell.push('</td>');
-          // second cell is the result
-          var secondcell = '<td><img src="' + im.get(recipe.resulttype.imagename).src + '"></td>';
+          secondcell.push('</td>');
           // third cell is the craft button
           var thirdcell = '<td><button class="craftit gameui" data-recipe-index="' + index + '">Craft</button></td>';
-          return '<tr>' + firstcell.join('') + secondcell + thirdcell + '</tr>';
+          return '<tr>' + firstcell + secondcell.join('') + thirdcell + '</tr>';
         }
         
         // add a craft screen
         // craft screen is a table with three columns: ingredients, result,
         // and a craft button
-        $('<div id="craftscreen"><table><thead><tr><td>Ingredients</td><td>Result</td>' +
+        $('<div id="craftscreen"><table><thead><tr><td>To make...</td><td>You need...</td>' +
           '<td></td></tr></thead><tbody></tbody></table>' +
           '<button id="donebutton" class="gameui">Done</button>' +
           '</div>')
