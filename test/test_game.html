@@ -64,9 +64,6 @@
 				
 				test('start', function() {
 					ok(typeof(this.g.start) === 'function', 'g.start');
-					this.g.start();
-					ok(this.g.updater.timer, 'timer is running');
-					this.g.updater.stop();
 				});
 				
 				test('add', function() {
