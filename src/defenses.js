@@ -47,7 +47,7 @@
           if (typeof collider.damage !== 'function') {
             return;
           }
-          collider.damage(7, that.vel.x > 0);
+          collider.damage(1, that.vel.x > 0);
           // remove the bullet from the game... its dread business is done
           that.killed = true;
           // stop colliding with things, its killed enough

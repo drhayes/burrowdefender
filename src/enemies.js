@@ -24,7 +24,7 @@
 
         // zombies are damageable
         damageable(that, {
-          health: 20,
+          health: 3,
           whendamaged: function() {
             that.movestate.standing = false;
           }
