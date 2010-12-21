@@ -41,38 +41,42 @@
     imagemanager.add('player', 'assets/images/player.png');
     
     // define player sprite
-		spritemanager.add('player', {x: 16, y: 20}, [
-		  {x: 0, y: 60}, // standing
-			{x: 0, y: 39}, // running right
-			{x: 17, y: 39},
-			{x: 34, y: 39},
-			{x: 51, y: 39},
-			{x: 68, y: 39},
-			{x: 0, y: 18}, // running left
-			{x: 17, y: 18},
-			{x: 34, y: 18},
-			{x: 51, y: 18},
-			{x: 68, y: 18},
-			{x: 17, y: 60}, // falling right
-			{x: 34, y: 60} // falling left
+		spritemanager.add('player', {x: 24, y: 32}, [
+		  {x: 0, y: 298}, // standing
+		  {x: 25, y: 298}, // blinking
+		  {x: 50, y: 298},
+		  {x: 75, y: 298},
+		  {x: 100, y: 298}
+      // {x: 0, y: 39}, // running right
+      // {x: 17, y: 39},
+      // {x: 34, y: 39},
+      // {x: 51, y: 39},
+      // {x: 68, y: 39},
+      // {x: 0, y: 18}, // running left
+      // {x: 17, y: 18},
+      // {x: 34, y: 18},
+      // {x: 51, y: 18},
+      // {x: 68, y: 18},
+      // {x: 17, y: 60}, // falling right
+      // {x: 34, y: 60} // falling left
 		]);
 
     // define player animations
     var standing = animation({
       name: 'player',
-      frames: [0]
+      frames: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 4, 3, 2, 1]
     });
     var runningleft = animation({
       name: 'player',
-      frames: [6, 6, 7, 7, 8, 8, 9, 9, 10, 10]
+      frames: [0]
     });
     var runningright = animation({
       name: 'player',
-      frames: [1, 1, 2, 2, 3, 3, 4, 4, 5, 5]
+      frames: [0]
     });
     var falling = animation({
       name: 'player',
-      frames: [11]
+      frames: [0]
     });
       
     loki.modules.player = function(env) {
@@ -383,8 +387,8 @@
         var that = mob(args);
         // set player defaults
         that.size = {
-          x: 16,
-          y: 20
+          x: 24,
+          y: 32
         };
         that.solid = false;
 

@@ -91,6 +91,10 @@
           sprite.image = im.get(name);
         }
         var frame = sprite.frames[frame];
+        if (!frame) {
+          console.log('did not get frame for ' + name + ' frame ' + frame);
+          return;
+        }
         ctx.drawImage(sprite.image, frame.x, frame.y, sprite.size.x, sprite.size.y, x, y, sprite.size.x, sprite.size.y);
       },
       reset: function() {
