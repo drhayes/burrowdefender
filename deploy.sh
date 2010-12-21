@@ -5,13 +5,11 @@ mkdir deploy
 echo 'Copying files to temp deploy directory...'
 cp index.html deploy/index.html
 cp -R lib/ deploy/lib/
-cp -R assets deploy/assets/
+mkdir deploy/assets/
+cp -R assets/images deploy/assets/images/
 cp -R src deploy/src/
 echo 'Copying files to remote server...'
-scp deploy/index.html minedefendernfs:/home/public/index.html
-scp -r deploy/lib/ minedefendernfs:/home/public/lib/
-scp -r deploy/assets/ minedefendernfs:/home/public/assets/
-scp -r deploy/src/ minedefendernfs:/home/public/src/
+rsync -rav deploy/ minedefendernfs:/home/public/
 echo 'Removing temp deploy directory...'
 rm -rf deploy/
 echo 'Done.'
