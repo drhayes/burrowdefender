@@ -41,20 +41,18 @@
     imagemanager.add('player', 'assets/images/player.png');
     
     // define player sprite
-		spritemanager.add('player', {x: 16, y: 20}, [
-		  {x: 0, y: 60}, // standing
-			{x: 0, y: 39}, // running right
-			{x: 17, y: 39},
-			{x: 34, y: 39},
-			{x: 51, y: 39},
-			{x: 68, y: 39},
-			{x: 0, y: 18}, // running left
-			{x: 17, y: 18},
-			{x: 34, y: 18},
-			{x: 51, y: 18},
-			{x: 68, y: 18},
-			{x: 17, y: 60}, // falling right
-			{x: 34, y: 60} // falling left
+		spritemanager.add('player', {x: 24, y: 32}, [
+		  {x: 0, y: 128}, // standing
+			{x: 0, y: 95}, // running right
+			{x: 25, y: 95},
+			{x: 50, y: 95},
+			{x: 75, y: 95},
+			{x: 0, y: 62}, // running left
+			{x: 25, y: 62},
+			{x: 50, y: 62},
+			{x: 75, y: 62},
+			{x: 0, y: 128}, // falling right
+			{x: 0, y: 128} // falling left
 		]);
 
     // define player animations
@@ -64,15 +62,15 @@
     });
     var runningleft = animation({
       name: 'player',
-      frames: [6, 6, 7, 7, 8, 8, 9, 9, 10, 10]
+      frames: [5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8]
     });
     var runningright = animation({
       name: 'player',
-      frames: [1, 1, 2, 2, 3, 3, 4, 4, 5, 5]
+      frames: [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4]
     });
     var falling = animation({
       name: 'player',
-      frames: [11]
+      frames: [9]
     });
       
     loki.modules.player = function(env) {
@@ -383,8 +381,8 @@
         var that = mob(args);
         // set player defaults
         that.size = {
-          x: 16,
-          y: 20
+          x: 24,
+          y: 32
         };
         that.solid = false;
 
