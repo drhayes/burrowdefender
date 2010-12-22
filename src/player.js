@@ -33,6 +33,8 @@
       imagemanager = env.imagemanager,
       spritemanager = env.spritemanager,
       animation = env.animation,
+      animsequence = env.sequence,
+      animrepeat = env.repeater,
       action = env.action;
     
     // add player images
@@ -76,7 +78,7 @@
     // define player animations
     var standing = animation({
       name: 'player',
-      frames: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 4, 3, 2, 1]
+      frames: [animrepeat([0], 100, 180), 1, 2, 3, 4, 4, 3, 2, 1]
     });
     var runningleft = animation({
       name: 'player',

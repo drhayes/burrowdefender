@@ -14,19 +14,32 @@
         return function(ctx, name, x, y) {
           spritemanager.draw(ctx, name, frames[index], x, y);
           index += 1;
-          return index === frames.length;
+          if (index === frames.length) {
+            index = 0;
+            return true;
+          }
+          return false;
         }
       };
 
       // repeat the given frames some number of times randomly chosen between
       // lo inclusive and hi exclusive.
       env.repeater = function(frames, lo, hi) {
-        var target = hi ? Math.floor(Math.random() * (hi - lo)) + lo : lo;
+        var choosetarget = function() {
+          target = hi ? Math.floor(Math.random() * (hi - lo)) + lo : lo;
+        }
+        var target;
+        choosetarget();
         var count = 0;
         return function(ctx, name, x, y) {
           spritemanager.draw(ctx, name, 0, x, y);
           count += 1;
-          return (count === target);
+          if (count === target) {
+            choosetarget();
+            count = 0;
+            return true;
+          }
+          return false;
         }
       };
 
