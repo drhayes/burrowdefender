@@ -69,8 +69,8 @@
 		  {x: 100, y: 232},
 		  {x: 125, y: 232},
 		  {x: 150, y: 232},
-      // {x: 17, y: 60}, // falling right
-      // {x: 34, y: 60} // falling left
+		  {x: 175, y: 232}, // jumping
+		  {x: 200, y: 232} // falling
 		]);
 
     // define player animations
@@ -88,8 +88,12 @@
     });
     var falling = animation({
       name: 'player',
-      frames: [0]
+      frames: [28]
     });
+    var jumping = animation({
+      name: 'player',
+      frames: [27]
+    })
       
     loki.modules.player = function(env) {
       
@@ -377,8 +381,11 @@
         };
         that.draw = function(drawthing) {
           drawthing.sprite1.push(function(ctx) {
-            if (player.movestate.standing === false) {
+            if (player.movestate.standing === false && player.vel.y > 0) {
               falling.draw(ctx, player.x, player.y);
+            }
+            else if (player.movestate.standing === false && player.vel.y <= 0) {
+              jumping.draw(ctx, player.x, player.y);
             }
             else if (player.movestate.walking === walking.LEFT) {
               runningleft.draw(ctx, player.x, player.y);
