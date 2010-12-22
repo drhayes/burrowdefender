@@ -151,3 +151,16 @@ var FakeEventObject = function() {
     this.removedEventListener = true;
   }
 }
+
+var FakeSpriteManager = function() {
+  this.drawArgs = [];
+  this.draw = function(ctx, name, frame, x, y) {
+    this.drawArgs.push({
+      ctx: ctx,
+      name: name,
+      frame: frame,
+      x: x,
+      y: y
+    });
+  }
+}

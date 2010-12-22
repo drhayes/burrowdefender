@@ -43,11 +43,53 @@
 						var ctx = canvas.getContext('2d');
 						anim.draw(ctx, 0, 0);
 						equals(anim.currentframe, 1, 'currentframe advanced');
-						ctx.fillStyle = "hsl(120, 0%, 0%)";
-						setInterval(function() {
-							ctx.fillRect(0, 0, 20, 20);
-							anim.draw(ctx, 0, 0);
-						}, 33);
+					})
+				});
+				
+				module('frame functions', {
+					setup: function() {
+						this.ctx = new FakeCtx();
+						this.fakespriteman = new FakeSpriteManager();
+						var me = this;
+						loki.define('assets', function(env) {
+							me.oldspritemandraw = env.spritemanager.draw;
+							env.spritemanager.draw = function() {
+								me.fakespriteman.draw.apply(me.fakespriteman, arguments);
+							};
+						})
+					},
+					teardown: function() {
+						var me = this;
+						loki.define('assets', function(env) {
+							env.spritemanager.draw = me.oldspritemandraw;
+						})
+					}
+				});
+				
+				test('ctors', function() {
+					loki.define('graphics', function(env) {
+						ok(env.repeater, 'repeater exists');
+					})
+				});
+				
+				test('repeater', function() {
+					var me = this;
+					loki.define('graphics', 'assets', function(env) {
+						var r = env.repeater([0], 10);
+						ok(r, 'got a function back');
+						for (var i = 0; i < 9; i++) {
+							// draw this thing...
+							var result = r(me.ctx, 'name', 1, 2);
+							equals(me.fakespriteman.drawArgs.length, i + 1, 'spriteman got draw command');
+							var drawArgs = me.fakespriteman.drawArgs[i];
+							equals(drawArgs.ctx, me.ctx, 'ctx set right');
+							equals(drawArgs.name, 'name', 'name was set right');
+							equals(drawArgs.frame, 0, 'frame is set to 0');
+							equals(drawArgs.x, 1, 'x is set to 1');
+							equals(drawArgs.y, 2, 'y is set to 2');
+							ok(!result, 'returns false nine times');
+						}
+						ok(r(me.ctx, 0, 1), 'returns true on the tenth time');
 					})
 				});
 			});
