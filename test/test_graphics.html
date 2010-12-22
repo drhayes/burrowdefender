@@ -17,31 +17,29 @@
 		</style>
 		<script>
 			$(document).ready(function() {
+				var canvas = $('<canvas width=24 height=32></canvas>').
+				  appendTo($('body')).get(0);
+				
+				loki.define('assets', function(env) {
+					env.imagemanager.add('player', '../assets/images/player.png');
+					env.imagemanager.load();
+					env.spritemanager.add('player', {x: 24, y: 32}, [
+					  {x: 0, y: 298}, // standing
+					  {x: 25, y: 298}, // blinking
+					  {x: 50, y: 298},
+					  {x: 75, y: 298},
+					  {x: 100, y: 298}
+					]);
+				});
+
 				module('animation');
 				
 				test('ctor', function() {
 					loki.define('assets', 'graphics', function(env) {
-						env.imagemanager.add('player', '../assets/images/player.png');
-						env.imagemanager.load();
-						env.spritemanager.add('player', {x: 16, y: 20}, [
-							{x: 0, y: 60},
-							{x: 0, y: 39},
-							{x: 17, y: 39},
-							{x: 34, y: 39},
-							{x: 51, y: 39},
-							{x: 68, y: 39},
-							{x: 0, y: 18},
-							{x: 17, y: 18},
-							{x: 34, y: 18},
-							{x: 51, y: 18},
-							{x: 68, y: 18}
-						]);
 						var anim = env.animation({
 							name: 'player',
-						    frames: [6, 6, 7, 7, 8, 8, 9, 9, 10, 10]});
+						    frames: [0, 1, 2, 3, 4]});
 						equals(anim.currentframe, 0, 'currentframe is 0');
-						var canvas = $('<canvas width=20 height=20></canvas>').
-						  appendTo($('body')).get(0);
 						var ctx = canvas.getContext('2d');
 						anim.draw(ctx, 0, 0);
 						equals(anim.currentframe, 1, 'currentframe advanced');
