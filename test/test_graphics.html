@@ -68,29 +68,70 @@
 				
 				test('ctors', function() {
 					loki.define('graphics', function(env) {
-						ok(env.repeater, 'repeater exists');
+						equals(typeof env.sequence, 'function', 'sequence exists');
+						equals(typeof env.repeater, 'function', 'repeater exists');
 					})
 				});
 				
-				test('repeater', function() {
+				test('sequence', function() {
 					var me = this;
-					loki.define('graphics', 'assets', function(env) {
+					loki.define('graphics', function(env) {
+						var s = env.sequence([0, 1, 2, 3]);
+						ok(s, 'got something back');
+						var result = s(me.ctx, 'name', 1, 2);
+						ok(!result, 'result is false for first sequence');
+						equals(me.fakespriteman.drawArgs.length, 1, 'spriteman got draw command');
+						var drawargs = me.fakespriteman.drawArgs[0];
+						equals(drawargs.ctx, me.ctx, 'ctx set right');
+						equals(drawargs.name, 'name', 'name set right');
+						equals(drawargs.frame, 0, 'frame set right');
+						equals(drawargs.x, 1, 'x');
+						equals(drawargs.y, 2, 'y');
+						result = s(me.ctx, 'name', 1, 2);
+						ok(!result, 'result');
+						equals(me.fakespriteman.drawArgs[1].frame, 1, 'frame');
+						result = s(me.ctx, 'name', 1, 2);
+						ok(!result, 'result');
+						equals(me.fakespriteman.drawArgs[2].frame, 2, 'frame');
+						result = s(me.ctx, 'name', 1, 2);
+						ok(result, 'result');
+						equals(me.fakespriteman.drawArgs[3].frame, 3, 'frame');
+					})
+				});
+				
+				test('repeater with only lo', function() {
+					var me = this;
+					loki.define('graphics', function(env) {
 						var r = env.repeater([0], 10);
 						ok(r, 'got a function back');
 						for (var i = 0; i < 9; i++) {
 							// draw this thing...
 							var result = r(me.ctx, 'name', 1, 2);
 							equals(me.fakespriteman.drawArgs.length, i + 1, 'spriteman got draw command');
-							var drawArgs = me.fakespriteman.drawArgs[i];
-							equals(drawArgs.ctx, me.ctx, 'ctx set right');
-							equals(drawArgs.name, 'name', 'name was set right');
-							equals(drawArgs.frame, 0, 'frame is set to 0');
-							equals(drawArgs.x, 1, 'x is set to 1');
-							equals(drawArgs.y, 2, 'y is set to 2');
+							var drawargs = me.fakespriteman.drawArgs[i];
+							equals(drawargs.ctx, me.ctx, 'ctx set right');
+							equals(drawargs.name, 'name', 'name was set right');
+							equals(drawargs.frame, 0, 'frame is set to 0');
+							equals(drawargs.x, 1, 'x is set to 1');
+							equals(drawargs.y, 2, 'y is set to 2');
 							ok(!result, 'returns false nine times');
 						}
 						ok(r(me.ctx, 0, 1), 'returns true on the tenth time');
-					})
+					});
+				});
+				
+				test('repeater with lo and hi', function() {
+					var me = this;
+					loki.define('graphics', function(env) {
+						var r = env.repeater([0], 2, 5);
+						var count = 0;
+						var done = false;
+						while (!done) {
+							done = r(me.ctx, 'name', 1, 2);
+							count += 1;
+						};
+						ok(2 <= count < 5, 'count is between 2 and 5 exclusive');
+					});
 				});
 			});
 		</script>
