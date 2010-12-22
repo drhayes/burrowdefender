@@ -35,15 +35,36 @@
 				module('animation');
 				
 				test('ctor', function() {
-					loki.define('assets', 'graphics', function(env) {
+					loki.define('graphics', function(env) {
 						var anim = env.animation({
 							name: 'player',
 						    frames: [0, 1, 2, 3, 4]});
-						equals(anim.currentframe, 0, 'currentframe is 0');
+						equals(anim.frameindex, 0, 'frameindex is 0');
 						var ctx = canvas.getContext('2d');
 						anim.draw(ctx, 0, 0);
-						equals(anim.currentframe, 1, 'currentframe advanced');
+						equals(anim.frameindex, 1, 'frameindex advanced');
 					})
+				});
+				
+				test('using frame numbers and functions', function() {
+					loki.define('graphics', function(env) {
+						var anim = env.animation({
+							name: 'player',
+							frames: [0, 1, env.sequence([2, 3, 4])]
+						});
+						equals(anim.frameindex, 0, 'frameindex is 0');
+						var fakectx = new FakeCtx();
+						anim.draw(fakectx, 0, 0);
+						equals(anim.frameindex, 1, 'frameindex is 1');
+						anim.draw(fakectx, 0, 0);
+						equals(anim.frameindex, 2, 'frameindex is 2');
+						anim.draw(fakectx, 0, 0);
+						equals(anim.frameindex, 2, 'frameindex is 2');
+						anim.draw(fakectx, 0, 0);
+						equals(anim.frameindex, 2, 'frameindex is 2');
+						anim.draw(fakectx, 0, 0);
+						equals(anim.frameindex, 0, 'frameindex is 0');
+					});
 				});
 				
 				module('frame functions', {

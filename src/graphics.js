@@ -36,13 +36,23 @@
       // * frames - array of indices into the frames of the sprite
       env.animation = function(args) {
         var that = {}
-        that.currentframe = 0;
+        that.frameindex = 0;
         
         var frameslength = args.frames.length;
+        var currentframe = args.frames[0];
 
         that.draw = function(ctx, x, y) {
-          spritemanager.draw(ctx, args.name, args.frames[that.currentframe], x, y);
-          that.currentframe = (that.currentframe + 1) % frameslength;
+          var advance = true;
+          currentframe = args.frames[that.frameindex];
+          if (typeof currentframe === 'function') {
+            advance = currentframe(ctx, args.name, x, y);
+          }
+          else {
+            spritemanager.draw(ctx, args.name, currentframe, x, y);
+          }
+          if (advance) {
+            that.frameindex = (that.frameindex + 1) % frameslength;
+          }
         }
 
         return that;
