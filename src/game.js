@@ -49,7 +49,6 @@
       that.things = [];
       that.addthings = [];
       that.mousemanager = env.mousemanager({game: that});
-      that.mininginterface = env.mininginterface({game: that});
       that.craftinginterface = env.craftinginterface({
         game: that,
         recipes: [
@@ -199,9 +198,6 @@
         }
       };
       that.add(backgrounddraw);
-
-      // show the mining interface
-      that.add(that.mininginterface);
 
       // last but not least, add the player
       that.player = env.player({
