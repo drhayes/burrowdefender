@@ -4,11 +4,12 @@
 
 (function(global, $) {
   
-  loki.define('mob', 'tileutils', 'components', function(env) {
+  loki.define('mob', 'tileutils', 'components', 'world', function(env) {
     var tilesize = env.tilesize,
       totilepos = env.totilepos,
       mob = env.mob,
-      damageable = env.damageable;
+      damageable = env.damageable,
+      tile = env.tile;
       
     loki.modules.enemies = function(env) {
       env.fox = function(args) {
@@ -100,6 +101,14 @@
 
         return that;
       }; // fox
+
+      env.foxhole = function(args) {
+        var that = tile(args);
+        // foxholes are not diggable
+        that.diggable = false;
+        
+        return that;
+      } // foxhole
     };
     
   });

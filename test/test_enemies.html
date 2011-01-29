@@ -5,12 +5,14 @@
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="../src/base.js"></script>
+		<script type="text/javascript" src="../src/assets.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
 		<script type="text/javascript" src="../src/actions.js"></script>
 		<script type="text/javascript" src="../src/components.js"></script>
 		<script type="text/javascript" src="../src/tileutils.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
 		<script type="text/javascript" src="../src/mob.js"></script>
+		<script type="text/javascript" src="../src/world.js"></script>
 		<script type="text/javascript" src="../src/enemies.js"></script>
 		<script type="text/javascript" src="fakes.js"></script>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" title="no title" charset="utf-8">
@@ -32,7 +34,7 @@
 						};
 						var me = this;
 						loki.define('enemies', function(env) {
-							me.z = env.fox({
+							me.fx = env.fox({
 								game: me.fakegame,
 								x: 0,
 								y: 0,
@@ -42,44 +44,44 @@
 				});
 				
 				test('stats', function() {
-					equals(this.z.size.x, 16, 'size.x');
-					equals(this.z.size.y, 20, 'size.y');
-					equals(typeof this.z.solid, 'boolean', 'solid is a property');
-					ok(!this.z.solid, '!solid');
-					equals(typeof this.z.enemy, 'boolean', 'enemy is a property');
-					ok(this.z.enemy, 'foxs are an enemy');
-					equals(typeof this.z.movestate.wantstodigx, 'boolean', 'movestate.wantstodigx is a property');
-					ok(!this.z.movestate.wantstodigx, '!movestate.wantstodigx');
+					equals(this.fx.size.x, 16, 'size.x');
+					equals(this.fx.size.y, 20, 'size.y');
+					equals(typeof this.fx.solid, 'boolean', 'solid is a property');
+					ok(!this.fx.solid, '!solid');
+					equals(typeof this.fx.enemy, 'boolean', 'enemy is a property');
+					ok(this.fx.enemy, 'foxs are an enemy');
+					equals(typeof this.fx.movestate.wantstodigx, 'boolean', 'movestate.wantstodigx is a property');
+					ok(!this.fx.movestate.wantstodigx, '!movestate.wantstodigx');
 				});
 				
 				test('draw', function() {
-					equals(typeof this.z.draw, 'function', 'draw exists');
+					equals(typeof this.fx.draw, 'function', 'draw exists');
 				});
 				
 				test('damage', function() {
-					equals(typeof this.z.damage, 'function', 'foxs are damageable');
+					equals(typeof this.fx.damage, 'function', 'foxs are damageable');
 				});
 				
 				test('tick moves towards player', function() {
-					equals(typeof this.z.tick, 'function', 'tick exists');
+					equals(typeof this.fx.tick, 'function', 'tick exists');
 					this.fakegame.player.x = -20;
-					this.z.tick();
-					ok(this.z.vel.x < 0, 'fox is heading towards player to the left');
+					this.fx.tick();
+					ok(this.fx.vel.x < 0, 'fox is heading towards player to the left');
 					this.fakegame.player.x = 20;
-					this.z.tick();
-					ok(this.z.vel.x > 0, 'fox is heading towards player to the right');
+					this.fx.tick();
+					ok(this.fx.vel.x > 0, 'fox is heading towards player to the right');
 				});
 				
 				test('tick jumps towards player if no x progress', function() {
 					this.fakegame.player.x = -20;
-					this.z.movestate.standing = true;
-					this.z.tick();
-					this.z.x = -1;
-					this.z.tick();
+					this.fx.movestate.standing = true;
+					this.fx.tick();
+					this.fx.x = -1;
+					this.fx.tick();
 					// because of gravity, the y of the fox will increase for a bit...
-					equals(this.z.vel.y, 1, 'fox is not jumping yet');
-					this.z.tick();
-					ok(this.z.vel.y < 0, 'fox is jumping to get player');
+					equals(this.fx.vel.y, 1, 'fox is not jumping yet');
+					this.fx.tick();
+					ok(this.fx.vel.y < 0, 'fox is jumping to get player');
 				});
 				
 				test('tick jumps towards player while checking null tiles', function() {
@@ -87,25 +89,25 @@
 						return null;
 					}
 					this.fakegame.player.x = -20;
-					this.z.movestate.standing = true;
-					this.z.tick();
-					this.z.x = -1;
-					this.z.tick();
+					this.fx.movestate.standing = true;
+					this.fx.tick();
+					this.fx.x = -1;
+					this.fx.tick();
 					// because of gravity, the y of the fox will increase for a bit...
-					equals(this.z.vel.y, 1, 'fox is not jumping yet');
-					this.z.tick();
-					ok(this.z.vel.y < 0, 'fox is jumping to get player');
+					equals(this.fx.vel.y, 1, 'fox is not jumping yet');
+					this.fx.tick();
+					ok(this.fx.vel.y < 0, 'fox is jumping to get player');
 				});
 				
 				test('tick digs towards player if cannot jump', function() {
 					expect(4);
 					this.fakegame.player.x = -20;
-					this.z.movestate.standing = true;
-					this.z.tick();
-					this.z.x = -1;
-					this.z.tick();
+					this.fx.movestate.standing = true;
+					this.fx.tick();
+					this.fx.x = -1;
+					this.fx.tick();
 					// because of gravity, the y of the fox will increase...
-					equals(this.z.vel.y, 1, 'fox is not jumping');
+					equals(this.fx.vel.y, 1, 'fox is not jumping');
 					// when the fox checks the tilemap, ensure that tiles come back solid
 					var me = this;
 					var gettile1 = function(x, y) {
@@ -122,9 +124,39 @@
 						}
 					};
 					this.fakegame.tilemap.get = gettile1;
-					this.z.tick();
-					ok(this.z.movestate.wantstodigx, 'fox wants to dig on the x');
+					this.fx.tick();
+					ok(this.fx.movestate.wantstodigx, 'fox wants to dig on the x');
 				});
+				
+				module('foxhole', {
+					setup: function() {
+						this.fakegame = new FakeGame();
+						this.fakegame.player = {
+							x: 0,
+							y: 0
+						};
+						var me = this;
+						loki.define('enemies', function(env) {
+							me.fh = env.foxhole({
+								game: me.fakegame,
+								x: 0,
+								y: 0,
+							});
+						});
+					}
+				});
+				
+				test('stats', function() {
+					equals(this.fh.x, 0, 'x pos');
+					equals(this.fh.y, 0, 'y pos');
+					equals(this.fh.x2, 32, 'x2 pos');
+					equals(this.fh.y2, 32, 'y2 pos');
+					equals(typeof this.fh.solid, 'boolean', 'solid is a property');
+					ok(this.fh.solid, '!solid');
+					equals(typeof this.fh.diggable, 'boolean', 'diggable is a property');
+					ok(!this.fh.diggable, '!diggable');
+				});
+
 			});
 		</script>
 	</head>
