@@ -19,11 +19,11 @@
 				
 				test('basics', function() {
 					loki.define('enemies', function(env) {
-						equals(typeof env.zombie, 'function', 'zombie exists');
+						equals(typeof env.fox, 'function', 'fox exists');
 					})
 				});
 				
-				module('zombie', {
+				module('fox', {
 					setup: function() {
 						this.fakegame = new FakeGame();
 						this.fakegame.player = {
@@ -32,7 +32,7 @@
 						};
 						var me = this;
 						loki.define('enemies', function(env) {
-							me.z = env.zombie({
+							me.z = env.fox({
 								game: me.fakegame,
 								x: 0,
 								y: 0,
@@ -47,7 +47,7 @@
 					equals(typeof this.z.solid, 'boolean', 'solid is a property');
 					ok(!this.z.solid, '!solid');
 					equals(typeof this.z.enemy, 'boolean', 'enemy is a property');
-					ok(this.z.enemy, 'zombies are an enemy');
+					ok(this.z.enemy, 'foxs are an enemy');
 					equals(typeof this.z.movestate.wantstodigx, 'boolean', 'movestate.wantstodigx is a property');
 					ok(!this.z.movestate.wantstodigx, '!movestate.wantstodigx');
 				});
@@ -57,17 +57,17 @@
 				});
 				
 				test('damage', function() {
-					equals(typeof this.z.damage, 'function', 'zombies are damageable');
+					equals(typeof this.z.damage, 'function', 'foxs are damageable');
 				});
 				
 				test('tick moves towards player', function() {
 					equals(typeof this.z.tick, 'function', 'tick exists');
 					this.fakegame.player.x = -20;
 					this.z.tick();
-					ok(this.z.vel.x < 0, 'zombie is heading towards player to the left');
+					ok(this.z.vel.x < 0, 'fox is heading towards player to the left');
 					this.fakegame.player.x = 20;
 					this.z.tick();
-					ok(this.z.vel.x > 0, 'zombie is heading towards player to the right');
+					ok(this.z.vel.x > 0, 'fox is heading towards player to the right');
 				});
 				
 				test('tick jumps towards player if no x progress', function() {
@@ -76,10 +76,10 @@
 					this.z.tick();
 					this.z.x = -1;
 					this.z.tick();
-					// because of gravity, the y of the zombie will increase for a bit...
-					equals(this.z.vel.y, 1, 'zombie is not jumping yet');
+					// because of gravity, the y of the fox will increase for a bit...
+					equals(this.z.vel.y, 1, 'fox is not jumping yet');
 					this.z.tick();
-					ok(this.z.vel.y < 0, 'zombie is jumping to get player');
+					ok(this.z.vel.y < 0, 'fox is jumping to get player');
 				});
 				
 				test('tick jumps towards player while checking null tiles', function() {
@@ -91,10 +91,10 @@
 					this.z.tick();
 					this.z.x = -1;
 					this.z.tick();
-					// because of gravity, the y of the zombie will increase for a bit...
-					equals(this.z.vel.y, 1, 'zombie is not jumping yet');
+					// because of gravity, the y of the fox will increase for a bit...
+					equals(this.z.vel.y, 1, 'fox is not jumping yet');
 					this.z.tick();
-					ok(this.z.vel.y < 0, 'zombie is jumping to get player');
+					ok(this.z.vel.y < 0, 'fox is jumping to get player');
 				});
 				
 				test('tick digs towards player if cannot jump', function() {
@@ -104,9 +104,9 @@
 					this.z.tick();
 					this.z.x = -1;
 					this.z.tick();
-					// because of gravity, the y of the zombie will increase...
-					equals(this.z.vel.y, 1, 'zombie is not jumping');
-					// when the zombie checks the tilemap, ensure that tiles come back solid
+					// because of gravity, the y of the fox will increase...
+					equals(this.z.vel.y, 1, 'fox is not jumping');
+					// when the fox checks the tilemap, ensure that tiles come back solid
 					var me = this;
 					var gettile1 = function(x, y) {
 						ok(true, 'tilemap.get called');
@@ -123,7 +123,7 @@
 					};
 					this.fakegame.tilemap.get = gettile1;
 					this.z.tick();
-					ok(this.z.movestate.wantstodigx, 'zombie wants to dig on the x');
+					ok(this.z.movestate.wantstodigx, 'fox wants to dig on the x');
 				});
 			});
 		</script>

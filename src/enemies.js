@@ -11,18 +11,18 @@
       damageable = env.damageable;
       
     loki.modules.enemies = function(env) {
-      env.zombie = function(args) {
-        // set the zombie defaults
+      env.fox = function(args) {
+        // set the fox defaults
         args.size = {
           x: 16,
           y: 20
         };
         var that = mob(args);
 
-        // zombies are not solid
+        // foxs are not solid
         that.solid = false;
 
-        // zombies are damageable
+        // foxs are damageable
         damageable(that, {
           health: 3,
           whendamaged: function() {
@@ -30,7 +30,7 @@
           }
         });
 
-        // zombies are an enemy
+        // foxs are an enemy
         that.enemy = true;
 
         // custom movestates
@@ -99,7 +99,7 @@
         }
 
         return that;
-      }; // zombie
+      }; // fox
     };
     
   });

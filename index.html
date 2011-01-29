@@ -121,7 +121,7 @@
 </head>
 <body>
 	<div id="instructions">
-		<button id="addzombie">Add Zombie</button>
+		<button id="addfox">Add Fox</button>
 		<p id="debug"></p>
 	</div>
 	<div id="surroundcanvas">
@@ -133,14 +133,14 @@
 			g.start();
 			
 			loki.define('enemies', 'items', function(env) {
-				$('#addzombie').click(function() {
-				    // add a zombie, for kicks...
-				    var zombie = env.zombie({
+				$('#addfox').click(function() {
+				    // add a fox, for kicks...
+				    var fox = env.fox({
 				      x: 200,
 				      y: -200,
 				      game: g
 				    });
-				    g.add(zombie);
+				    g.add(fox);
 				});
 			})			
 		});
