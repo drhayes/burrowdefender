@@ -191,6 +191,7 @@
       env.tilemap = function(args) {
         var that = {};
         that.tilemap = {};
+        that.ticktiles = {};
 
         that.get = function(x, y) {
           var key = env.tilemap.makekey(x, y);
@@ -244,6 +245,20 @@
               tile.tick();
             };
           });
+          // now the non-visibles...
+          for (var key in that.ticktiles) {
+            if (typeof that.ticktiles[key].tick === 'function') {
+              var result = that.ticktiles[key].tick();
+              if (result) {
+                delete that.ticktiles[key];
+              }
+            }
+          }
+        };
+
+        that.addticktile = function(tile) {
+          var key = env.tilemap.makekey(tile.x, tile.y);
+          that.ticktiles[key] = tile;
         };
 
         return that;

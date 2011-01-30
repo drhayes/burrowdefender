@@ -105,6 +105,7 @@
 				
 				test('drawdamage', function() {
 					equals(typeof(this.tile.drawdamage), 'function', 'drawdamage exists');
+          // TODO: fix drawing test
 					// this.tile.drawdamage(this.fakectx, 1);
 					// equals(this.fakectx.drawImageArgs.length, 0, 'drawImage not called');
 					// this.tile.drawdamage(this.fakectx, 0.9);
@@ -370,7 +371,48 @@
 						equals(args[2].offx, 0, 'offset.y');
 					})
 				});
-				
+
+        test('ticking non-visible tiles', function() {
+          var me = this;
+          loki.define('tiles', 'tileutils', function(env) {
+            me.fakegame.width = env.tilesize * 2;
+            me.fakegame.height = env.tilesize * 2;
+            for (var i = 0; i < 5; i++) {
+              var t = env.dirt({
+                game: me.fakegame,
+                x: i* env.tilesize,
+                y: 0
+              });
+              me.tm.set(t);
+            }
+            var nonvistile = env.dirt({
+              game: me.fakegame,
+              x: 1000,
+              y: 0
+            });
+            var ticked = false;
+            nonvistile.tick = function() {
+              ticked = true;
+            };
+            me.tm.tick();
+            ok(!ticked, 'tile not ticked yet');
+            me.tm.addticktile(nonvistile);
+            me.tm.tick();
+            ok(ticked, 'ticked a non-visible tile');
+            delete nonvistile.tick;
+            me.tm.tick();
+            var count = 0;
+            nonvistile.tick = function() {
+              count += 1;
+              return true;
+            };
+            me.tm.tick();
+            equals(count, 1, 'non vis tile was ticked once');
+            me.tm.tick();
+            equals(count, 1, 'returned false, was removed from queue');
+          });
+        });
+
 				module('spatialhash', {
 					setup: function() {
 						var me = this;
