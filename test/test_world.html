@@ -409,7 +409,7 @@
             me.tm.tick();
             equals(count, 1, 'non vis tile was ticked once');
             me.tm.tick();
-            equals(count, 1, 'returned false, was removed from queue');
+            equals(count, 1, 'returned true, was removed from queue');
           });
         });
 
