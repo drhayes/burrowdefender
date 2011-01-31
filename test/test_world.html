@@ -204,6 +204,9 @@
 					equals(args.eventname, 'mined', 'fired the mined event');
 					same(args.eventarg, this.t, 'passed along the tile that got mined');
 				});
+
+        test('tick returns true when completely healed', function() {
+        });
 				
 				module('tilemap', {
 					setup: function() {
