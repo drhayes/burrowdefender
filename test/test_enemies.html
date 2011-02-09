@@ -154,8 +154,29 @@
 					equals(typeof this.fh.solid, 'boolean', 'solid is a property');
 					ok(this.fh.solid, '!solid');
 					equals(typeof this.fh.diggable, 'boolean', 'diggable is a property');
-					ok(!this.fh.diggable, '!diggable');
-				});
+          ok(!this.fh.diggable, '!diggable');
+          equals(typeof this.fh.last_gen_time, 'number', 'last_gen_time');
+        });
+
+        test('tick', function() {
+          expect(6);
+          equals(typeof this.fh.tick, 'function', 'tick exists');
+          var add_called = false;
+          this.fakegame.add = function(thing) {
+            add_called = true;
+            ok(thing.enemy, 'added thing is an enemy');
+            equals(thing.x, 0, 'fox x');
+            equals(thing.y, 0, 'fox y');
+          };
+          this.fh.tick();
+          ok(!add_called, 'add was not called');
+          add_called = false;
+          // Set the last_gen_time so far back it doesn't matter what
+          // rate it generates foxes at.
+          this.fh.last_gen_time = new Date().getTime() - 20 * 1e6;
+          this.fh.tick();
+          ok(add_called, 'add was called');
+        });
 			});
 		</script>
 	</head>

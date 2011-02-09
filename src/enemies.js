@@ -48,42 +48,42 @@
           var tile = args.game.tilemap.get(x, y);
           if (tile) {
             return !tile.solid;
-          };
+          }
           return true;
-        }
+        };
 
         that.tick = function() {
-      		// gravity has to have some effect here...
-    			mob.gravitytick.call(this);
-    			// track player along the x axis...
-    			if (args.game.player.x < that.x) {
-    			  that.vel.x = -1;
-    			}
-    			else if (args.game.player.x > that.x) {
-    			  that.vel.x = 1;
-    			};
-    			// have I been killed?
-    			if (that.health <= 0) {
-    			  that.killed = true;
-    			}
-    			// if no forward progress was made, jump or dig
-    	    that.movestate.wantstodigx = false;
-    			var tilepos = totilepos(that.x, that.y);
-    			var tiledeltax = that.vel.x < 1 ? -1 : 1;
-    			tilepos.x += tiledeltax;
-    			var forwardprogress = typeof that.lastx === 'undefined' || that.x !== that.lastx;
-    			if (!forwardprogress) {
-    			  // can we jump?
-    			  var passthrough1 = canpassthrough(tilepos.x, tilepos.y - 1);
-    			  var passthrough2 = canpassthrough(tilepos.x, tilepos.y - 2);
-    			  if (!passthrough1 && !passthrough2) {
-    			    that.movestate.wantstodigx = true;
-    			  }
-    			  else {
-    			    that.jump();
-    			  }
-    			}
-    			that.lastx = that.x;
+          // gravity has to have some effect here...
+          mob.gravitytick.call(this);
+          // track player along the x axis...
+          if (args.game.player.x < that.x) {
+            that.vel.x = -1;
+          }
+          else if (args.game.player.x > that.x) {
+            that.vel.x = 1;
+          }
+          // have I been killed?
+          if (that.health <= 0) {
+            that.killed = true;
+          }
+          // if no forward progress was made, jump or dig
+          that.movestate.wantstodigx = false;
+          var tilepos = totilepos(that.x, that.y);
+          var tiledeltax = that.vel.x < 1 ? -1 : 1;
+          tilepos.x += tiledeltax;
+          var forwardprogress = typeof that.lastx === 'undefined' || that.x !== that.lastx;
+          if (!forwardprogress) {
+            // can we jump?
+            var passthrough1 = canpassthrough(tilepos.x, tilepos.y - 1);
+            var passthrough2 = canpassthrough(tilepos.x, tilepos.y - 2);
+            if (!passthrough1 && !passthrough2) {
+              that.movestate.wantstodigx = true;
+            }
+            else {
+              that.jump();
+            }
+          }
+          that.lastx = that.x;
         };
 
         that.collide = function(collider) {
@@ -97,18 +97,36 @@
             collider.damage(1, that.vel.x > 0);
             return true;
           }
-        }
+        };
 
         return that;
       }; // fox
+
+      // rate at which foxes are generated in ms
+      var FOX_GENERATION_RATE = 5000;
 
       env.foxhole = function(args) {
         var that = tile(args);
         // foxholes are not diggable
         that.diggable = false;
-        
+        that.last_gen_time = new Date().getTime();
+
+        that.tick = function() {
+          // is it time to generate a fox?
+          var now = new Date().getTime();
+          if (that.last_gen_time + FOX_GENERATION_RATE > now) {
+            return;
+          }
+          var new_fox = env.fox({
+            game: args.game,
+            x: 0,
+            y: 0
+          });
+          args.game.add(new_fox);
+        };
+
         return that;
-      } // foxhole
+      }; // foxhole
     };
     
   });

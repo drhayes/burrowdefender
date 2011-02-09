@@ -20,7 +20,7 @@ var FakeCtx = function() {
       stw: stw,
       sth: sth
     });
-  }
+  };
   this.fillRectArgs = [];
   this.fillRect = function(frx, fry, frw, frh) {
     this.fillRectArgs.push({
@@ -31,7 +31,7 @@ var FakeCtx = function() {
 			offx: this.offset.x,
 			offy: this.offset.y
     });
-  },
+  };
   this.drawImage = function(img, drx, dry) {
     this.drawImageArgs.push({
       img: img,
@@ -64,7 +64,7 @@ var FakeEventer = function() {
         eventarg: eventarg
       });
     }
-  }
+  };
 };
 
 
@@ -149,8 +149,8 @@ var FakeEventObject = function() {
   
   this.removeEventListener = function() {
     this.removedEventListener = true;
-  }
-}
+  };
+};
 
 var FakeSpriteManager = function() {
   this.drawArgs = [];
@@ -162,5 +162,5 @@ var FakeSpriteManager = function() {
       x: x,
       y: y
     });
-  }
-}
+  };
+};
