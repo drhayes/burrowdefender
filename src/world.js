@@ -65,7 +65,7 @@
           // generate some stuff!
           that.generated[key] = true;
           // what tile x are we starting from?
-          var x1 = totilepos(genscalar(x) * CHUNK_SIZE, 0).x
+          var x1 = totilepos(genscalar(x) * CHUNK_SIZE, 0).x;
           var x2 = x1 + CHUNK_SCALAR;
           var y = 0;
           var gentile = null;

@@ -20,10 +20,10 @@
         };
         var that = mob(args);
 
-        // foxs are not solid
+        // foxes are not solid
         that.solid = false;
 
-        // foxs are damageable
+        // foxes are damageable
         damageable(that, {
           health: 3,
           whendamaged: function() {
@@ -31,7 +31,7 @@
           }
         });
 
-        // foxs are an enemy
+        // foxes are an enemy
         that.enemy = true;
 
         // custom movestates
