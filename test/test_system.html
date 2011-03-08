@@ -3,6 +3,7 @@
 	<head>
 		<title>System</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="../lib/underscore/underscore-min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="../src/base.js"></script>
 		<script type="text/javascript" src="../src/system.js"></script>
@@ -152,34 +153,7 @@
 						})
 					}
 				});
-				
-				test('subscribe validation', function() {
-					try {
-						this.e.subscribe(null, function() {});
-						ok(false, 'null event name');
-					}
-					catch (error) {
-						ok(true, 'null event name');
-					}
-					try {
-						this.e.subscribe('blah', null);
-						ok(false, 'null callback');
-					}
-					catch (error) {
-						ok(true, 'null callback');
-					}
-				});
-				
-				test('fire validation', function() {
-					try {
-						this.e.fire(null);
-						ok(false, 'null event name');
-					}
-					catch (error) {
-						ok(true, 'null event name');
-					}
-				});
-				
+								
 				test('subscribe and fire one', function() {
 					var func1Called = false;
 					var func1 = function() {
