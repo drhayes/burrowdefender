@@ -21,15 +21,15 @@
 
     var genscalar = function(s) {
       return Math.floor(s / CHUNK_SIZE);
-    }
+    };
 
     var keyscalar = function(x) {
       return Math.floor(x / cellsize);
-    }
+    };
 
     var makerawkey = function(x, y) {
       return x + ':' + y;
-    }
+    };
 
     var makekey = function(x, y) {
       return makerawkey(keyscalar(x), keyscalar(y));
@@ -67,17 +67,19 @@
           // what tile x are we starting from?
           var x1 = totilepos(genscalar(x) * CHUNK_SIZE, 0).x;
           var x2 = x1 + CHUNK_SCALAR;
-          var y = 0;
+          var gen_y = 0;
           var gentile = null;
           for (var i = x1; i < x2; i++) {
-            y = env.tilegenerator.gensurface(i);
+            gen_y = env.tilegenerator.gensurface(i);
             for (var j = 0; j < 20; j++) {
               var tileargs = {
                 game: game,
                 x: i * env.tilesize,
-                y: (y + j) * env.tilesize
+                y: (gen_y + j) * env.tilesize
               };
-              if (j === 0) {
+              if (i === 0 && j === 0) {
+              }
+              else if (j === 0) {
                 gentile = args.surfacetile(tileargs);
               }
               else {
@@ -104,7 +106,7 @@
           0.5 * Math.cos(0.9 * x) + 3 * Math.sin(0.1 * x) -
           5.1 * Math.cos(0.09 * x);
         return Math.round(y);
-      }
+      };
       
       // A tile the player can walk around on in the game.
       // Args:
@@ -130,16 +132,16 @@
           if (!that.diggable) {
             return;
           }
-      	  // if we're not dead, do nothing...
-      	  if (that.health > 0) {
-      	    return;
-      	  }
-      	  // this tile has been killed!
-      	  var minedtile = args.genminedtile({
-      	    game: args.game,
-      	    x: that.x,
-      	    y: that.y
-      	  });
+          // if we're not dead, do nothing...
+          if (that.health > 0) {
+            return;
+          }
+          // this tile has been killed!
+          var minedtile = args.genminedtile({
+            game: args.game,
+            x: that.x,
+            y: that.y
+          });
           args.game.tilemap.set(minedtile);
           args.game.spatialhash.remove(that);
           // fire an event notifying that this tile has been mined
@@ -153,14 +155,14 @@
           if (!that.lasthealed) {
             that.lasthealed = new Date().getTime();
             return;
-          };
+          }
           var currenttime = new Date().getTime();
           if (currenttime - that.lasthealed >= 750) {
             that.health += 1;
-          };
+          }
           if (that.health >= that.maxhealth) {
             that.lasthealed = null;
-          };
+          }
         };
 
         that.tick = function() {
@@ -168,7 +170,7 @@
           that.mine();
           // is this mine in need of healing?
           that.healtick();
-        }
+        };
 
         return that;
       }; // tile
@@ -177,7 +179,7 @@
       env.tile.drawdamage = function(ctx, percentage) {
         if (percentage === 1) {
           return;
-        };
+        }
         var image = 'cracks1';
         if (percentage <= 0.3) {
           image = 'cracks3';
@@ -290,7 +292,7 @@
             return l;
           }
           return [];
-        }
+        };
 
         that.iterate = function(r, func) {
           var kx1 = keyscalar(r.x1);
@@ -329,7 +331,7 @@
               return;
             }
             addemup.apply(this, [key, r]);
-          })
+          });
           return things;
         };
 

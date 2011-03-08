@@ -121,8 +121,6 @@
 </head>
 <body>
 	<div id="instructions">
-		<button id="addfox">Add Fox</button>
-		<p id="debug"></p>
 	</div>
 	<div id="surroundcanvas">
 		<canvas id="drawme" width="600" height="500"></canvas>
@@ -131,18 +129,6 @@
 		var g = game('#drawme');
 		$(document).ready(function() {
 			g.start();
-			
-			loki.define('enemies', 'items', function(env) {
-				$('#addfox').click(function() {
-				    // add a fox, for kicks...
-				    var fox = env.fox({
-				      x: 200,
-				      y: -200,
-				      game: g
-				    });
-				    g.add(fox);
-				});
-			})			
 		});
 	</script>
 </body>

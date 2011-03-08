@@ -12,7 +12,7 @@
           typeof thing.y1 === 'number' &&
           typeof thing.x2 === 'number' &&
           typeof thing.y2 === 'number';
-    }
+    };
 
     var game = function(canvasid) {
       var that = {};
@@ -26,8 +26,8 @@
       var maketile = function(tilename) {
         return function(args) {
           return env[tilename](args);
-        }
-      }
+        };
+      };
 
       that.tilegenerator = env.tilegenerator({
         game: that,
@@ -59,9 +59,9 @@
       });
 
       // temporary tile generation
-  		that.tilegenerator.generate(31 * env.tilesize, 0);
-  		that.tilegenerator.generate(0, 0);
-  		that.tilegenerator.generate(-10 * env.tilesize, 0);
+      that.tilegenerator.generate(31 * env.tilesize, 0);
+      that.tilegenerator.generate(0, 0);
+      that.tilegenerator.generate(-10 * env.tilesize, 0);
 
       // methods
       that.start = function() {
@@ -98,18 +98,18 @@
         $.each(that.things, function(index, thing) {
           if (typeof(thing) === 'function') {
             thing();
-          };
+          }
           if (thing.tick) {
             thing.tick();
-          };
+          }
           if (thing.move) {
             thing.move(that.spatialhash.get(thing, thing.vel.x, thing.vel.y));
-          };
+          }
           if (thing.draw) {
             that.drawables.push(function(drawthing) {
               thing.draw(drawthing);
             });
-          };
+          }
           if (typeof(thing.killed) === 'undefined' || !thing.killed) {
             newthings.push(thing);
           }
@@ -178,8 +178,8 @@
         // we don't want the offset given to this function, so...
         ctx.restore();
         ctx.fillStyle = 'hsl(230, 100%, 60%)';
-  			ctx.fillRect(0, 0, that.width, that.height);
-  			ctx.save();
+        ctx.fillRect(0, 0, that.width, that.height);
+        ctx.save();
       };
 
       that.drawtiles = function(ctx) {
@@ -215,4 +215,4 @@
     global.game = game;
   });
   
-})(this, jQuery)
+})(this, jQuery);
