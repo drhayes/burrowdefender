@@ -18,9 +18,9 @@
 						equals(typeof env.collide, 'function', 'utils.collide exists');
 						rect1 = {x1: 0, y1: 0, x2: 10, y2: 10};
 						rect2 = {x1: -5, y1: -5, x2: 5, y2: 5};
-						rect3 = {x1: 11, y1:0, x2:6, y2: 5};
+						rect3 = {x1: 11, y1: 0, x2: 16, y2: 5};
 						ok(env.collide(rect1, rect2), 'rect1 and rect2 collide');
-						ok(!env.collide(rect1, rect3), 'rect2 and rect3 do not collide');
+						ok(!env.collide(rect1, rect3), 'rect1 and rect3 do not collide');
 					})
 				});
 				
