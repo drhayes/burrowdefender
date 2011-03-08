@@ -22,7 +22,7 @@
       list.push = function(o) {
         var l;
         l = oldpush.call(list, o);
-        l.sort(function(a, b) {
+        list.sort(function(a, b) {
           return a.priority - b.priority;
         });
         return l;

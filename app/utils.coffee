@@ -15,6 +15,6 @@ loki.modules.utils = (env) ->
     oldpush = list.push
     list.push = (o) ->
       l = oldpush.call(list, o)
-      l.sort((a, b) -> a.priority - b.priority)
+      list.sort((a, b) -> a.priority - b.priority)
       l
     list
