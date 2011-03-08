@@ -4,15 +4,15 @@ loki = {
   define: (args...) ->
     env = {}
     callback = args.pop()
-    modules = if args[0]? && typeof args[0] == 'string' then args[0] else args
-
-    # Did the caller ask for any modules?
-    if modules?
-      if modules[0] == '*'
-        modules = (module for own module in loki.modules)
+    modules = if args[0]? && typeof args[0] == 'string' then args else args[0]
     
+    # Did the caller ask for any modules?
+    if modules? and modules[0] == '*'
+      modules = (module for own module in loki.modules)
+
     # Initialize the modules.
-    for own modulename of modules
+    for modulename in modules
+      console.log(modulename)
       if !loki.modules.hasOwnProperty(modulename)
         throw {
           name: 'Mission module'

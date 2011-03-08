@@ -1,30 +1,29 @@
 (function() {
   var Function, loki;
-  var __slice = Array.prototype.slice, __hasProp = Object.prototype.hasOwnProperty;
+  var __slice = Array.prototype.slice;
   loki = {
     modules: {},
     define: function() {
-      var args, callback, env, module, modulename, modules;
+      var args, callback, env, module, modulename, modules, _i, _len;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       env = {};
       callback = args.pop();
-      modules = (args[0] != null) && typeof args[0] === 'string' ? args[0] : args;
-      if (modules != null) {
-        if (modules[0] === '*') {
-          modules = (function() {
-            var _i, _len, _ref, _results;
-            _ref = loki.modules;
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              module = _ref[_i];
-              _results.push(module);
-            }
-            return _results;
-          })();
-        }
+      modules = (args[0] != null) && typeof args[0] === 'string' ? args : args[0];
+      if ((modules != null) && modules[0] === '*') {
+        modules = (function() {
+          var _i, _len, _ref, _results;
+          _ref = loki.modules;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            module = _ref[_i];
+            _results.push(module);
+          }
+          return _results;
+        })();
       }
-      for (modulename in modules) {
-        if (!__hasProp.call(modules, modulename)) continue;
+      for (_i = 0, _len = modules.length; _i < _len; _i++) {
+        modulename = modules[_i];
+        console.log(modulename);
         if (!loki.modules.hasOwnProperty(modulename)) {
           throw {
             name: 'Mission module',
