@@ -8,18 +8,18 @@ loki = {
     
     # Did the caller ask for any modules?
     if modules? and modules[0] == '*'
-      modules = (module for own module in loki.modules)
+      modules = (module for own module of loki.modules)
 
     # Initialize the modules.
-    for modulename in modules
-      console.log(modulename)
-      if !loki.modules.hasOwnProperty(modulename)
-        throw {
-          name: 'Mission module'
-          message: 'Trying to import module: ' + modulename
-          toString: () -> @message
-        }
-      loki.modules[modulename](env)
+    if modules
+      for modulename in modules
+        if !loki.modules.hasOwnProperty(modulename)
+          throw {
+            name: 'Mission module'
+            message: 'Trying to import module: ' + modulename
+            toString: () -> @message
+          }
+        loki.modules[modulename](env)
       
     # Call the callback, we're done.
     callback(env)

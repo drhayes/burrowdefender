@@ -1,6 +1,6 @@
 (function() {
   var Function, loki;
-  var __slice = Array.prototype.slice;
+  var __slice = Array.prototype.slice, __hasProp = Object.prototype.hasOwnProperty;
   loki = {
     modules: {},
     define: function() {
@@ -11,29 +11,30 @@
       modules = (args[0] != null) && typeof args[0] === 'string' ? args : args[0];
       if ((modules != null) && modules[0] === '*') {
         modules = (function() {
-          var _i, _len, _ref, _results;
+          var _ref, _results;
           _ref = loki.modules;
           _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            module = _ref[_i];
+          for (module in _ref) {
+            if (!__hasProp.call(_ref, module)) continue;
             _results.push(module);
           }
           return _results;
         })();
       }
-      for (_i = 0, _len = modules.length; _i < _len; _i++) {
-        modulename = modules[_i];
-        console.log(modulename);
-        if (!loki.modules.hasOwnProperty(modulename)) {
-          throw {
-            name: 'Mission module',
-            message: 'Trying to import module: ' + modulename,
-            toString: function() {
-              return this.message;
-            }
-          };
+      if (modules) {
+        for (_i = 0, _len = modules.length; _i < _len; _i++) {
+          modulename = modules[_i];
+          if (!loki.modules.hasOwnProperty(modulename)) {
+            throw {
+              name: 'Mission module',
+              message: 'Trying to import module: ' + modulename,
+              toString: function() {
+                return this.message;
+              }
+            };
+          }
+          loki.modules[modulename](env);
         }
-        loki.modules[modulename](env);
       }
       return callback(env);
     }
