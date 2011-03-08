@@ -1,6 +1,6 @@
 (function() {
-  var Function, loki;
-  var __slice = Array.prototype.slice, __hasProp = Object.prototype.hasOwnProperty;
+  var loki;
+  var __slice = Array.prototype.slice, __hasProp = Object.prototype.hasOwnProperty, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   loki = {
     modules: {},
     define: function() {
@@ -39,14 +39,10 @@
       return callback(env);
     }
   };
-  Function = (function() {
-    function Function() {}
-    return Function;
-  })();
   Function.prototype.ratelimit = function(interval) {
     var lastcalled, limiter;
     lastcalled = 0;
-    return limiter = function() {
+    return limiter = __bind(function() {
       var args, current;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       current = new Date().getTime();
@@ -55,7 +51,7 @@
         lastcalled = current;
         return this.apply(this, args);
       }
-    };
+    }, this);
   };
   this.loki = loki;
 }).call(this);

@@ -25,10 +25,9 @@ loki = {
     callback(env)
 }
 
-class Function
 Function::ratelimit = (interval) ->
   lastcalled = 0
-  limiter = (args...) ->    
+  limiter = (args...) =>
     current = new Date().getTime()
     if current - lastcalled >= interval || limiter.force
       limiter.force = false;
