@@ -82,59 +82,60 @@
       };
       env.tile = function(args) {
         var that;
-        return that = {
+        that = {
           diggable: true,
           solid: true,
           x: args.x,
           y: args.y,
           x1: args.x,
-          y1: args.y,
-          x2: tilesize + that.x1,
-          y2: tilesize + that.y1,
-          halfwidth: (that.x2 - that.x1) / 2,
-          halfheight: (that.y2 - that.y1) / 2,
-          halfx: that.halfwidth + that.x1,
-          halfy: that.halfheight + that.y1,
-          mine: function() {
-            var minedtile;
-            if (!that.diggable) {
-              return;
-            }
-            if (that.health > 0) {
-              return;
-            }
-            minedtile = args.genminedtile({
-              game: args.game,
-              x: that.x,
-              y: that.y
-            });
-            args.game.tilemap.set(minedtile);
-            args.game.spatialhash.remove(that);
-            return args.game.eventbus.fire('mined', that);
-          },
-          healtick: function() {
-            var currenttime;
-            if (that.health === that.maxhealth) {
-              return;
-            }
-            if (!that.lasthealed) {
-              that.lasthealed = new Date().getTime();
-              return;
-            }
-            currenttime = new Date().getTime();
-            if (currenttime - that.lasthealed >= 750) {
-              that.health += 1;
-            }
-            if (that.health >= that.maxhealth) {
-              that.lasthealed = null;
-              return that.health = that.maxhealth;
-            }
-          },
-          tick: function() {
-            that.mine();
-            return that.healtick();
+          y1: args.y
+        };
+        that.x2 = tilesize + that.x1;
+        that.y2 = tilesize + that.y1;
+        that.halfwidth = (that.x2 - that.x1) / 2;
+        that.halfheight = (that.y2 - that.y1) / 2;
+        that.halfx = that.halfwidth + that.x1;
+        that.halfy = that.halfheight + that.y1;
+        that.mine = function() {
+          var minedtile;
+          if (!that.diggable) {
+            return;
+          }
+          if (that.health > 0) {
+            return;
+          }
+          minedtile = args.genminedtile({
+            game: args.game,
+            x: that.x,
+            y: that.y
+          });
+          args.game.tilemap.set(minedtile);
+          args.game.spatialhash.remove(that);
+          return args.game.eventbus.fire('mined', that);
+        };
+        that.healtick = function() {
+          var currenttime;
+          if (that.health === that.maxhealth) {
+            return;
+          }
+          if (!that.lasthealed) {
+            that.lasthealed = new Date().getTime();
+            return;
+          }
+          currenttime = new Date().getTime();
+          if (currenttime - that.lasthealed >= 750) {
+            that.health += 1;
+          }
+          if (that.health >= that.maxhealth) {
+            that.lasthealed = null;
+            return that.health = that.maxhealth;
           }
         };
+        that.tick = function() {
+          that.mine();
+          return that.healtick();
+        };
+        return that;
       };
       env.tile.drawdamage = function(ctx, percentage) {
         var image;

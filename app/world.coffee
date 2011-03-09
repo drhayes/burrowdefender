@@ -94,47 +94,47 @@ loki.define('assets', 'tileutils', (env) ->
         y: args.y
         x1: args.x
         y1: args.y
-        x2: tilesize + that.x1
-        y2: tilesize + that.y1
-        halfwidth: (that.x2 - that.x1) / 2
-        halfheight: (that.y2 - that.y1) / 2
-        halfx: that.halfwidth + that.x1
-        halfy: that.halfheight + that.y1
-        mine: () ->
-          # Are we diggable?
-          return if not that.diggable
-          # If we're not dead, do nothing.
-          return if that.health > 0
-          # This tile has been mined.
-          minedtile = args.genminedtile({
-            game: args.game
-            x: that.x
-            y: that.y
-          })
-          args.game.tilemap.set(minedtile)
-          args.game.spatialhash.remove(that)
-          # Fire an event notifying that this tile has been mined.
-          args.game.eventbus.fire('mined', that)
-        healtick: () ->
-          # Do we have anything to heal?
-          return if that.health == that.maxhealth
-          # If we haven't healed recently, set that
-          if not that.lasthealed
-            that.lasthealed = new Date().getTime()
-            return
-          currenttime = new Date().getTime()
-          if currenttime - that.lasthealed >= 750
-            that.health += 1
-          if that.health >= that.maxhealth
-            that.lasthealed = null
-            that.health = that.maxhealth
-        tick: () ->
-          # Is this tile getting dug?
-          that.mine()
-          # Is this tile in need of healing?
-          that.healtick()
-
       }
+      that.x2 = tilesize + that.x1
+      that.y2 = tilesize + that.y1
+      that.halfwidth = (that.x2 - that.x1) / 2
+      that.halfheight = (that.y2 - that.y1) / 2
+      that.halfx = that.halfwidth + that.x1
+      that.halfy = that.halfheight + that.y1
+      that.mine = () ->
+        # Are we diggable?
+        return if not that.diggable
+        # If we're not dead, do nothing.
+        return if that.health > 0
+        # This tile has been mined.
+        minedtile = args.genminedtile({
+          game: args.game
+          x: that.x
+          y: that.y
+        })
+        args.game.tilemap.set(minedtile)
+        args.game.spatialhash.remove(that)
+        # Fire an event notifying that this tile has been mined.
+        args.game.eventbus.fire('mined', that)
+      that.healtick = () ->
+        # Do we have anything to heal?
+        return if that.health == that.maxhealth
+        # If we haven't healed recently, set that
+        if not that.lasthealed
+          that.lasthealed = new Date().getTime()
+          return
+        currenttime = new Date().getTime()
+        if currenttime - that.lasthealed >= 750
+          that.health += 1
+        if that.health >= that.maxhealth
+          that.lasthealed = null
+          that.health = that.maxhealth
+      that.tick = () ->
+        # Is this tile getting dug?
+        that.mine()
+        # Is this tile in need of healing?
+        that.healtick()
+      that
 
       
     env.tile.drawdamage = (ctx, percentage) ->
