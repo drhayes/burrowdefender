@@ -3,6 +3,7 @@
 	<head>
 		<title>Actions</title>
 		<script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="../lib/underscore/underscore-min.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="../src/base.js"></script>
 		<script type="text/javascript" src="../src/utils.js"></script>
@@ -138,6 +139,9 @@
 							return true;
 						}
 					};
+					this.a1.name = 'a1'
+					this.a2.name = 'a2'
+					a3.name = 'a3'
 					this.am.add(this.a1);
 					this.am.execute();
 					equals(this.executed1, 1, 'a1 ran once');
