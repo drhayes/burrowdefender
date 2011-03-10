@@ -32,6 +32,7 @@
       env.mob = function(args) {
         var that;
         that = _.extend({}, defaults, args);
+        delete that.game;
         that.updaterect = function() {
           that.x1 = that.x;
           that.y1 = that.y;

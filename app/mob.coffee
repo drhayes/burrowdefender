@@ -34,29 +34,11 @@ loki.define('utils', (env) ->
   loki.modules.mob = (env) ->
     env.mob = (args) ->
       that = _.extend({}, defaults, args)
-      # that.x = args.x
-      # that.y = args.y
-      # that.size = {
-      #   x: args.size.x
-      #   y: args.size.y
-      # }
-      # that.vel = {
-      #   x: args.vel.x
-      #   y: args.vel.y
-      # }
-      # that.friction = args.friction
-      # that.bounce = args.bounce
-      # that.movestate = {
-      #   # Jumping is defined as having jumped but not yet become standing.
-      #   jumping: args.movestate.jumping
-      #   # Standing is having 0 effective y velocity.
-      #   standing: args.movestate.standing
-      # }
-      # that.velocities = {
-      #   jump: args.velocities.jump
-      #   walkleft: args.velocities.walkleft
-      #   walkright: args.velocities.walkright
-      # }
+      # Don't keep the game object on the mob. This causes strange bugs in
+      # the tests when calling equals(m1, m2) between two mobs, so it probably
+      # has weird side effects in the game as well.
+      delete that.game
+
       that.updaterect = ->
         that.x1 = that.x
         that.y1 = that.y
