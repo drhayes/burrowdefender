@@ -4,36 +4,37 @@
 FORCE_OF_GRAVITY = 0.25
 MAX_OF_GRAVITY = 12
 
-defaults = {
-  x: 0
-  y: 0
-  size: {
-    x: 16
-    y: 16
-  }
-  vel: {
+defaults = ->
+  {
     x: 0
     y: 0
+    size: {
+      x: 16
+      y: 16
+    }
+    vel: {
+      x: 0
+      y: 0
+    }
+    movestate: {
+      jumping: false
+      standing: false
+    }
+    velocities: {
+      jump: -6
+      walkleft: -2
+      walkright: 2
+    }
+    friction: 1
+    bounce: 0
   }
-  movestate: {
-    jumping: false
-    standing: false
-  }
-  velocities: {
-    jump: -6
-    walkleft: -2
-    walkright: 2
-  }
-  friction: 1
-  bounce: 0
-}
 
 loki.define('utils', (env) ->
   collide = env.collide
   
   loki.modules.mob = (env) ->
     env.mob = (args) ->
-      that = _.extend({}, defaults, args)
+      that = _.extend(defaults(), args)
       # Don't keep the game object on the mob. This causes strange bugs in
       # the tests when calling equals(m1, m2) between two mobs, so it probably
       # has weird side effects in the game as well.
@@ -64,18 +65,23 @@ loki.define('utils', (env) ->
           x: 0
           y: 0
         }
+        nomorecollisions = false
         _.each(collides, (r) ->
+          # Are we not supposed to collide with things anymore?
+          return false if nomorecollisions
           # Am I colliding with myself?
           return if r == that
           # Are we actually colliding?
           return if not collide(that, r)
           # Does what we're colliding with have a collide function?
           stop = false
-          stop |= r.collide(that) if typeof r.collide == 'function'
+          stop |= r.collide(that) if _.isFunction(r.collide)
           # Converse, too...
-          stop |= that.collide(r) if typeof that.collide == 'funcion'
+          stop |= that.collide(r) if _.isFunction(that.collide)
           # If any of these collide methods returned false, stop colliding.
-          return false if stop
+          if stop
+            nomorecollisions = true
+            return
           # Is this thing solid?
           return if r.solid? and not r.solid
           # Do projection-based collision detection.

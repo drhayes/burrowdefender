@@ -2,28 +2,30 @@
   var FORCE_OF_GRAVITY, MAX_OF_GRAVITY, defaults;
   FORCE_OF_GRAVITY = 0.25;
   MAX_OF_GRAVITY = 12;
-  defaults = {
-    x: 0,
-    y: 0,
-    size: {
-      x: 16,
-      y: 16
-    },
-    vel: {
+  defaults = function() {
+    return {
       x: 0,
-      y: 0
-    },
-    movestate: {
-      jumping: false,
-      standing: false
-    },
-    velocities: {
-      jump: -6,
-      walkleft: -2,
-      walkright: 2
-    },
-    friction: 1,
-    bounce: 0
+      y: 0,
+      size: {
+        x: 16,
+        y: 16
+      },
+      vel: {
+        x: 0,
+        y: 0
+      },
+      movestate: {
+        jumping: false,
+        standing: false
+      },
+      velocities: {
+        jump: -6,
+        walkleft: -2,
+        walkright: 2
+      },
+      friction: 1,
+      bounce: 0
+    };
   };
   loki.define('utils', function(env) {
     var collide;
@@ -31,7 +33,7 @@
     return loki.modules.mob = function(env) {
       env.mob = function(args) {
         var that;
-        that = _.extend({}, defaults, args);
+        that = _.extend(defaults(), args);
         delete that.game;
         that.updaterect = function() {
           that.x1 = that.x;
@@ -44,7 +46,7 @@
           return that.halfy = that.halfheight + that.y1;
         };
         that.move = function(collides) {
-          var aftervel;
+          var aftervel, nomorecollisions;
           if (collides == null) {
             collides = [];
           }
@@ -63,8 +65,12 @@
             x: 0,
             y: 0
           };
+          nomorecollisions = false;
           _.each(collides, function(r) {
             var dx, dy, stop, tx, ty, vx, vy;
+            if (nomorecollisions) {
+              return false;
+            }
             if (r === that) {
               return;
             }
@@ -72,14 +78,15 @@
               return;
             }
             stop = false;
-            if (typeof r.collide === 'function') {
+            if (_.isFunction(r.collide)) {
               stop |= r.collide(that);
             }
-            if (typeof that.collide === 'funcion') {
+            if (_.isFunction(that.collide)) {
               stop |= that.collide(r);
             }
             if (stop) {
-              return false;
+              nomorecollisions = true;
+              return;
             }
             if ((r.solid != null) && !r.solid) {
               return;

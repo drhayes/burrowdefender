@@ -345,13 +345,18 @@
 								vel: {
 									x: 0,
 									y: 0
-								}
+								},
+								// movestate: {
+								// 	jumping: false,
+								// 	standing: false
+								// }
 							});
 						})
 					}
 				});
 				
 				test('basic jumping', function() {
+					console.log('basic jumping');
 					ok(this.m.movestate, 'movestate defined');
 					equals(this.m.movestate.jumping, false, 'movestate.jumping');
 					equals(this.m.movestate.standing, false, 'movestate.standing');
