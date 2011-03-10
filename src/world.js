@@ -248,7 +248,7 @@
             for (thing in cell) {
               l.push(cell[thing]);
             }
-            l;
+            return l;
           }
           return [];
         };

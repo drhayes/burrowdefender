@@ -229,7 +229,7 @@ loki.define('assets', 'tileutils', (env) ->
           cell = that.spacemap[key]
           for thing of cell
             l.push(cell[thing])
-          l
+          return l
         []
         
       that.iterate = (r, func) ->
