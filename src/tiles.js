@@ -1,10 +1,10 @@
 // tile.js
 //
-// Concrete tiles for use in Mine Defender.
+// Concrete tiles for use in Burrow Defender.
 
 
 (function(global, $) {
-  
+
   loki.define('assets', 'world', 'components', 'tileutils', 'mob', function(env) {
     var tilesize = env.tilesize,
       tile = env.tile,
@@ -12,7 +12,7 @@
       mob = env.mob,
       dirtitem = env.dirtitem,
       imagemanager = env.imagemanager;
-    
+
     // load the tile images
     imagemanager.add('dirt', 'assets/images/dirt.png');
     imagemanager.add('grass', 'assets/images/grass.png');
@@ -64,7 +64,7 @@
 
         return that;
       }; // dug
-      
+
       // The other really common tile.
       env.dirt = function(args) {
         args.genminedtile = function(args) {
@@ -78,21 +78,21 @@
             that.lasthealed = null;
           }
         });
-      
+
         that.draw = function(ctx) {
           ctx.fillStyle = 'rgb(102,51,0)';
           ctx.fillRect(0, tilesize - 2, tilesize, 3);
           imagemanager.draw(ctx, 'dirt', 0, 0);
           tile.drawdamage(ctx, that.health / that.maxhealth);
         };
-      
+
         return that;
       }; // dirt
-      
+
       // The common tile, but on the surface with grass
       env.dirtwithgrass = function(args) {
         var that = env.dirt(args);
-      
+
         that.draw = function(ctx) {
           ctx.fillStyle = 'rgb(102,51,0)';
           ctx.fillRect(0, tilesize - 2, tilesize, 3);
@@ -100,9 +100,9 @@
           imagemanager.draw(ctx, 'grass', 0, 0);
           tile.drawdamage(ctx, that.health / that.maxhealth);
         };
-      
+
         return that;
       }; // dirtwithgrass
     }
-  });  
+  });
 }(this, jQuery));

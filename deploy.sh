@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo 'Deploying Mine Defender...'
+echo 'Deploying Burrow Defender...'
 mkdir deploy
 echo 'Copying files to temp deploy directory...'
 cp index.html deploy/index.html
