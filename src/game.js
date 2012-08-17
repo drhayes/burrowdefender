@@ -1,11 +1,11 @@
 // game.js
 //
-// The object that handles everthing about showing the game.
+// The object that handles everything about showing the game.
 //
 // Depends: on everything else...
 
 (function(global, $) {
-  
+
   loki.define('*', function(env) {
     var isrect = function(thing) {
       return typeof thing.x1 === 'number' &&
@@ -77,7 +77,7 @@
         that.addthings.push(thing);
         // if the thing is a rect, set it in the spatialhash
         if (isrect(thing)) {
-          that.spatialhash.set(thing);      
+          that.spatialhash.set(thing);
         }
       };
 
@@ -208,11 +208,11 @@
 
       return that;
     };
-    
+
     // load the images
     env.imagemanager.load();
 
     global.game = game;
   });
-  
+
 })(this, jQuery);

@@ -4,7 +4,7 @@
 // and maintaing a coherent world.
 
 (function(global, $) {
-  
+
   loki.define('assets', 'tileutils', function(env) {
     var tilesize = env.tilesize,
       totilepos = env.totilepos,
@@ -13,7 +13,7 @@
       // spatialhash cell
       cellsize = tilesize * 2,
       imagemanager = env.imagemanager;
-    
+
     // load tile images
     imagemanager.add('cracks1', 'assets/images/cracks1.png');
     imagemanager.add('cracks2', 'assets/images/cracks2.png');
@@ -85,15 +85,17 @@
               else {
                 gentile = args.firstgroundtile(tileargs);
               }
-              tilemap.set(gentile);
-              spatialhash.set(gentile);
+              if (gentile) {
+                tilemap.set(gentile);
+                spatialhash.set(gentile);
+              }
             }
           }
         };
 
         return that;
       }; // tilegenerator
-      
+
       // Given x,y in world-space, give
       env.tilegenerator.makekey = function(x, y) {
         return genscalar(x) + ':' + genscalar(y);
@@ -107,7 +109,7 @@
           5.1 * Math.cos(0.09 * x);
         return Math.round(y);
       };
-      
+
       // A tile the player can walk around on in the game.
       // Args:
       // * game - the mediator object that has spatialhash and tilemap
@@ -174,7 +176,7 @@
 
         return that;
       }; // tile
-      
+
       // Draw the tile damage tiles
       env.tile.drawdamage = function(ctx, percentage) {
         if (percentage === 1) {
@@ -189,7 +191,7 @@
         }
         imagemanager.draw(ctx, image, 0, 0);
       };
-      
+
       env.tilemap = function(args) {
         var that = {};
         that.tilemap = {};
@@ -265,7 +267,7 @@
 
         return that;
       }; // tilemap
-      
+
       env.tilemap.makekey = function(x, y) {
         return x + ':' + y;
       };
@@ -277,7 +279,7 @@
           y: nums[1]
         };
       };
-      
+
       env.spatialhash = function() {
         var that = {};
         that.spacemap = {};
@@ -364,5 +366,5 @@
       }; // spatialhash
     }; // world module
   });
-  
+
 }(this, jQuery));
